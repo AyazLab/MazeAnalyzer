@@ -1,0 +1,133 @@
+MazeAnalyzer Change Log
+
+3.0.5
+For release 3.0.5
+
+3.0.3
+Added maze file selection and drag drop for files in new project wizard
+Added color display on the left pane for individual paths
+Changed formating for Analyze Tool output
+Added zoom buttons to lower right corner for easy access
+Fixed issues related to MazeRegion definition and Zoom
+
+-3.0.1
+Fixed an issue related to command line processing
+Restored "Play" Functionality
+
+-3.0.0.0
+Added Define Rectangular Region as additional option to freeform shapes
+New icons, welcome panel, and background
+Added ability to show and hide individual maze elements as well as regions
+Added Zoom functionality
+Added MazeProject functionality
+	Allows loading multiple mazes and paths and collectively analyzing the data
+	Added tabs and Project pane view to switch between mazes and remove paths/mazes easier
+	Can be loaded and saved to ease analysis
+Added path tree to sort loaded paths by defined Experimental Info
+Added ability to restructure path tree using ChangePriority/Hierarchy tool
+Multiple files can now be opened using drag and drop
+Export and Analyze tool now use Experimental info in path names and export using this information
+Mazes are now scrollable
+Created Path Import Tool to handle assignment of different paths to different mazes
+Added ability to load/save/ and reset custom path colors
+Added Theming ability to MazeAnalyzer
+Defined Regions are embedded within the project file
+Added support for touch controls
+Added ability for Export Paths tool to show 2D angle at each timepoint
+
+1.11.0.0
+New measure function: click on one reference position and as you move mouse distances are shown in real-time in status bar
+Various misc improvements 
+
+1.10.0.0
+New point feature for calculations, 
+Use the point button at the toolbar to mark specific points of interest in mazes, save and load these along with regions.
+New calculation in Export: Distance to Point or Region Centroid for all timepoints as extra columns
+Minor other improvements
+
+-1.9.0.0
+New quick start panel
+
+-1.8.0.0
+New splash screen during startup
+
+-1.7.5.0
+Manual menu item under top menu help.
+
+-1.7.0.0
+Measurement tool: Detailed region entry/exit log is provided for each region 
+Region Definition file can be opened from main window and recent file list is also saved in current settings (in addition to 'Manage Regions' tool)
+Updated to work with .NET Framework 4.0
+About box- version check mechanism updated and standardized
+
+-1.6.0.4
+Updated to include maze scale option for each maze path
+
+-1.6.0.3
+ About box (launch with timer, show new update in red, etc.)
+
+-1.6.0.0
+  Rebuild with Visual Studio 2012
+  Updated to work with .NET Framework 4.5
+
+-1.5.1.0
+About box: error handling on load / fixed update link
+
+-1.5.0.0
+  Read new maze file format
+  minor changes in user interface
+
+-1.4.0.0  
+  Implemented time interval selection for measure feature 
+  LogProcessor is updated (GUI changes and compatiblity with new log file format)
+  Remove log files from previous list if open attempt is unsuccessful
+
+-1.3.0.1
+  Aboutbox version check: handle exception when server is not accessible
+
+-1.3.0.0
+  Log file preview (displays all maze logs in the file and can select individual items (matching or not are marked with different color)
+  Use updated log file format
+  Display in properties pane the mel file (if applicable)
+  Updated about dialog box (also checks for new version)
+  MazeUpdate option in top menu>help
+
+-1.2.0.0
+  Handle missing file
+  Measure tool
+
+-1.1.0.1
+  Drag and drop loading region files
+  Changed first path color
+
+-1.1.0.0
+ Measurement Regions (Define/Manage)
+ Export
+ Enable/disable drawing floors
+
+
+-1.0.1.0
+ Visual Studio 2010 build
+ Fix first loading maze size
+ Moved MazeLib project to the same folder
+
+-1.0.0.2
+User settings saved
+Previous maze files and log files 
+
+-1.0.0.1
+Logprocessor updated.
+Multi-threaded
+
+-0.0.9.3
+ Play feature that is integrated with MazeWalker
+
+-0.0.9.2
+ Events properties from logs
+
+-0.0.9.1
+ Drag and drop files
+ Can load old log files
+
+-0.0.9.0
+ First release
