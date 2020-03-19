@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MazeAnalyzer")]
-[assembly: AssemblyDescription("Analyze MazeSuite Log Files (www.mazesuite.com)")]
+[assembly: AssemblyDescription("Analyzes MazeSuite Log Files (www.mazesuite.com)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("hasanayaz.com")]
 [assembly: AssemblyProduct("MazeAnalyzer")]
-[assembly: AssemblyCopyright("Copyright © 2019")]
+[assembly: AssemblyCopyright("Copyright © 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.0.6")]
-[assembly: AssemblyFileVersion("3.0.6")]
+[assembly: AssemblyVersion("3.1.0")]
+[assembly: AssemblyFileVersion("3.1.0")]
