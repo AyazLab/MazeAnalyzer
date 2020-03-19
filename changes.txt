@@ -1,6 +1,6 @@
 MazeAnalyzer Change Log
 
-3.1
+3.1.0
 Migrated codebase to Github
 
 3.0.5
