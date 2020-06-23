@@ -19,3 +19,24 @@ D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\Ma
 D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csprojAssemblyReference.cache
 D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CoreCompileInputs.cache
 D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CopyComplete
+F:\Github\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeAnalyzer.exe.config
+F:\Github\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeAnalyzer.exe
+F:\Github\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeAnalyzer.pdb
+F:\Github\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeLib.dll
+F:\Github\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeLib.pdb
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csprojAssemblyReference.cache
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.About.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.ExpInfoPrioritySort.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.AnalyzerProjectWizard.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Measure.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Exporter.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.LogProcessor.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Main.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Properties.Resources.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.SelectPaths.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Splash.resources
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.GenerateResource.cache
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CoreCompileInputs.cache
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CopyComplete
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.exe
+F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.pdb
