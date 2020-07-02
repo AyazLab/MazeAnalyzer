@@ -19,3 +19,26 @@ D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\Ma
 D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csprojAssemblyReference.cache
 D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CoreCompileInputs.cache
 D:\VSStudio\Visual Studio 2013\Projects\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CopyComplete
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeAnalyzer.exe.config
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeAnalyzer.exe
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeAnalyzer.pdb
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeLib.dll
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\bin\Release\MazeLib.pdb
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csprojAssemblyReference.cache
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.About.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.ExpInfoPrioritySort.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.AnalyzerProjectWizard.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Measure.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Exporter.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.LogProcessor.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Main.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Properties.Resources.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.SelectPaths.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Splash.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.GenerateResource.cache
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CoreCompileInputs.cache
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.csproj.CopyComplete
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.exe
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.pdb
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.Heatmap.resources
+C:\Users\liqui\Documents\GitHub\MazeAnalyzer\MazeAnalyzer\obj\Release\MazeAnalyzer.HeatmapConfig.resources
