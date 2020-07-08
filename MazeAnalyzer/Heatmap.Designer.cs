@@ -58,6 +58,11 @@
             this.radioButtonPres = new System.Windows.Forms.RadioButton();
             this.buttonSaveCsv = new System.Windows.Forms.Button();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.buttonCopy = new System.Windows.Forms.Button();
+            this.labelSharpness = new System.Windows.Forms.Label();
+            this.labelSharpnessVal = new System.Windows.Forms.Label();
+            this.trackBarSharpness = new System.Windows.Forms.TrackBar();
+            this.buttonAutoRes = new System.Windows.Forms.Button();
             this.buttonOffset = new System.Windows.Forms.Button();
             this.labelOpacityPercent = new System.Windows.Forms.Label();
             this.labelScroll = new System.Windows.Forms.Label();
@@ -66,13 +71,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMidpoint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             this.panelSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarSharpness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHtmap)).BeginInit();
             this.panelHtmap.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxRes
             // 
-            this.textBoxRes.Location = new System.Drawing.Point(213, 482);
+            this.textBoxRes.Location = new System.Drawing.Point(216, 455);
             this.textBoxRes.Name = "textBoxRes";
             this.textBoxRes.Size = new System.Drawing.Size(57, 22);
             this.textBoxRes.TabIndex = 1;
@@ -81,7 +87,7 @@
             // 
             // buttonMaxColor
             // 
-            this.buttonMaxColor.Location = new System.Drawing.Point(73, 96);
+            this.buttonMaxColor.Location = new System.Drawing.Point(67, 81);
             this.buttonMaxColor.Name = "buttonMaxColor";
             this.buttonMaxColor.Size = new System.Drawing.Size(84, 23);
             this.buttonMaxColor.TabIndex = 2;
@@ -91,7 +97,7 @@
             // 
             // buttonMinColor
             // 
-            this.buttonMinColor.Location = new System.Drawing.Point(73, 275);
+            this.buttonMinColor.Location = new System.Drawing.Point(67, 260);
             this.buttonMinColor.Name = "buttonMinColor";
             this.buttonMinColor.Size = new System.Drawing.Size(84, 23);
             this.buttonMinColor.TabIndex = 3;
@@ -101,7 +107,7 @@
             // 
             // buttonBgColor
             // 
-            this.buttonBgColor.Location = new System.Drawing.Point(21, 391);
+            this.buttonBgColor.Location = new System.Drawing.Point(15, 376);
             this.buttonBgColor.Name = "buttonBgColor";
             this.buttonBgColor.Size = new System.Drawing.Size(143, 23);
             this.buttonBgColor.TabIndex = 4;
@@ -111,7 +117,7 @@
             // 
             // buttonMidColor
             // 
-            this.buttonMidColor.Location = new System.Drawing.Point(73, 196);
+            this.buttonMidColor.Location = new System.Drawing.Point(67, 181);
             this.buttonMidColor.Name = "buttonMidColor";
             this.buttonMidColor.Size = new System.Drawing.Size(84, 23);
             this.buttonMidColor.TabIndex = 10;
@@ -122,7 +128,7 @@
             // checkBoxTransparentBg
             // 
             this.checkBoxTransparentBg.AutoSize = true;
-            this.checkBoxTransparentBg.Location = new System.Drawing.Point(21, 364);
+            this.checkBoxTransparentBg.Location = new System.Drawing.Point(15, 349);
             this.checkBoxTransparentBg.Name = "checkBoxTransparentBg";
             this.checkBoxTransparentBg.Size = new System.Drawing.Size(188, 21);
             this.checkBoxTransparentBg.TabIndex = 17;
@@ -133,7 +139,7 @@
             // checkBoxMidColor
             // 
             this.checkBoxMidColor.AutoSize = true;
-            this.checkBoxMidColor.Location = new System.Drawing.Point(73, 169);
+            this.checkBoxMidColor.Location = new System.Drawing.Point(67, 154);
             this.checkBoxMidColor.Name = "checkBoxMidColor";
             this.checkBoxMidColor.Size = new System.Drawing.Size(89, 21);
             this.checkBoxMidColor.TabIndex = 18;
@@ -143,7 +149,7 @@
             // 
             // trackBarMidpoint
             // 
-            this.trackBarMidpoint.Location = new System.Drawing.Point(21, 96);
+            this.trackBarMidpoint.Location = new System.Drawing.Point(15, 81);
             this.trackBarMidpoint.Maximum = 9;
             this.trackBarMidpoint.Name = "trackBarMidpoint";
             this.trackBarMidpoint.Orientation = System.Windows.Forms.Orientation.Vertical;
@@ -156,10 +162,12 @@
             this.comboBoxInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterpolation.FormattingEnabled = true;
             this.comboBoxInterpolation.Items.AddRange(new object[] {
-            "Default",
+            "None",
+            "Bilinear",
+            "HighQualityBilinear",
             "Bicubic",
-            "Nearest Neighbor"});
-            this.comboBoxInterpolation.Location = new System.Drawing.Point(101, 544);
+            "HighQualityBicubic"});
+            this.comboBoxInterpolation.Location = new System.Drawing.Point(104, 517);
             this.comboBoxInterpolation.Name = "comboBoxInterpolation";
             this.comboBoxInterpolation.Size = new System.Drawing.Size(169, 24);
             this.comboBoxInterpolation.TabIndex = 21;
@@ -168,7 +176,7 @@
             // labelRes
             // 
             this.labelRes.AutoSize = true;
-            this.labelRes.Location = new System.Drawing.Point(9, 482);
+            this.labelRes.Location = new System.Drawing.Point(12, 455);
             this.labelRes.Name = "labelRes";
             this.labelRes.Size = new System.Drawing.Size(198, 17);
             this.labelRes.TabIndex = 22;
@@ -177,7 +185,7 @@
             // labelShowInterpolation
             // 
             this.labelShowInterpolation.AutoSize = true;
-            this.labelShowInterpolation.Location = new System.Drawing.Point(9, 544);
+            this.labelShowInterpolation.Location = new System.Drawing.Point(12, 517);
             this.labelShowInterpolation.Name = "labelShowInterpolation";
             this.labelShowInterpolation.Size = new System.Drawing.Size(86, 17);
             this.labelShowInterpolation.TabIndex = 24;
@@ -185,7 +193,7 @@
             // 
             // buttonSavePng
             // 
-            this.buttonSavePng.Location = new System.Drawing.Point(114, 724);
+            this.buttonSavePng.Location = new System.Drawing.Point(107, 718);
             this.buttonSavePng.Name = "buttonSavePng";
             this.buttonSavePng.Size = new System.Drawing.Size(93, 23);
             this.buttonSavePng.TabIndex = 26;
@@ -195,18 +203,18 @@
             // 
             // trackBarOpacity
             // 
-            this.trackBarOpacity.Location = new System.Drawing.Point(73, 329);
-            this.trackBarOpacity.Maximum = 255;
+            this.trackBarOpacity.Location = new System.Drawing.Point(67, 314);
+            this.trackBarOpacity.Maximum = 100;
             this.trackBarOpacity.Name = "trackBarOpacity";
             this.trackBarOpacity.Size = new System.Drawing.Size(121, 56);
             this.trackBarOpacity.TabIndex = 28;
-            this.trackBarOpacity.TickFrequency = 32;
+            this.trackBarOpacity.TickFrequency = 10;
             this.trackBarOpacity.Scroll += new System.EventHandler(this.trackBarOpacity_Scroll);
             // 
             // labelOpacity
             // 
             this.labelOpacity.AutoSize = true;
-            this.labelOpacity.Location = new System.Drawing.Point(11, 329);
+            this.labelOpacity.Location = new System.Drawing.Point(5, 314);
             this.labelOpacity.Name = "labelOpacity";
             this.labelOpacity.Size = new System.Drawing.Size(56, 17);
             this.labelOpacity.TabIndex = 29;
@@ -214,7 +222,7 @@
             // 
             // textBoxOffset
             // 
-            this.textBoxOffset.Location = new System.Drawing.Point(96, 511);
+            this.textBoxOffset.Location = new System.Drawing.Point(99, 484);
             this.textBoxOffset.Name = "textBoxOffset";
             this.textBoxOffset.Size = new System.Drawing.Size(100, 22);
             this.textBoxOffset.TabIndex = 34;
@@ -225,7 +233,7 @@
             // 
             this.labelOffset.AutoSize = true;
             this.labelOffset.BackColor = System.Drawing.SystemColors.Control;
-            this.labelOffset.Location = new System.Drawing.Point(9, 511);
+            this.labelOffset.Location = new System.Drawing.Point(12, 484);
             this.labelOffset.Name = "labelOffset";
             this.labelOffset.Size = new System.Drawing.Size(81, 17);
             this.labelOffset.TabIndex = 36;
@@ -236,11 +244,11 @@
             // 
             this.comboBoxPreset.FormattingEnabled = true;
             this.comboBoxPreset.Items.AddRange(new object[] {
-            "cold scale",
-            "heat scale",
+            "cool scale",
+            "hot scale",
             "gray scale",
             "custom"});
-            this.comboBoxPreset.Location = new System.Drawing.Point(73, 55);
+            this.comboBoxPreset.Location = new System.Drawing.Point(67, 40);
             this.comboBoxPreset.Name = "comboBoxPreset";
             this.comboBoxPreset.Size = new System.Drawing.Size(121, 24);
             this.comboBoxPreset.TabIndex = 38;
@@ -249,7 +257,7 @@
             // labelPreset
             // 
             this.labelPreset.AutoSize = true;
-            this.labelPreset.Location = new System.Drawing.Point(18, 58);
+            this.labelPreset.Location = new System.Drawing.Point(12, 43);
             this.labelPreset.Name = "labelPreset";
             this.labelPreset.Size = new System.Drawing.Size(49, 17);
             this.labelPreset.TabIndex = 39;
@@ -277,7 +285,7 @@
             // 
             this.labelQualitySettings.AutoSize = true;
             this.labelQualitySettings.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.labelQualitySettings.Location = new System.Drawing.Point(9, 453);
+            this.labelQualitySettings.Location = new System.Drawing.Point(12, 426);
             this.labelQualitySettings.Name = "labelQualitySettings";
             this.labelQualitySettings.Size = new System.Drawing.Size(107, 17);
             this.labelQualitySettings.TabIndex = 48;
@@ -287,7 +295,7 @@
             // 
             this.labelColorSettings.AutoSize = true;
             this.labelColorSettings.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.labelColorSettings.Location = new System.Drawing.Point(18, 24);
+            this.labelColorSettings.Location = new System.Drawing.Point(12, 9);
             this.labelColorSettings.Name = "labelColorSettings";
             this.labelColorSettings.Size = new System.Drawing.Size(96, 17);
             this.labelColorSettings.TabIndex = 47;
@@ -352,7 +360,7 @@
             // 
             // buttonSaveCsv
             // 
-            this.buttonSaveCsv.Location = new System.Drawing.Point(15, 724);
+            this.buttonSaveCsv.Location = new System.Drawing.Point(8, 718);
             this.buttonSaveCsv.Name = "buttonSaveCsv";
             this.buttonSaveCsv.Size = new System.Drawing.Size(93, 23);
             this.buttonSaveCsv.TabIndex = 40;
@@ -362,6 +370,11 @@
             // 
             // panelSettings
             // 
+            this.panelSettings.Controls.Add(this.buttonCopy);
+            this.panelSettings.Controls.Add(this.labelSharpness);
+            this.panelSettings.Controls.Add(this.labelSharpnessVal);
+            this.panelSettings.Controls.Add(this.trackBarSharpness);
+            this.panelSettings.Controls.Add(this.buttonAutoRes);
             this.panelSettings.Controls.Add(this.buttonOffset);
             this.panelSettings.Controls.Add(this.labelOpacityPercent);
             this.panelSettings.Controls.Add(this.checkBoxTransparentBg);
@@ -397,12 +410,59 @@
             this.panelSettings.Size = new System.Drawing.Size(309, 767);
             this.panelSettings.TabIndex = 42;
             // 
+            // buttonCopy
+            // 
+            this.buttonCopy.Location = new System.Drawing.Point(206, 706);
+            this.buttonCopy.Name = "buttonCopy";
+            this.buttonCopy.Size = new System.Drawing.Size(91, 46);
+            this.buttonCopy.TabIndex = 55;
+            this.buttonCopy.Text = "Copy To Clipboard";
+            this.buttonCopy.UseVisualStyleBackColor = true;
+            this.buttonCopy.Click += new System.EventHandler(this.buttonCopy_Click);
+            // 
+            // labelSharpness
+            // 
+            this.labelSharpness.AutoSize = true;
+            this.labelSharpness.Location = new System.Drawing.Point(12, 554);
+            this.labelSharpness.Name = "labelSharpness";
+            this.labelSharpness.Size = new System.Drawing.Size(76, 17);
+            this.labelSharpness.TabIndex = 54;
+            this.labelSharpness.Text = "Sharpness";
+            // 
+            // labelSharpnessVal
+            // 
+            this.labelSharpnessVal.AutoSize = true;
+            this.labelSharpnessVal.Location = new System.Drawing.Point(221, 554);
+            this.labelSharpnessVal.Name = "labelSharpnessVal";
+            this.labelSharpnessVal.Size = new System.Drawing.Size(0, 17);
+            this.labelSharpnessVal.TabIndex = 53;
+            // 
+            // trackBarSharpness
+            // 
+            this.trackBarSharpness.Location = new System.Drawing.Point(94, 547);
+            this.trackBarSharpness.Name = "trackBarSharpness";
+            this.trackBarSharpness.Size = new System.Drawing.Size(121, 56);
+            this.trackBarSharpness.TabIndex = 52;
+            this.trackBarSharpness.Scroll += new System.EventHandler(this.trackBarSharpness_Scroll);
+            // 
+            // buttonAutoRes
+            // 
+            this.buttonAutoRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonAutoRes.Location = new System.Drawing.Point(276, 455);
+            this.buttonAutoRes.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonAutoRes.Name = "buttonAutoRes";
+            this.buttonAutoRes.Size = new System.Drawing.Size(28, 24);
+            this.buttonAutoRes.TabIndex = 45;
+            this.buttonAutoRes.Text = "¤";
+            this.buttonAutoRes.UseVisualStyleBackColor = true;
+            this.buttonAutoRes.Click += new System.EventHandler(this.buttonAutoRes_Click);
+            // 
             // buttonOffset
             // 
             this.buttonOffset.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonOffset.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOffset.Image = global::MazeAnalyzer.Properties.Resources.target1;
-            this.buttonOffset.Location = new System.Drawing.Point(203, 509);
+            this.buttonOffset.Location = new System.Drawing.Point(206, 482);
             this.buttonOffset.Margin = new System.Windows.Forms.Padding(0);
             this.buttonOffset.Name = "buttonOffset";
             this.buttonOffset.Size = new System.Drawing.Size(28, 24);
@@ -413,7 +473,7 @@
             // labelOpacityPercent
             // 
             this.labelOpacityPercent.AutoSize = true;
-            this.labelOpacityPercent.Location = new System.Drawing.Point(200, 329);
+            this.labelOpacityPercent.Location = new System.Drawing.Point(194, 314);
             this.labelOpacityPercent.Name = "labelOpacityPercent";
             this.labelOpacityPercent.Size = new System.Drawing.Size(0, 17);
             this.labelOpacityPercent.TabIndex = 50;
@@ -437,6 +497,9 @@
             this.pictureBoxHtmap.TabStop = false;
             this.pictureBoxHtmap.Click += new System.EventHandler(this.pictureBoxHtmap_Click);
             this.pictureBoxHtmap.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxHtmap_Paint);
+            this.pictureBoxHtmap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHtmap_MouseDown);
+            this.pictureBoxHtmap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHtmap_MouseMove);
+            this.pictureBoxHtmap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHtmap_MouseUp);
             // 
             // panelHtmap
             // 
@@ -467,6 +530,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).EndInit();
             this.panelSettings.ResumeLayout(false);
             this.panelSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarSharpness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHtmap)).EndInit();
             this.panelHtmap.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -509,5 +573,10 @@
         private System.Windows.Forms.Panel panelHtmap;
         private System.Windows.Forms.Label labelOpacityPercent;
         private System.Windows.Forms.Button buttonOffset;
+        private System.Windows.Forms.Button buttonAutoRes;
+        private System.Windows.Forms.Label labelSharpness;
+        private System.Windows.Forms.Label labelSharpnessVal;
+        private System.Windows.Forms.TrackBar trackBarSharpness;
+        private System.Windows.Forms.Button buttonCopy;
     }
 }

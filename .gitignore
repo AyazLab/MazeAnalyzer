@@ -2,3 +2,4 @@
 *.pdb
 *.cache
 .vs/MazeAnalyzer/v16/.suo
+*.exe
