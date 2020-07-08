@@ -790,26 +790,26 @@ namespace MazeAnalyzer
 
         Bitmap ToBitmap(double[,] htmap) // makes a bitmap for the colorbar and heatmap
         {
-            Bitmap bitmap = new Bitmap(htmap.GetLength(0), htmap.GetLength(1));
+            Bitmap bmp = new Bitmap(htmap.GetLength(0), htmap.GetLength(1));
 
             for (int i = 0; i < htmap.GetLength(0); i++)
             {
                 for (int j = 0; j < htmap.GetLength(1); j++)
                 {
-                    bitmap.SetPixel(i, j, ToColor(htmap[i, j]));
+                    bmp.SetPixel(i, j, ToColor(htmap[i, j]));
 
                     if (htmap[i, j] == 0 && checkBoxTransparentBg.Checked) // sets background to transparent or background color
                     {
-                        bitmap.SetPixel(i, j, Color.Transparent);
+                        bmp.SetPixel(i, j, Color.Transparent);
                     }
                     else if (htmap[i, j] == 0)
                     {
-                        bitmap.SetPixel(i, j, Color.FromArgb(htmapAlpha, buttonBgColor.BackColor));
+                        bmp.SetPixel(i, j, Color.FromArgb(htmapAlpha, buttonBgColor.BackColor));
                     }
                 }
             }
 
-            return bitmap;
+            return bmp;
         }
 
         Bitmap MakeColorbar()
@@ -897,13 +897,10 @@ namespace MazeAnalyzer
 
 
             // makes maze, heatmap, and colorbar
-            Image mazeBitmap = curMaze.PaintMazeToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
-            // TODO: analyzer regions not showing correctly
-            Image anaRegnsBitmap = curMaze.PaintAnalyzerItemsToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
-            Bitmap heatBitmap = ToBitmap(selectHtmap);
-            Bitmap colorbarBitmap = MakeColorbar();
-            //htmapWidth = htmapWidth - htmapWidth % heatBitmap.Width;
-            //htmapHeight = htmapHeight - htmapHeight % heatBitmap.Height;
+            Image mazeBmp = curMaze.PaintMazeToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
+            Image anaRegnsBmp = curMaze.PaintAnalyzerItemsToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
+            Bitmap heatBmp = ToBitmap(selectHtmap);
+            Bitmap colorbarBmp = MakeColorbar();
 
 
             // autosize & scroll settings
@@ -924,19 +921,19 @@ namespace MazeAnalyzer
             Rectangle mazeDest = new Rectangle(0, 0, width, height);
             if (maze)
             {
-                png.DrawImage(mazeBitmap, mazeDest, 0, 0, mazeBitmap.Width, mazeBitmap.Height, GraphicsUnit.Pixel);
+                png.DrawImage(mazeBmp, mazeDest, 0, 0, mazeBmp.Width, mazeBmp.Height, GraphicsUnit.Pixel);
             }
             if (anaRegns)
             {
-                png.DrawImage(anaRegnsBitmap, mazeDest, 0, 0, anaRegnsBitmap.Width, anaRegnsBitmap.Height, GraphicsUnit.Pixel);
+                png.DrawImage(anaRegnsBmp, mazeDest, 0, 0, anaRegnsBmp.Width, anaRegnsBmp.Height, GraphicsUnit.Pixel);
             }
 
             Rectangle htmapDest = new Rectangle(htmapTopLeftX, htmapTopLeftZ, htmapWidth, htmapHeight);
-            Bitmap resizeheatBitmap = ResizeBitmap(heatBitmap, sharpness, htmapWidth);
+            Bitmap resizeheatBitmap = ResizeBitmap(heatBmp, sharpness, htmapWidth);
             png.DrawImage(resizeheatBitmap, htmapDest, 0, 0, resizeheatBitmap.Width, resizeheatBitmap.Height, GraphicsUnit.Pixel);
 
             Rectangle colorbarDest = new Rectangle(colorbarTopLeftX, colorbarTopLeftZ, colorbarWidth, colorbarHeight);
-            png.DrawImage(colorbarBitmap, colorbarDest, 0, 0, colorbarBitmap.Width, colorbarBitmap.Height, GraphicsUnit.Pixel);
+            png.DrawImage(colorbarBmp, colorbarDest, 0, 0, colorbarBmp.Width, colorbarBmp.Height, GraphicsUnit.Pixel);
 
             Font font = new Font(new FontFamily("times"), colorbarLabelSize);
             SolidBrush brush = new SolidBrush(colorbarLabelColor);
