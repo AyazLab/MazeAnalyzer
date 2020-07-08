@@ -1000,7 +1000,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.propertyGrid1);
             this.splitContainer1.Size = new System.Drawing.Size(1151, 512);
-            this.splitContainer1.SplitterDistance = 858;
+            this.splitContainer1.SplitterDistance = 857;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -1013,7 +1013,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(858, 512);
+            this.tabControl1.Size = new System.Drawing.Size(857, 512);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
@@ -1035,7 +1035,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(850, 483);
+            this.tabPage1.Size = new System.Drawing.Size(849, 483);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Maze";
             this.tabPage1.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabControl1_DragDrop);
@@ -1059,7 +1059,7 @@
             this.panelWelcome.Controls.Add(this.label2);
             this.panelWelcome.Controls.Add(this.label1);
             this.panelWelcome.Controls.Add(this.pictureBox1);
-            this.panelWelcome.Location = new System.Drawing.Point(202, 91);
+            this.panelWelcome.Location = new System.Drawing.Point(201, 91);
             this.panelWelcome.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelWelcome.Name = "panelWelcome";
             this.panelWelcome.Size = new System.Drawing.Size(451, 270);
@@ -1220,7 +1220,7 @@
             this.propertyGrid1.Location = new System.Drawing.Point(0, 0);
             this.propertyGrid1.Margin = new System.Windows.Forms.Padding(4);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(288, 512);
+            this.propertyGrid1.Size = new System.Drawing.Size(289, 512);
             this.propertyGrid1.TabIndex = 0;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
             // 

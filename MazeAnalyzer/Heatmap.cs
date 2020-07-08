@@ -254,7 +254,11 @@ namespace MazeAnalyzer
         {
             midpoint = Convert.ToDouble(trackBarMidpoint.Value) / 10;
 
-            if (!checkBoxMidColor.Checked)
+            if (checkBoxMidColor.Checked)
+            {
+                Refresh();
+            }
+            else
             {
                 checkBoxMidColor_Click(sender, e);
             }
@@ -655,13 +659,13 @@ namespace MazeAnalyzer
             height = (int)((MazePathItem.zPixels * MazePathItem.res + buffer * 2) / (MazePathItem.xPixels * MazePathItem.res + buffer * 2) * width);
             scale = 5 + (double)(panelHtmap.Width - panelSettings.Width) / (1302 - panelSettings.Width) * 12;
 
-            Bitmap copy = new Bitmap(width + colorbarWidth, height);
+            Bitmap copy = new Bitmap((int)(width + colorbarWidth * 0.85), height);
             Graphics png = Graphics.FromImage(copy);
 
             pictureBoxHtmap_Paint(png, true, width, height, colorbarWidth, colorbarHeight, colorbarTopLeftX, colorbarTopLeftZ, 8, Color.Black);
 
             Clipboard.Clear();
-            Clipboard.SetImage(copy.Clone(new Rectangle(0, 0, width + colorbarWidth, height), copy.PixelFormat));
+            Clipboard.SetImage(copy.Clone(new Rectangle(0, 0, (int)(width + colorbarWidth * 0.85), height), copy.PixelFormat));
             copy.Dispose();
         }
 
@@ -938,11 +942,11 @@ namespace MazeAnalyzer
             Font font = new Font(new FontFamily("times"), colorbarLabelSize);
             SolidBrush brush = new SolidBrush(colorbarLabelColor);
             png.DrawString(string.Format("{0}\n({1})", htmapTypeStr, htmapUnits), font, brush, colorbarTopLeftX - font.Size, (float)(colorbarTopLeftZ + colorbarHeight * -0.22));
-            png.DrawString(string.Format("{0}", selectMaxHeat), font, brush, colorbarTopLeftX, colorbarTopLeftZ);
-            png.DrawString(string.Format("{0}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .75), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.22));
-            png.DrawString(string.Format("{0}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .5), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.44));
-            png.DrawString(string.Format("{0}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .25), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.66));
-            png.DrawString(string.Format("{0}", selectMinHeat), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.88));
+            png.DrawString(string.Format("{0:0.00}", selectMaxHeat), font, brush, colorbarTopLeftX, colorbarTopLeftZ);
+            png.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .75), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.22));
+            png.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .5), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.44));
+            png.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .25), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.66));
+            png.DrawString(string.Format("{0:0.00}", selectMinHeat), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.88));
         }
 
         public Bitmap ResizeBitmap(Bitmap bmp, int factor, int destWidth)
