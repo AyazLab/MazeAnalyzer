@@ -50,8 +50,8 @@ namespace MazeAnalyzer
         static double selectMaxHeat;
         string heatmapUnits;
         
-        static bool maze = true;
-        static bool anaRegns = false;
+        static bool showMaze = true;
+        static bool showAnaRegns = false;
 
         static string csvPath; // a string containing the selected paths for the csv files
 
@@ -102,8 +102,8 @@ namespace MazeAnalyzer
             {
                 radioButtonTime.Checked = true;
             }
-            checkBoxMaze.Checked = maze;
-            checkBoxAnaRegns.Checked = anaRegns;
+            checkBoxMaze.Checked = showMaze;
+            checkBoxAnaRegns.Checked = showAnaRegns;
         }
 
 
@@ -499,17 +499,17 @@ namespace MazeAnalyzer
 
         private void checkBoxMaze_Click(object sender, EventArgs e)
         {
-            maze = !maze;
+            showMaze = !showMaze;
 
-            checkBoxMaze.Checked = maze;
+            checkBoxMaze.Checked = showMaze;
             Refresh();
         }
 
         private void checkBoxAnalyzerRegions_Click(object sender, EventArgs e)
         {
-            anaRegns = !anaRegns;
+            showAnaRegns = !showAnaRegns;
 
-            checkBoxAnaRegns.Checked = anaRegns;
+            checkBoxAnaRegns.Checked = showAnaRegns;
             Refresh();
         }
 
@@ -874,11 +874,11 @@ namespace MazeAnalyzer
             SetInterpolation(g);
 
             Rectangle mazeDest = new Rectangle(0, 0, width, height);
-            if (maze)
+            if (showMaze)
             {
                 g.DrawImage(mazeBmp, mazeDest, 0, 0, mazeBmp.Width, mazeBmp.Height, GraphicsUnit.Pixel);
             }
-            if (anaRegns)
+            if (showAnaRegns)
             {
                 g.DrawImage(anaRegnsBmp, mazeDest, 0, 0, anaRegnsBmp.Width, anaRegnsBmp.Height, GraphicsUnit.Pixel);
             }
