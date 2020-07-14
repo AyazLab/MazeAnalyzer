@@ -29,7 +29,7 @@ namespace MazeAnalyzer
         static Preset selectPreset = Preset.Cool;
         static double midpoint = 0.1;
         static int opacity = 75;
-        static int htmapAlpha = (int)((double)opacity / 100 * 255);
+        static int heatmapAlpha = (int)((double)opacity / 100 * 255);
         static int sharpness = 0;
 
         public enum ClickMode
@@ -42,43 +42,25 @@ namespace MazeAnalyzer
             None, Bilinear, HighQualityBilinear, Bicubic, HighQualityBicubic
         }
         static InterpolationModes interpolation = InterpolationModes.None;
+        readonly MazeViewer mv;
 
-        readonly MazeViewer curMaze;
-
-        static double[,] presHtmap;
-        static double minPres;
-        static double maxPres;
-
-        static double[,] entrHtmap;
-        static double minEntr;
-        static double maxEntr;
-
-        static double[,] timeHtmap;
-        static double minTime;
-        static double maxTime;
-
-        public enum HtmapType
-        {
-            Presence, Entrance, Time
-        }
-        static HtmapType selectHtmapType = HtmapType.Presence;
-        static string htmapTypeStr;
-        static double[,] selectHtmap = new double[0, 0];
+        static string heatmapTypeStr;
+        static HeatmapItem selectHeatmap = new HeatmapItem();
         static double selectMinHeat;
         static double selectMaxHeat;
-        string htmapUnits;
+        string heatmapUnits;
         
         static bool maze = true;
         static bool anaRegns = false;
 
-        static string csvPathHeaderInfo; // a string containing the selected paths for the csv files
+        static string csvPath; // a string containing the selected paths for the csv files
 
-        public Heatmap(MazeViewer inpMz)
+        public Heatmap(MazeViewer mv)
         {
             InitializeComponent();
 
-            curMaze = inpMz;
-            BuildHtmap(curMaze);
+            this.mv = mv;
+            BuildHtmap(this.mv);
 
             DoubleBuffered = true;
         }
@@ -89,15 +71,15 @@ namespace MazeAnalyzer
             comboBoxPreset.SelectedIndex = (int)selectPreset;
             trackBarMidpoint.Value = Convert.ToInt32(midpoint * 10);
             trackBarOpacity.Value = opacity;
-            htmapAlpha = (int)((double)opacity / 100 * 255);
+            heatmapAlpha = (int)((double)opacity / 100 * 255);
             labelOpacityPercent.Text = string.Format("{0}%", opacity);
 
 
-            textBoxRes.Text = Convert.ToString(MazePathItem.res);
+            textBoxRes.Text = Convert.ToString(selectHeatmap.res);
             textBoxRes.BackColor = SystemColors.Control;
 
-            double offsetX = Math.Round(MazePathItem.offsetX, 2, MidpointRounding.AwayFromZero);
-            double offsetZ = Math.Round(MazePathItem.offsetZ, 2, MidpointRounding.AwayFromZero);
+            double offsetX = Math.Round(selectHeatmap.offsetX, 2, MidpointRounding.AwayFromZero);
+            double offsetZ = Math.Round(selectHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero);
             textBoxOffset.Text = string.Format("{0}, {1}", offsetX, offsetZ);
             textBoxOffset.BackColor = SystemColors.Control;
             buttonOffset.Image = new Bitmap(buttonOffset.Image, 12, 12);
@@ -108,15 +90,15 @@ namespace MazeAnalyzer
             labelSharpnessVal.Text = string.Format("{0}", sharpness);
 
 
-            if (selectHtmapType == HtmapType.Presence)
+            if (selectHeatmap.type == HeatmapItem.Type.Presence)
             {
                 radioButtonPres.Checked = true;
             }
-            else if (selectHtmapType == HtmapType.Entrance)
+            else if (selectHeatmap.type == HeatmapItem.Type.Entrance)
             {
                 radioButtonEntr.Checked = true;
             }
-            else if (selectHtmapType == HtmapType.Time)
+            else if (selectHeatmap.type == HeatmapItem.Type.Time)
             {
                 radioButtonTime.Checked = true;
             }
@@ -267,7 +249,7 @@ namespace MazeAnalyzer
         private void trackBarOpacity_Scroll(object sender, EventArgs e)
         {
             opacity = trackBarOpacity.Value;
-            htmapAlpha = (int)((double)opacity / 100 * 255);
+            heatmapAlpha = (int)((double)opacity / 100 * 255);
 
             labelOpacityPercent.Text = string.Format("{0}%", opacity);
             Refresh();
@@ -280,10 +262,10 @@ namespace MazeAnalyzer
             if (e.KeyCode == Keys.Enter)
             {
                 // 0.2 - 15 maze units / pixel, beyond this range, heatmap calculations and colorbar pixel approximations could slow down
-                MazePathItem.res = Convert.ToDouble(textBoxRes.Text);
+                mv.SetHeatmapRes(Convert.ToDouble(textBoxRes.Text));
 
                 textBoxRes.BackColor = SystemColors.Control;
-                RebuildHtmap();
+                RebuildHeatmap();
             }
         }
 
@@ -310,25 +292,20 @@ namespace MazeAnalyzer
         {
             string newOffSetX = textBoxOffset.Text.Split(new String[] { ", " }, StringSplitOptions.None)[0];
             string newOffSetZ = textBoxOffset.Text.Split(new String[] { ", " }, StringSplitOptions.None)[1];
-            string offsetX = Convert.ToString(Math.Round(MazePathItem.offsetX, 2, MidpointRounding.AwayFromZero));
-            string offsetZ = Convert.ToString(Math.Round(MazePathItem.offsetZ, 2, MidpointRounding.AwayFromZero));
+            string offsetX = Convert.ToString(Math.Round(selectHeatmap.offsetX, 2, MidpointRounding.AwayFromZero));
+            string offsetZ = Convert.ToString(Math.Round(selectHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero));
 
             if (newOffSetX != offsetX || newOffSetZ != offsetZ)
             {
-                MazePathItem.offsetX = Convert.ToDouble(newOffSetX);
-                MazePathItem.offsetZ = Convert.ToDouble(newOffSetZ);
-                // BuildHtmap only runs if the number of heatmap pixels has changed and changing the offset doesn't necessarily change the number of heatmap pixels
-                selectHtmap = new double[0, 0];
-                RebuildHtmap();
+                mv.SetHeatmapOffset(Convert.ToDouble(newOffSetX), Convert.ToDouble(newOffSetZ));
+                RebuildHeatmap();
             }
         }
 
-        void RebuildHtmap()
+        void RebuildHeatmap()
         // called when the resolution or offset is changed
         {
-            MazePathItem.UpdateHtmapPixels();
-
-            BuildHtmap(curMaze);
+            BuildHtmap(mv);
 
             Refresh();
         }
@@ -401,8 +378,8 @@ namespace MazeAnalyzer
                 PointF mazeCoord1 = MouseToMazeCoord(mouseCoord1.X, mouseCoord1.Y);
                 PointF mazeCoord2 = MouseToMazeCoord(mouseCoord2.X, mouseCoord2.Y);
 
-                MazePathItem.res = Math.Round(Math.Max(Math.Abs(mazeCoord1.X - mazeCoord2.X), Math.Abs(mazeCoord1.Y - mazeCoord2.Y)), 2);
-                textBoxRes.Text = Convert.ToString(MazePathItem.res);
+                selectHeatmap.res = Math.Round(Math.Max(Math.Abs(mazeCoord1.X - mazeCoord2.X), Math.Abs(mazeCoord1.Y - mazeCoord2.Y)), 2);
+                textBoxRes.Text = Convert.ToString(selectHeatmap.res);
                 textBoxOffset.Text = string.Format("{0}, {1}", mazeCoord1.X, mazeCoord2.Y);
                 selectRect = false;
                 selectClickMode = ClickMode.None;
@@ -447,14 +424,14 @@ namespace MazeAnalyzer
                 ToolTip offset = new ToolTip();
 
                 double heatVal = double.NaN;
-                Point pixelCoord = MazePathItem.MapCoord(mazeCoord.X, mazeCoord.Y);
+                Point heatmapCoord = selectHeatmap.MazeToHeatmapCoord(mazeCoord.X, mazeCoord.Y);
 
-                if (pixelCoord.X >= 0 && pixelCoord.X < MazePathItem.xPixels && pixelCoord.Y >= 0 && pixelCoord.Y < MazePathItem.zPixels)
+                if (heatmapCoord.X >= 0 && heatmapCoord.X < selectHeatmap.xPixels && heatmapCoord.Y >= 0 && heatmapCoord.Y < selectHeatmap.zPixels)
                 {
-                    heatVal = Math.Round(selectHtmap[pixelCoord.X, pixelCoord.Y], 2, MidpointRounding.AwayFromZero);
+                    heatVal = Math.Round(selectHeatmap.val[heatmapCoord.X, heatmapCoord.Y], 2, MidpointRounding.AwayFromZero);
                 }
 
-                offset.SetToolTip(pictureBoxHtmap, string.Format("x:{0}, z:{1}\n{2} {3}", mazeCoord.X, mazeCoord.Y, heatVal, htmapUnits));
+                offset.SetToolTip(pictureBoxHtmap, string.Format("x:{0}, z:{1}\n{2} {3}", mazeCoord.X, mazeCoord.Y, heatVal, heatmapUnits));
             }
         }
 
@@ -462,67 +439,62 @@ namespace MazeAnalyzer
         {
             PointF mazeCoord = new PointF();
 
-            double hm_mzUnits_topLeftX = MazePathItem.htmapXCenter - MazePathItem.xLowerRadius * MazePathItem.res - buffer;
-            double hm_mzUnits_width = MazePathItem.xPixels * MazePathItem.res + buffer * 2;
+            double mzTopLeftX = selectHeatmap.heatmapXCenter - selectHeatmap.xBotRadius * selectHeatmap.res - buffer;
+            double mzWidth = selectHeatmap.xPixels * selectHeatmap.res + buffer * 2;
 
-            mazeCoord.X = (float)Math.Round(hm_mzUnits_topLeftX + x / width * hm_mzUnits_width, 2, MidpointRounding.AwayFromZero);
+            mazeCoord.X = (float)Math.Round(mzTopLeftX + x / width * mzWidth, 2, MidpointRounding.AwayFromZero);
 
-            double hm_mzUnits_topLeftZ = MazePathItem.htmapZCenter - MazePathItem.zLowerRadius * MazePathItem.res - buffer;
-            double hm_mzUnits_height = MazePathItem.zPixels * MazePathItem.res + buffer * 2;
+            double mzTopLeftZ = selectHeatmap.heatmapZCenter - selectHeatmap.zBotRadius * selectHeatmap.res - buffer;
+            double mzHeight = selectHeatmap.zPixels * selectHeatmap.res + buffer * 2;
 
-            mazeCoord.Y = (float)Math.Round(hm_mzUnits_topLeftZ + (z - panelHtmap.AutoScrollPosition.Y) / height * hm_mzUnits_height, 2, MidpointRounding.AwayFromZero);
+            mazeCoord.Y = (float)Math.Round(mzTopLeftZ + (z - panelHtmap.AutoScrollPosition.Y) / height * mzHeight, 2, MidpointRounding.AwayFromZero);
 
             return mazeCoord;
         }
 
 
         // selected heatmap, maze, and analyzer regions events
-        public void SetHtmapType(HtmapType newHtmapType)
+        public void SetHeatmapType(HeatmapItem.Type newHeatmapType)
         {
-            switch (newHtmapType)
+            switch (newHeatmapType)
             {
-                case HtmapType.Presence:
-                    htmapTypeStr = "Presence";
-                    selectHtmap = presHtmap;
-                    selectMaxHeat = maxPres;
-                    selectMinHeat = minPres;
-                    htmapUnits = "% Trials";
+                case HeatmapItem.Type.Presence:
+                    heatmapTypeStr = "Presence";
+                    selectHeatmap = mv.presHeatmap;
+                    heatmapUnits = "% Trials";
                     break;
-                case HtmapType.Entrance:
-                    htmapTypeStr = "Entrance";
-                    selectHtmap = entrHtmap;
-                    selectMaxHeat = maxEntr;
-                    selectMinHeat = minEntr;
-                    htmapUnits = "# Times";
+                case HeatmapItem.Type.Entrance:
+                    heatmapTypeStr = "Entrance";
+                    selectHeatmap = mv.entrHeatmap;
+                    heatmapUnits = "# Times";
                     break;
-                case HtmapType.Time:
-                    htmapTypeStr = "Time";
-                    selectHtmap = timeHtmap;
-                    selectMaxHeat = maxTime;
-                    selectMinHeat = minTime;
-                    htmapUnits = "s";
+                case HeatmapItem.Type.Time:
+                    heatmapTypeStr = "Time";
+                    selectHeatmap = mv.timeHeatmap;
+                    heatmapUnits = "s";
                     break;
                 default:
                     break;
             }
-            selectHtmapType = newHtmapType;
+            selectMinHeat = selectHeatmap.GetMin();
+            selectMaxHeat = selectHeatmap.GetMax();
 
             Refresh();
         }
 
         private void radioButtonPres_CheckedChanged(object sender, EventArgs e)
         {
-            SetHtmapType(HtmapType.Presence);
+            SetHeatmapType(HeatmapItem.Type.Presence);
         }
         
         private void radioButtonEntr_CheckedChanged(object sender, EventArgs e)
         {
-            SetHtmapType(HtmapType.Entrance);
+            SetHeatmapType(HeatmapItem.Type.Entrance);
         }
 
         private void radioButtonTime_CheckedChanged(object sender, EventArgs e)
         {
-            SetHtmapType(HtmapType.Time);
+            SetHeatmapType(HeatmapItem.Type.Time);
         }
 
         private void checkBoxMaze_Click(object sender, EventArgs e)
@@ -552,30 +524,30 @@ namespace MazeAnalyzer
             {
                 StreamWriter csv = new StreamWriter(saveCsv.FileName);
 
-                csv.Write(string.Format("Maze Analyzer Heatmap Export: {0}\n", htmapTypeStr));
+                csv.Write(string.Format("Maze Analyzer Heatmap Export: {0}\n", heatmapTypeStr));
                 csv.Write(string.Format("Date Exported: {0}\n", DateTime.Now));
-                csv.Write(string.Format("Project File Name: {0}\n", curMaze.projectInfo.ProjectFilename));
-                csv.Write(string.Format("Project Name: {0}\n", curMaze.projectInfo.ProjectFilename.Split('\\')[curMaze.projectInfo.ProjectFilename.Split('\\').Length - 1]));
-                csv.Write(string.Format("Maze Name: {0}.maz\n", curMaze.mazeFileName));
-                csv.Write(string.Format("Paths Exported: {0}\n", csvPathHeaderInfo));
-                csv.Write(string.Format("Heatmap Resolution: {0} Maze Units / Pixel\n", MazePathItem.res));
+                csv.Write(string.Format("Project File Name: {0}\n", mv.projectInfo.ProjectFilename));
+                csv.Write(string.Format("Project Name: {0}\n", mv.projectInfo.ProjectFilename.Split('\\')[mv.projectInfo.ProjectFilename.Split('\\').Length - 1]));
+                csv.Write(string.Format("Maze Name: {0}.maz\n", mv.mazeFileName));
+                csv.Write(string.Format("Paths Exported: {0}\n", csvPath));
+                csv.Write(string.Format("Heatmap Resolution: {0} Maze Units / Pixel\n", selectHeatmap.res));
                 csv.Write("\n");
 
                 csv.Write("xz, ");
-                string xs = GetCoords(MazePathItem.offsetX, MazePathItem.xLowerRadius, MazePathItem.xPixels);
+                string xs = GetHeatmapBorders(selectHeatmap.offsetX, selectHeatmap.xBotRadius, selectHeatmap.xPixels);
                 csv.Write(xs.Substring(0, xs.Length - 2));
                 csv.Write("\n");
 
-                string[] zs = GetCoords(MazePathItem.offsetZ, MazePathItem.zLowerRadius, MazePathItem.zPixels).Split(' ');
+                string[] zs = GetHeatmapBorders(selectHeatmap.offsetZ, selectHeatmap.zBotRadius, selectHeatmap.zPixels).Split(' ');
 
-                for (int i = 0; i < selectHtmap.GetLength(1); i++)
+                for (int i = 0; i < selectHeatmap.val.GetLength(1); i++)
                 {
                     csv.Write(zs[i] + " ");
-                    for (int j = 0; j < selectHtmap.GetLength(0); j++)
+                    for (int j = 0; j < selectHeatmap.val.GetLength(0); j++)
                     {
-                        csv.Write(selectHtmap[j, i]);
+                        csv.Write(selectHeatmap.val[j, i]);
 
-                        if (j != selectHtmap.GetLength(0) - 1)
+                        if (j != selectHeatmap.val.GetLength(0) - 1)
                         {
                             csv.Write(", ");
                         }
@@ -586,14 +558,14 @@ namespace MazeAnalyzer
             }
         }
 
-        string GetCoords(double offset, int lowerRadius, int pixels)
+        string GetHeatmapBorders(double offset, int lowerRadius, int pixels)
         // returns the coordinates borders of all the pixels for the csv file
         {
             string coords = "";
 
             for (int i = 0; i < pixels + 1; i++)
             {
-                double coord = offset + (i - lowerRadius) * MazePathItem.res;
+                double coord = offset + (i - lowerRadius) * selectHeatmap.res;
 
                 if (coord != offset)
                 {
@@ -625,8 +597,8 @@ namespace MazeAnalyzer
         Bitmap MakePng()
         {
             int resize = 100;
-            int width = (int)(MazePathItem.xPixels * MazePathItem.res + buffer * 2) * resize;
-            int height = (int)(MazePathItem.zPixels * MazePathItem.res + buffer * 2) * resize;
+            int width = (int)(selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * resize;
+            int height = (int)(selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) * resize;
 
             int colorbarWidth = width / 10;
             int colorbarHeight = height / 4;
@@ -656,13 +628,13 @@ namespace MazeAnalyzer
             int colorbarTopLeftZ = trackBarMidpoint.Location.Y - panelHtmap.AutoScrollPosition.Y * 2;
 
             width = panelHtmap.Width - colorbarWidth;
-            height = (int)((MazePathItem.zPixels * MazePathItem.res + buffer * 2) / (MazePathItem.xPixels * MazePathItem.res + buffer * 2) * width);
+            height = (int)((selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * width);
             scale = 5 + (double)(panelHtmap.Width - panelSettings.Width) / (1302 - panelSettings.Width) * 12;
 
             Bitmap copy = new Bitmap((int)(width + colorbarWidth * 0.85), height);
-            Graphics png = Graphics.FromImage(copy);
+            Graphics g = Graphics.FromImage(copy);
 
-            pictureBoxHtmap_Paint(png, true, width, height, colorbarWidth, colorbarHeight, colorbarTopLeftX, colorbarTopLeftZ, 8, Color.Black);
+            pictureBoxHtmap_Paint(g, true, width, height, colorbarWidth, colorbarHeight, colorbarTopLeftX, colorbarTopLeftZ, 8, Color.Black);
 
             Clipboard.Clear();
             Clipboard.SetImage(copy.Clone(new Rectangle(0, 0, (int)(width + colorbarWidth * 0.85), height), copy.PixelFormat));
@@ -671,82 +643,59 @@ namespace MazeAnalyzer
 
 
         // painting events
-        private Rectangle PointsToRect(Point beginPoint, Point endPoint)
+        private Rectangle MouseToRect(Point topLeft, Point botRight)
         {
-            int top = beginPoint.Y < endPoint.Y ? beginPoint.Y : endPoint.Y;
-            int bottom = beginPoint.Y > endPoint.Y ? beginPoint.Y : endPoint.Y;
-            int left = beginPoint.X < endPoint.X ? beginPoint.X : endPoint.X;
-            int right = beginPoint.X > endPoint.X ? beginPoint.X : endPoint.X;
+            int top = topLeft.Y < botRight.Y ? topLeft.Y : botRight.Y;
+            int bot = topLeft.Y > botRight.Y ? topLeft.Y : botRight.Y;
+            int left = topLeft.X < botRight.X ? topLeft.X : botRight.X;
+            int right = topLeft.X > botRight.X ? topLeft.X : botRight.X;
 
-            return new Rectangle(left, top, right - left, bottom - top);
+            return new Rectangle(left, top, right - left, bot - top);
         }
 
-        private void PaintSelectRect(Graphics png)
+        private void PaintSelectRect(Graphics g)
         {
-            png.DrawRectangle(new Pen(Brushes.Black, 1F), PointsToRect(mouseCoord1, mouseCoord2));
+            g.DrawRectangle(new Pen(Brushes.Black, 1F), MouseToRect(mouseCoord1, mouseCoord2));
         }
 
-        void BuildHtmap(MazeViewer inpMz)
+        void BuildHtmap(MazeViewer mv)
         // makes the heatmaps and adds them together [the numbers]
         {
-            if (selectHtmap.Length != MazePathItem.xPixels * MazePathItem.zPixels)
+            // TODO: Make flag to skip build if no changes are made
+            mv.presHeatmap = new HeatmapItem(HeatmapItem.Type.Presence);
+            mv.entrHeatmap = new HeatmapItem(HeatmapItem.Type.Entrance);
+            mv.timeHeatmap = new HeatmapItem(HeatmapItem.Type.Time);
+
+            foreach (MazePathItem mpi in mv.curMazePaths.cPaths)
             {
-                presHtmap = new double[MazePathItem.xPixels, MazePathItem.zPixels];
-                entrHtmap = new double[MazePathItem.xPixels, MazePathItem.zPixels];
-                timeHtmap = new double[MazePathItem.xPixels, MazePathItem.zPixels];
-
-                foreach (MazePathItem mzp in inpMz.curMazePaths.cPaths)
+                if (mpi.selected)
                 {
-                    if (mzp.selected)
+                    mpi.MakePathHeatmap();
+
+                    mv.presHeatmap += mpi.presHeatmap;
+                    mv.entrHeatmap += mpi.entrHeatmap;
+                    mv.timeHeatmap += mpi.timeHeatmap;
+
+                    // gets paths for the csv file
+                    csvPath += string.Format("\"TRI {0} ", mpi.ExpTrial);
+                    if (mpi.ExpGroup != "")
                     {
-                        mzp.MakePathHtmap();
-
-                        for (int i = 0; i < MazePathItem.xPixels; i++)
-                        {
-                            for (int j = 0; j < MazePathItem.zPixels; j++)
-                            {
-                                presHtmap[i, j] += mzp.presHtmap[i, j]; // bool to int switch
-                                entrHtmap[i, j] += mzp.entrHtmap[i, j];
-                                timeHtmap[i, j] += mzp.timeHtmap[i, j] / 1000; // millisecond to second conversion
-                            }
-                        }
-
-                        // gets paths for the csv file
-                        csvPathHeaderInfo += string.Format("\"TRI {0} ", mzp.ExpTrial);
-                        if (mzp.ExpGroup != "")
-                        {
-                            csvPathHeaderInfo += string.Format("GRO {0} ", mzp.ExpGroup);
-                        }
-                        if (mzp.ExpCondition != "")
-                        {
-                            csvPathHeaderInfo += string.Format("CON {0} ", mzp.ExpCondition);
-                        }
-                        csvPathHeaderInfo += string.Format("SUB {0} ", mzp.ExpSubjectID);
-                        csvPathHeaderInfo += string.Format("SES {0}\"; ", mzp.ExpSession);
+                        csvPath += string.Format("GRO {0} ", mpi.ExpGroup);
                     }
-                }
-
-                // gets min, max, & average for each heatmap
-                for (int i = 0; i < MazePathItem.xPixels; i++)
-                {
-                    for (int j = 0; j < MazePathItem.zPixels; j++)
+                    if (mpi.ExpCondition != "")
                     {
-                        presHtmap[i, j] /= curMaze.curMazePaths.cPaths.Count;
-                        minPres = Math.Min(presHtmap[i, j], minPres);
-                        maxPres = Math.Max(presHtmap[i, j], maxPres);
-
-                        entrHtmap[i, j] /= curMaze.curMazePaths.cPaths.Count;
-                        minEntr = Math.Min(entrHtmap[i, j], minEntr);
-                        maxEntr = Math.Max(entrHtmap[i, j], maxEntr);
-
-                        timeHtmap[i, j] /= curMaze.curMazePaths.cPaths.Count;
-                        minTime = Math.Min(timeHtmap[i, j], minTime);
-                        maxTime = Math.Max(timeHtmap[i, j], maxTime);
+                        csvPath += string.Format("CON {0} ", mpi.ExpCondition);
                     }
+                    csvPath += string.Format("SUB {0} ", mpi.ExpSubjectID);
+                    csvPath += string.Format("SES {0}\"; ", mpi.ExpSession);
                 }
-
-                SetHtmapType(selectHtmapType);
             }
+
+            mv.presHeatmap /= mv.curMazePaths.cPaths.Count;
+            mv.entrHeatmap /= mv.curMazePaths.cPaths.Count;
+            mv.timeHeatmap /= mv.curMazePaths.cPaths.Count / 1000; // convert to seconds
+
+            SetHeatmapType(selectHeatmap.type);
         }
 
         Color ToColor(double heatVal) // takes a heat number and returns a color
@@ -789,7 +738,7 @@ namespace MazeAnalyzer
                 b = Convert.ToInt32(minB + (maxB - minB) * heatVal / (selectMaxHeat - selectMinHeat));
             }
 
-            return Color.FromArgb(htmapAlpha, r, g, b);
+            return Color.FromArgb(heatmapAlpha, r, g, b);
         }
 
         Bitmap ToBitmap(double[,] htmap) // makes a bitmap for the colorbar and heatmap
@@ -808,7 +757,7 @@ namespace MazeAnalyzer
                     }
                     else if (htmap[i, j] == 0)
                     {
-                        bmp.SetPixel(i, j, Color.FromArgb(htmapAlpha, buttonBgColor.BackColor));
+                        bmp.SetPixel(i, j, Color.FromArgb(heatmapAlpha, buttonBgColor.BackColor));
                     }
                 }
             }
@@ -819,7 +768,7 @@ namespace MazeAnalyzer
         Bitmap MakeColorbar()
         {
             // MakeColorbar parameter 0 less than parameter 1, parameter 1 is an approximation of the number of pixels
-            double[,] colorbar = new double[Math.Min(MazePathItem.xPixels, MazePathItem.zPixels), (MazePathItem.xPixels + MazePathItem.zPixels) / 2];
+            double[,] colorbar = new double[Math.Min(selectHeatmap.xPixels, selectHeatmap.zPixels), (selectHeatmap.xPixels + selectHeatmap.zPixels) / 2];
 
             for (int i = 0; i < colorbar.GetLength(0); i++)
             {
@@ -832,7 +781,7 @@ namespace MazeAnalyzer
             return ToBitmap(colorbar);
         }
 
-        void SetInterpolation(Graphics png)
+        void SetInterpolation(Graphics g)
         {
             trackBarSharpness.Enabled = true;
 
@@ -840,33 +789,33 @@ namespace MazeAnalyzer
             {
                 case InterpolationModes.None:
                     trackBarSharpness.Enabled = false;
-                    png.InterpolationMode = InterpolationMode.NearestNeighbor;
+                    g.InterpolationMode = InterpolationMode.NearestNeighbor;
                     break;
                 case InterpolationModes.Bilinear:
-                    png.InterpolationMode = InterpolationMode.Bilinear;
+                    g.InterpolationMode = InterpolationMode.Bilinear;
                     break;
                 case InterpolationModes.HighQualityBilinear:
-                    png.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                    g.InterpolationMode = InterpolationMode.HighQualityBilinear;
                     break;
                 case InterpolationModes.Bicubic:
-                    png.InterpolationMode = InterpolationMode.Bicubic;
+                    g.InterpolationMode = InterpolationMode.Bicubic;
                     break;
                 case InterpolationModes.HighQualityBicubic:
-                    png.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     break;
                 default:
                     break;
             }
 
-            png.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            png.SmoothingMode = SmoothingMode.None;
-            png.CompositingQuality = CompositingQuality.AssumeLinear;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.SmoothingMode = SmoothingMode.None;
+            g.CompositingQuality = CompositingQuality.AssumeLinear;
         }
 
         static int width;
         static int height;
-        static double scale;
-        static double buffer = 2;
+        static double scale; // in pixel per maze units
+        static double buffer = 2; // in maze units
         private void pictureBoxHtmap_Paint(object sender, PaintEventArgs e)
         {
             int colorbarWidth = (int)(trackBarMidpoint.Width * 1.4);
@@ -875,7 +824,7 @@ namespace MazeAnalyzer
             int colorbarTopLeftZ = trackBarMidpoint.Location.Y - panelHtmap.AutoScrollPosition.Y * 2;
 
             width = panelHtmap.Width - colorbarWidth;
-            height = (int)((MazePathItem.zPixels * MazePathItem.res + buffer * 2) / (MazePathItem.xPixels * MazePathItem.res + buffer * 2) * width);
+            height = (int)((selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * width);
             scale = 5 + (double)(panelHtmap.Width - panelSettings.Width) / (1302 - panelSettings.Width) * 12;
 
             pictureBoxHtmap_Paint(e.Graphics, true, width, height, colorbarWidth, colorbarHeight, colorbarTopLeftX, colorbarTopLeftZ, 8, Color.Black);
@@ -887,23 +836,25 @@ namespace MazeAnalyzer
         }
 
         static bool scroll = false;
-        private void pictureBoxHtmap_Paint(Graphics png, bool autosize, int width, int height, int colorbarWidth, int colorbarHeight, int colorbarTopLeftX, int colorbarTopLeftZ, int colorbarLabelSize, Color colorbarLabelColor)
+        private void pictureBoxHtmap_Paint(Graphics g, bool autosize, int width, int height, int colorbarWidth, int colorbarHeight, int colorbarTopLeftX, int colorbarTopLeftZ, int colorbarLabelSize, Color colorbarLabelColor)
         {
-            float mazeTopLeftX = (float)(-(MazePathItem.htmapXCenter - MazePathItem.xLowerRadius * MazePathItem.res - buffer) * scale);
-            float mazeTopLeftZ = (float)(-(MazePathItem.htmapZCenter - MazePathItem.zLowerRadius * MazePathItem.res - buffer) * scale);
-            int mazeWidth = (int)((MazePathItem.xPixels * MazePathItem.res + buffer * 2) * scale);
-            int mazeHeight = (int)((MazePathItem.zPixels * MazePathItem.res + buffer * 2) * scale);
+            // in maze units * scale
+            int mazeTopLeftX = (int)(-(selectHeatmap.heatmapXCenter - selectHeatmap.xBotRadius * selectHeatmap.res - buffer) * scale);
+            int mazeTopLeftZ = (int)(-(selectHeatmap.heatmapZCenter - selectHeatmap.zBotRadius * selectHeatmap.res - buffer) * scale);
+            int mazeWidth = (int)((selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * scale);
+            int mazeHeight = (int)((selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) * scale);
 
-            int htmapTopLeftX = (int)(width * buffer / (MazePathItem.xPixels * MazePathItem.res + buffer * 2));
-            int htmapTopLeftZ = (int)(htmapTopLeftX / (MazePathItem.xPixels * MazePathItem.res + buffer * 2) * (MazePathItem.zPixels * MazePathItem.res + buffer * 2));
+            // in coord system of the paint function
+            int htmapTopLeftX = (int)(width * buffer / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2));
+            int htmapTopLeftZ = (int)(htmapTopLeftX / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * (selectHeatmap.zPixels * selectHeatmap.res + buffer * 2));
             int htmapWidth = width - htmapTopLeftX * 2;
             int htmapHeight = height - htmapTopLeftZ * 2;
 
 
             // makes maze, heatmap, and colorbar
-            Image mazeBmp = curMaze.PaintMazeToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
-            Image anaRegnsBmp = curMaze.PaintAnalyzerItemsToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
-            Bitmap heatBmp = ToBitmap(selectHtmap);
+            Image mazeBmp = mv.PaintMazeToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
+            Image anaRegnsBmp = mv.PaintAnalyzerItemsToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
+            Bitmap heatBmp = ToBitmap(selectHeatmap.val);
             Bitmap colorbarBmp = MakeColorbar();
 
 
@@ -915,38 +866,38 @@ namespace MazeAnalyzer
                     labelScroll.Location = new Point(labelScroll.Location.X, height);
                     scroll = true;
                 }
-                png.TranslateTransform(panelHtmap.AutoScrollPosition.X, panelHtmap.AutoScrollPosition.Y);
+                g.TranslateTransform(panelHtmap.AutoScrollPosition.X, panelHtmap.AutoScrollPosition.Y);
             }
 
 
             // draws maze, heatmap, colorbar, and colorbar labels
-            SetInterpolation(png);
+            SetInterpolation(g);
 
             Rectangle mazeDest = new Rectangle(0, 0, width, height);
             if (maze)
             {
-                png.DrawImage(mazeBmp, mazeDest, 0, 0, mazeBmp.Width, mazeBmp.Height, GraphicsUnit.Pixel);
+                g.DrawImage(mazeBmp, mazeDest, 0, 0, mazeBmp.Width, mazeBmp.Height, GraphicsUnit.Pixel);
             }
             if (anaRegns)
             {
-                png.DrawImage(anaRegnsBmp, mazeDest, 0, 0, anaRegnsBmp.Width, anaRegnsBmp.Height, GraphicsUnit.Pixel);
+                g.DrawImage(anaRegnsBmp, mazeDest, 0, 0, anaRegnsBmp.Width, anaRegnsBmp.Height, GraphicsUnit.Pixel);
             }
 
             Rectangle htmapDest = new Rectangle(htmapTopLeftX, htmapTopLeftZ, htmapWidth, htmapHeight);
             Bitmap resizeheatBitmap = ResizeBitmap(heatBmp, sharpness, htmapWidth);
-            png.DrawImage(resizeheatBitmap, htmapDest, 0, 0, resizeheatBitmap.Width, resizeheatBitmap.Height, GraphicsUnit.Pixel);
+            g.DrawImage(resizeheatBitmap, htmapDest, 0, 0, resizeheatBitmap.Width, resizeheatBitmap.Height, GraphicsUnit.Pixel);
 
             Rectangle colorbarDest = new Rectangle(colorbarTopLeftX, colorbarTopLeftZ, colorbarWidth, colorbarHeight);
-            png.DrawImage(colorbarBmp, colorbarDest, 0, 0, colorbarBmp.Width, colorbarBmp.Height, GraphicsUnit.Pixel);
+            g.DrawImage(colorbarBmp, colorbarDest, 0, 0, colorbarBmp.Width, colorbarBmp.Height, GraphicsUnit.Pixel);
 
             Font font = new Font(new FontFamily("times"), colorbarLabelSize);
             SolidBrush brush = new SolidBrush(colorbarLabelColor);
-            png.DrawString(string.Format("{0}\n({1})", htmapTypeStr, htmapUnits), font, brush, colorbarTopLeftX - font.Size, (float)(colorbarTopLeftZ + colorbarHeight * -0.22));
-            png.DrawString(string.Format("{0:0.00}", selectMaxHeat), font, brush, colorbarTopLeftX, colorbarTopLeftZ);
-            png.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .75), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.22));
-            png.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .5), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.44));
-            png.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .25), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.66));
-            png.DrawString(string.Format("{0:0.00}", selectMinHeat), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.88));
+            g.DrawString(string.Format("{0}\n({1})", heatmapTypeStr, heatmapUnits), font, brush, colorbarTopLeftX - font.Size, (float)(colorbarTopLeftZ + colorbarHeight * -0.22));
+            g.DrawString(string.Format("{0:0.00}", selectMaxHeat), font, brush, colorbarTopLeftX, colorbarTopLeftZ);
+            g.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .75), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.22));
+            g.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .5), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.44));
+            g.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .25), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.66));
+            g.DrawString(string.Format("{0:0.00}", selectMinHeat), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.88));
         }
 
         public Bitmap ResizeBitmap(Bitmap bmp, int factor, int destWidth)
@@ -964,15 +915,15 @@ namespace MazeAnalyzer
             int newBmpHeight = bmp.Height * factor;
             Bitmap resizeBmp = new Bitmap(newBmpWidth, newBmpHeight);
 
-            using (Graphics png = Graphics.FromImage(resizeBmp))
+            using (Graphics g = Graphics.FromImage(resizeBmp))
             {
-                png.InterpolationMode = InterpolationMode.NearestNeighbor;
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
-                png.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                png.SmoothingMode = SmoothingMode.None;
-                png.CompositingQuality = CompositingQuality.AssumeLinear;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                g.SmoothingMode = SmoothingMode.None;
+                g.CompositingQuality = CompositingQuality.AssumeLinear;
 
-                png.DrawImage(bmp, 0, 0, newBmpWidth, newBmpHeight);
+                g.DrawImage(bmp, 0, 0, newBmpWidth, newBmpHeight);
             }
 
             return resizeBmp;
