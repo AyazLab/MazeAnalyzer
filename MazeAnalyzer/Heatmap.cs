@@ -59,10 +59,18 @@ namespace MazeAnalyzer
         {
             InitializeComponent();
 
+            this.MouseWheel += new MouseEventHandler(PanelHeatmap_MouseWheel);
+
             this.mv = mv;
             BuildHeatmap(this.mv);
 
             DoubleBuffered = true;
+        }
+
+        private void PanelHeatmap_MouseWheel(object sender, MouseEventArgs e)
+        {
+            panelHeatmap.Focus();
+            
         }
 
         private void HeatmapConfig_Load(object sender, EventArgs e)
@@ -395,6 +403,14 @@ namespace MazeAnalyzer
                 PointF mazeCoord1 = MouseToMazeCoord(mouseCoord1.X, mouseCoord1.Y);
                 PointF mazeCoord2 = MouseToMazeCoord(mouseCoord2.X, mouseCoord2.Y);
 
+                if(mazeCoord1==mazeCoord2)
+                {
+                    showResBox = false;
+                    clickMode = ClickMode.None;
+                    Cursor = Cursors.Default;
+                    return;
+                }
+
                 selectedHeatmap.res = Math.Round(Math.Max(Math.Abs(mazeCoord1.X - mazeCoord2.X), Math.Abs(mazeCoord1.Y - mazeCoord2.Y)), 2);
                 textBoxRes.Text = Convert.ToString(selectedHeatmap.res);
                 textBoxOffset.Text = string.Format("{0}, {1}", mazeCoord1.X, mazeCoord2.Y);
@@ -676,7 +692,8 @@ namespace MazeAnalyzer
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                pictureBoxHeatmap_Paint(g, false, mzHmWidth, mzHmHeight, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 170, Color.White);
+                PaintHeatmap(g, false, mzHmWidth, mzHmHeight);
+                PaintColorBar(g, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
             }
 
             return bmp;
@@ -701,7 +718,8 @@ namespace MazeAnalyzer
             Bitmap copy = new Bitmap((int)(mzHmWidth + cbWidth * 0.85), mzHmHeight);
             Graphics g = Graphics.FromImage(copy);
 
-            pictureBoxHeatmap_Paint(g, false, mzHmWidth, mzHmHeight, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
+            PaintHeatmap(g, false, mzHmWidth, mzHmHeight);
+            PaintColorBar(g, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
 
             Clipboard.Clear();
             Clipboard.SetImage(copy.Clone(new Rectangle(0, 0, (int)(mzHmWidth + cbWidth * 0.85), mzHmHeight), copy.PixelFormat));
@@ -838,7 +856,7 @@ namespace MazeAnalyzer
         {
             // new double[] parameter 0 less than parameter 1
             // new double[] parameter 1: average of heatmap xPixels & zPixels
-            double[,] colorbar = new double[Math.Min(selectedHeatmap.xPixels, selectedHeatmap.zPixels), (selectedHeatmap.xPixels + selectedHeatmap.zPixels) / 2];
+            double[,] colorbar = new double[1, 256];
 
             for (int i = 0; i < colorbar.GetLength(0); i++)
             {
@@ -902,7 +920,9 @@ namespace MazeAnalyzer
             mzHmHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * mzHmWidth);
             mazeDrawScale = 5 + ((double)panelHeatmap.Width - panelSettings.Width) / (1302.0 - panelSettings.Width) * 12;
 
-            pictureBoxHeatmap_Paint(e.Graphics, true, mzHmWidth, mzHmHeight, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
+            PaintHeatmap(e.Graphics, true, mzHmWidth, mzHmHeight);
+
+            PaintColorBar(e.Graphics, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
 
             if (showResBox) // paints resolution box
             {
@@ -911,7 +931,7 @@ namespace MazeAnalyzer
         }
 
         static bool scroll = false;
-        private void pictureBoxHeatmap_Paint(Graphics g, bool autosize, int mzHmWidth, int mzHmHeight, int cbWidth, int cbHeight, int cbTopLeftX, int cbTopLeftZ, int cbLabelSize, Color cbLabelColor)
+        private void PaintHeatmap(Graphics g, bool autosize, int mzHmWidth, int mzHmHeight)
         // overload for MakePng
         {
             // in maze coord * scale
@@ -948,7 +968,7 @@ namespace MazeAnalyzer
             Image mazeBmp = mv.PaintMazeToBuffer(mzTopLeftX, mzTopLeftZ, mzWidth, mzHeight, mazeDrawScale);
             Image anaRegnsBmp = mv.PaintAnalyzerItemsToBuffer(mzTopLeftX, mzTopLeftZ, mzWidth, mzHeight, mazeDrawScale);
             Bitmap heatmapBmp = HeatmapToBitmap(selectedHeatmap.val);
-            Bitmap colorbarBmp = MakeColorbar();
+            
            
 
             // autosize & scroll settings
@@ -965,7 +985,7 @@ namespace MazeAnalyzer
 
             // paints maze, heatmap, & colorbar
             SetInterpolation(g);
-            SetInterpolation(g);
+            //SetInterpolation(g);
 
             Rectangle mazeDest = new Rectangle(0, 0, mzHmWidth, mzHmHeight);
 
@@ -986,17 +1006,24 @@ namespace MazeAnalyzer
             Bitmap resizedHeatmapBmp = ResizeBitmap(heatmapBmp, sharpness, hmWidth);
             g.DrawImage(resizedHeatmapBmp, heatmapDest, 0, 0, resizedHeatmapBmp.Width, resizedHeatmapBmp.Height, GraphicsUnit.Pixel);
 
+            
+        }
+
+        private void PaintColorBar(Graphics g, int cbWidth, int cbHeight, int cbTopLeftX, int cbTopLeftZ, int cbLabelSize, Color cbLabelColor)
+        {
+            Bitmap colorbarBmp = MakeColorbar();
+
             Rectangle colorbarDest = new Rectangle(cbTopLeftX, cbTopLeftZ, cbWidth, cbHeight);
             g.DrawImage(colorbarBmp, colorbarDest, 0, 0, colorbarBmp.Width, colorbarBmp.Height, GraphicsUnit.Pixel);
 
             Font font = new Font(new FontFamily("times"), cbLabelSize);
             SolidBrush brush = new SolidBrush(cbLabelColor);
-            g.DrawString(string.Format("{0}\n({1})", heatmapTypeStr, heatmapUnits), font, brush, cbTopLeftX - font.Size, (float)(cbTopLeftZ + cbHeight * -0.22));
-            g.DrawString(string.Format("{0:0.00}", maxHeatVal), font, brush, cbTopLeftX, cbTopLeftZ);
-            g.DrawString(string.Format("{0:0.00}", minHeatVal + (maxHeatVal - minHeatVal) * .75), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.22));
-            g.DrawString(string.Format("{0:0.00}", minHeatVal + (maxHeatVal - minHeatVal) * .5), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.44));
-            g.DrawString(string.Format("{0:0.00}", minHeatVal + (maxHeatVal - minHeatVal) * .25), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.66));
-            g.DrawString(string.Format("{0:0.00}", minHeatVal), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.88));
+            g.DrawString(string.Format("{0}\n({1})", heatmapTypeStr, heatmapUnits), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * -0.22));
+            g.DrawString(string.Format("{0:0.##}", maxHeatVal), font, brush, cbTopLeftX + (int)font.Size, cbTopLeftZ);
+            g.DrawString(string.Format("{0:0.##}", minHeatVal + (maxHeatVal - minHeatVal) * .75), font, brush, cbTopLeftX + (int)font.Size, (float)(cbTopLeftZ + cbHeight * 0.22));
+            g.DrawString(string.Format("{0:0.##}", minHeatVal + (maxHeatVal - minHeatVal) * .5), font, brush, cbTopLeftX + (int)font.Size, (float)(cbTopLeftZ + cbHeight * 0.44));
+            g.DrawString(string.Format("{0:0.##}", minHeatVal + (maxHeatVal - minHeatVal) * .25), font, brush, cbTopLeftX + (int)font.Size, (float)(cbTopLeftZ + cbHeight * 0.66));
+            g.DrawString(string.Format("{0:0.##}", minHeatVal), font, brush, cbTopLeftX + (int)font.Size, (float)(cbTopLeftZ + cbHeight * 0.88));
         }
 
         public Bitmap ResizeBitmap(Bitmap bmp, int factor, int destWidth)
