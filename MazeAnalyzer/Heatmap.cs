@@ -10,7 +10,7 @@ namespace MazeAnalyzer
 {
     public partial class Heatmap : Form
     {
-        // effected by preset
+        // effected by color preset
         static Color cusMinColor = Color.FromArgb(128, 255, 128);
         static Color cusMaxColor = Color.FromArgb(128, 0, 255);
 
@@ -22,11 +22,11 @@ namespace MazeAnalyzer
         static bool showTransparentBg;
         static Color cusBgColor = Color.White;
 
-        public enum Preset
+        public enum ColorPreset
         {
             Cool, Hot, Gray, Custom
         }
-        static Preset preset = Preset.Cool;
+        static ColorPreset colorPreset = ColorPreset.Cool;
         static double midpoint = 0.1;
         static int opacity = 75;
         static int heatmapAlpha = (int)(opacity / 100.0 * 255);
@@ -68,7 +68,7 @@ namespace MazeAnalyzer
         private void HeatmapConfig_Load(object sender, EventArgs e)
         // syncs internal and external settings
         {
-            comboBoxPreset.SelectedIndex = (int)preset; // calls SetPreset
+            comboBoxColorPreset.SelectedIndex = (int)colorPreset; // calls SetColorPreset
             trackBarMidpoint.Value = (int)(midpoint * 10);
             trackBarOpacity.Value = opacity;
             heatmapAlpha = (int)(opacity / 100.0 * 255);
@@ -78,8 +78,8 @@ namespace MazeAnalyzer
             textBoxRes.Text = Convert.ToString(selectedHeatmap.res); // changes textBoxRes.BackColor to white
             textBoxRes.BackColor = SystemColors.Control;
 
-            double offsetX = Math.Round(selectedHeatmap.offsetX, 2, MidpointRounding.AwayFromZero);
-            double offsetZ = Math.Round(selectedHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero);
+            double offsetX = Math.Round(selectedHeatmap.offsetMazeX, 2, MidpointRounding.AwayFromZero);
+            double offsetZ = Math.Round(selectedHeatmap.offsetMazeZ, 2, MidpointRounding.AwayFromZero);
             textBoxOffset.Text = string.Format("{0}, {1}", offsetX, offsetZ);
             textBoxOffset.BackColor = SystemColors.Control;
             buttonOffset.Image = new Bitmap(buttonOffset.Image, 12, 12);
@@ -112,8 +112,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                preset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)preset; // calls SetPreset
+                colorPreset = ColorPreset.Custom;
+                comboBoxColorPreset.SelectedIndex = (int)colorPreset; // calls SetColorPreset
                 cusMinColor = colorDialog.Color;
 
                 buttonMinColor.BackColor = cusMinColor;
@@ -125,8 +125,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                preset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)preset;
+                colorPreset = ColorPreset.Custom;
+                comboBoxColorPreset.SelectedIndex = (int)colorPreset;
                 cusMaxColor = colorDialog.Color;
 
                 buttonMaxColor.BackColor = cusMaxColor;
@@ -136,8 +136,8 @@ namespace MazeAnalyzer
 
         private void checkBoxShowMidColor_Click(object sender, EventArgs e)
         {
-            preset = Preset.Custom;
-            comboBoxPreset.SelectedIndex = (int)preset;
+            colorPreset = ColorPreset.Custom;
+            comboBoxColorPreset.SelectedIndex = (int)colorPreset;
             showMidColor = !showMidColor;
             checkBoxShowMidColor.Checked = showMidColor;
             showCusMidColor = showMidColor;
@@ -149,8 +149,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                preset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)preset;
+                colorPreset = ColorPreset.Custom;
+                comboBoxColorPreset.SelectedIndex = (int)colorPreset;
                 cusMidColor = colorDialog.Color;
 
                 buttonMidColor.BackColor = cusMidColor;
@@ -160,8 +160,8 @@ namespace MazeAnalyzer
 
         private void checkBoxShowBgTransparent_Click(object sender, EventArgs e)
         {
-            preset = Preset.Custom;
-            comboBoxPreset.SelectedIndex = (int)preset;
+            colorPreset = ColorPreset.Custom;
+            comboBoxColorPreset.SelectedIndex = (int)colorPreset;
             showTransparentBg = !showTransparentBg;
             checkBoxShowTransparentBg.Checked = showTransparentBg;
             showCusTransparentBg = showTransparentBg;
@@ -173,8 +173,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                preset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)preset;
+                colorPreset = ColorPreset.Custom;
+                comboBoxColorPreset.SelectedIndex = (int)colorPreset;
                 cusBgColor = colorDialog.Color;
 
                 buttonBgColor.BackColor = cusBgColor;
@@ -182,36 +182,36 @@ namespace MazeAnalyzer
             }
         }
 
-        private void comboBoxPreset_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxColorPreset_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetPreset((Preset)comboBoxPreset.SelectedIndex);
+            SetColorPreset((ColorPreset)comboBoxColorPreset.SelectedIndex);
 
             Refresh();
         }
 
-        private void SetPreset(Preset newPreset)
+        private void SetColorPreset(ColorPreset newColorPreset)
         {
-            switch (newPreset)
+            switch (newColorPreset)
             {
-                case Preset.Cool:
+                case ColorPreset.Cool:
                     buttonMinColor.BackColor = Color.FromArgb(128, 255, 128);
                     buttonMidColor.BackColor = Color.FromArgb(128, 255, 255);
                     buttonMaxColor.BackColor = Color.FromArgb(128, 0, 255);
                     break;
 
-                case Preset.Hot:
+                case ColorPreset.Hot:
                     buttonMinColor.BackColor = Color.White;
                     buttonMidColor.BackColor = Color.FromArgb(255, 255, 128);
                     buttonMaxColor.BackColor = Color.FromArgb(255, 128, 128);
                     break;
 
-                case Preset.Gray:
+                case ColorPreset.Gray:
                     buttonMinColor.BackColor = Color.FromArgb(128, 128, 128);
                     buttonMidColor.BackColor = Color.FromArgb(192, 192, 192);
                     buttonMaxColor.BackColor = Color.White;
                     break;
 
-                case Preset.Custom:
+                case ColorPreset.Custom:
                     buttonMinColor.BackColor = cusMinColor;
                     buttonMaxColor.BackColor = cusMaxColor;
 
@@ -226,7 +226,7 @@ namespace MazeAnalyzer
                     break;
             }
 
-            if (newPreset != Preset.Custom)
+            if (newColorPreset != ColorPreset.Custom)
             {
                 showMidColor = true;
                 checkBoxShowMidColor.Checked = showMidColor;
@@ -235,7 +235,7 @@ namespace MazeAnalyzer
                 buttonBgColor.BackColor = Color.White;
             }
             
-            preset = newPreset;
+            colorPreset = newColorPreset;
         }
 
         private void trackBarMidpoint_Scroll(object sender, EventArgs e)
@@ -300,8 +300,8 @@ namespace MazeAnalyzer
         {
             string newOffSetX = textBoxOffset.Text.Split(new String[] { ", " }, StringSplitOptions.None)[0];
             string newOffSetZ = textBoxOffset.Text.Split(new String[] { ", " }, StringSplitOptions.None)[1];
-            string offsetX = Convert.ToString(Math.Round(selectedHeatmap.offsetX, 2, MidpointRounding.AwayFromZero));
-            string offsetZ = Convert.ToString(Math.Round(selectedHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero));
+            string offsetX = Convert.ToString(Math.Round(selectedHeatmap.offsetMazeX, 2, MidpointRounding.AwayFromZero));
+            string offsetZ = Convert.ToString(Math.Round(selectedHeatmap.offsetMazeZ, 2, MidpointRounding.AwayFromZero));
 
             if (newOffSetX != offsetX || newOffSetZ != offsetZ)
             {
@@ -453,12 +453,12 @@ namespace MazeAnalyzer
         {
             PointF mazeCoord = new PointF();
 
-            double mzTopLeftX = selectedHeatmap.hmXCenter - selectedHeatmap.xBotRadius * selectedHeatmap.res - buffer;
+            double mzTopLeftX = selectedHeatmap.hmXCenter - selectedHeatmap.xOffsetRemainder_Bot * selectedHeatmap.res - buffer;
             double mzWidth = selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2;
 
             mazeCoord.X = (float)Math.Round(mzTopLeftX + x / mzHmWidth * mzWidth, 2, MidpointRounding.AwayFromZero);
 
-            double mzTopLeftZ = selectedHeatmap.hmZCenter - selectedHeatmap.zBotRadius * selectedHeatmap.res - buffer;
+            double mzTopLeftZ = selectedHeatmap.hmZCenter - selectedHeatmap.zOffsetRemainder_Bot * selectedHeatmap.res - buffer;
             double mzHeight = selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2;
 
             mazeCoord.Y = (float)Math.Round(mzTopLeftZ + (z - panelHeatmap.AutoScrollPosition.Y) / mzHmHeight * mzHeight, 2, MidpointRounding.AwayFromZero);
@@ -548,11 +548,11 @@ namespace MazeAnalyzer
                 csv.Write("\n");
 
                 csv.Write("xz, ");
-                string hmXBorders = GetHeatmapBorders(selectedHeatmap.offsetX, selectedHeatmap.xBotRadius, selectedHeatmap.xPixels);
+                string hmXBorders = GetHeatmapBorders(selectedHeatmap.offsetMazeX, selectedHeatmap.xOffsetRemainder_Bot, selectedHeatmap.xPixels);
                 csv.Write(hmXBorders.Substring(0, hmXBorders.Length - 2));
                 csv.Write("\n");
 
-                string[] hmZBorders = GetHeatmapBorders(selectedHeatmap.offsetZ, selectedHeatmap.zBotRadius, selectedHeatmap.zPixels).Split(' ');
+                string[] hmZBorders = GetHeatmapBorders(selectedHeatmap.offsetMazeZ, selectedHeatmap.zOffsetRemainder_Bot, selectedHeatmap.zPixels).Split(' ');
 
                 for (int i = 0; i < selectedHeatmap.val.GetLength(1); i++)
                 {
@@ -862,8 +862,8 @@ namespace MazeAnalyzer
         // overload for MakePng
         {
             // in maze coord * scale
-            int mzTopLeftX = (int)(-(selectedHeatmap.hmXCenter - selectedHeatmap.xBotRadius * selectedHeatmap.res - buffer) * scale);
-            int mzTopLeftZ = (int)(-(selectedHeatmap.hmZCenter - selectedHeatmap.zBotRadius * selectedHeatmap.res - buffer) * scale);
+            int mzTopLeftX = (int)(-(selectedHeatmap.hmXCenter - selectedHeatmap.xOffsetRemainder_Bot * selectedHeatmap.res - buffer) * scale);
+            int mzTopLeftZ = (int)(-(selectedHeatmap.hmZCenter - selectedHeatmap.zOffsetRemainder_Bot * selectedHeatmap.res - buffer) * scale);
             int mzWidth = (int)((selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * scale);
             int mzHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) * scale);
 

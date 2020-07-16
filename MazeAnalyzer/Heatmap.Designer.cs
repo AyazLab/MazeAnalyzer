@@ -45,8 +45,8 @@
             this.labelOpacity = new System.Windows.Forms.Label();
             this.textBoxOffset = new System.Windows.Forms.TextBox();
             this.labelOffset = new System.Windows.Forms.Label();
-            this.comboBoxPreset = new System.Windows.Forms.ComboBox();
-            this.labelPreset = new System.Windows.Forms.Label();
+            this.comboBoxColorPreset = new System.Windows.Forms.ComboBox();
+            this.labelColorPreset = new System.Windows.Forms.Label();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.labelDrawSettings = new System.Windows.Forms.Label();
             this.labelQualitySettings = new System.Windows.Forms.Label();
@@ -240,28 +240,28 @@
             this.labelOffset.Text = "Offset (x, z)";
             this.labelOffset.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // comboBoxPreset
+            // comboBoxColorPreset
             // 
-            this.comboBoxPreset.FormattingEnabled = true;
-            this.comboBoxPreset.Items.AddRange(new object[] {
+            this.comboBoxColorPreset.FormattingEnabled = true;
+            this.comboBoxColorPreset.Items.AddRange(new object[] {
             "cool scale",
             "hot scale",
             "gray scale",
             "custom"});
-            this.comboBoxPreset.Location = new System.Drawing.Point(67, 40);
-            this.comboBoxPreset.Name = "comboBoxPreset";
-            this.comboBoxPreset.Size = new System.Drawing.Size(121, 24);
-            this.comboBoxPreset.TabIndex = 38;
-            this.comboBoxPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxPreset_SelectedIndexChanged);
+            this.comboBoxColorPreset.Location = new System.Drawing.Point(67, 40);
+            this.comboBoxColorPreset.Name = "comboBoxColorPreset";
+            this.comboBoxColorPreset.Size = new System.Drawing.Size(121, 24);
+            this.comboBoxColorPreset.TabIndex = 38;
+            this.comboBoxColorPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxColorPreset_SelectedIndexChanged);
             // 
-            // labelPreset
+            // labelColorPreset
             // 
-            this.labelPreset.AutoSize = true;
-            this.labelPreset.Location = new System.Drawing.Point(12, 43);
-            this.labelPreset.Name = "labelPreset";
-            this.labelPreset.Size = new System.Drawing.Size(49, 17);
-            this.labelPreset.TabIndex = 39;
-            this.labelPreset.Text = "Preset";
+            this.labelColorPreset.AutoSize = true;
+            this.labelColorPreset.Location = new System.Drawing.Point(12, 43);
+            this.labelColorPreset.Name = "labelColorPreset";
+            this.labelColorPreset.Size = new System.Drawing.Size(49, 17);
+            this.labelColorPreset.TabIndex = 39;
+            this.labelColorPreset.Text = "Preset";
             // 
             // splitter1
             // 
@@ -396,11 +396,11 @@
             this.panelSettings.Controls.Add(this.labelOpacity);
             this.panelSettings.Controls.Add(this.buttonBgColor);
             this.panelSettings.Controls.Add(this.checkBoxShowMidColor);
-            this.panelSettings.Controls.Add(this.labelPreset);
+            this.panelSettings.Controls.Add(this.labelColorPreset);
             this.panelSettings.Controls.Add(this.buttonMidColor);
             this.panelSettings.Controls.Add(this.textBoxRes);
             this.panelSettings.Controls.Add(this.textBoxOffset);
-            this.panelSettings.Controls.Add(this.comboBoxPreset);
+            this.panelSettings.Controls.Add(this.comboBoxColorPreset);
             this.panelSettings.Controls.Add(this.buttonMinColor);
             this.panelSettings.Controls.Add(this.buttonMaxColor);
             this.panelSettings.Controls.Add(this.labelOffset);
@@ -558,8 +558,8 @@
         private System.Windows.Forms.Label labelOpacity;
         private System.Windows.Forms.TextBox textBoxOffset;
         private System.Windows.Forms.Label labelOffset;
-        private System.Windows.Forms.ComboBox comboBoxPreset;
-        private System.Windows.Forms.Label labelPreset;
+        private System.Windows.Forms.ComboBox comboBoxColorPreset;
+        private System.Windows.Forms.Label labelColorPreset;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Button buttonSaveCsv;
         private System.Windows.Forms.RadioButton radioButtonPres;
