@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Heatmap));
             this.textBoxRes = new System.Windows.Forms.TextBox();
             this.buttonMaxColor = new System.Windows.Forms.Button();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
@@ -78,18 +79,20 @@
             // 
             // textBoxRes
             // 
-            this.textBoxRes.Location = new System.Drawing.Point(216, 455);
+            this.textBoxRes.Location = new System.Drawing.Point(243, 569);
+            this.textBoxRes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxRes.Name = "textBoxRes";
-            this.textBoxRes.Size = new System.Drawing.Size(57, 22);
+            this.textBoxRes.Size = new System.Drawing.Size(64, 26);
             this.textBoxRes.TabIndex = 1;
             this.textBoxRes.TextChanged += new System.EventHandler(this.textBoxRes_TextChanged);
             this.textBoxRes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxRes_KeyDown);
             // 
             // buttonMaxColor
             // 
-            this.buttonMaxColor.Location = new System.Drawing.Point(67, 81);
+            this.buttonMaxColor.Location = new System.Drawing.Point(75, 101);
+            this.buttonMaxColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonMaxColor.Name = "buttonMaxColor";
-            this.buttonMaxColor.Size = new System.Drawing.Size(84, 23);
+            this.buttonMaxColor.Size = new System.Drawing.Size(94, 29);
             this.buttonMaxColor.TabIndex = 2;
             this.buttonMaxColor.Text = "Max Color";
             this.buttonMaxColor.UseVisualStyleBackColor = true;
@@ -97,9 +100,10 @@
             // 
             // buttonMinColor
             // 
-            this.buttonMinColor.Location = new System.Drawing.Point(67, 260);
+            this.buttonMinColor.Location = new System.Drawing.Point(75, 325);
+            this.buttonMinColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonMinColor.Name = "buttonMinColor";
-            this.buttonMinColor.Size = new System.Drawing.Size(84, 23);
+            this.buttonMinColor.Size = new System.Drawing.Size(94, 29);
             this.buttonMinColor.TabIndex = 3;
             this.buttonMinColor.Text = "Min Color";
             this.buttonMinColor.UseVisualStyleBackColor = true;
@@ -107,9 +111,10 @@
             // 
             // buttonBgColor
             // 
-            this.buttonBgColor.Location = new System.Drawing.Point(15, 376);
+            this.buttonBgColor.Location = new System.Drawing.Point(17, 470);
+            this.buttonBgColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonBgColor.Name = "buttonBgColor";
-            this.buttonBgColor.Size = new System.Drawing.Size(143, 23);
+            this.buttonBgColor.Size = new System.Drawing.Size(161, 29);
             this.buttonBgColor.TabIndex = 4;
             this.buttonBgColor.Text = "Background Color";
             this.buttonBgColor.UseVisualStyleBackColor = true;
@@ -117,9 +122,10 @@
             // 
             // buttonMidColor
             // 
-            this.buttonMidColor.Location = new System.Drawing.Point(67, 181);
+            this.buttonMidColor.Location = new System.Drawing.Point(75, 226);
+            this.buttonMidColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonMidColor.Name = "buttonMidColor";
-            this.buttonMidColor.Size = new System.Drawing.Size(84, 23);
+            this.buttonMidColor.Size = new System.Drawing.Size(94, 29);
             this.buttonMidColor.TabIndex = 10;
             this.buttonMidColor.Text = "Mid Color";
             this.buttonMidColor.UseVisualStyleBackColor = true;
@@ -128,9 +134,10 @@
             // checkBoxShowTransparentBg
             // 
             this.checkBoxShowTransparentBg.AutoSize = true;
-            this.checkBoxShowTransparentBg.Location = new System.Drawing.Point(15, 349);
+            this.checkBoxShowTransparentBg.Location = new System.Drawing.Point(17, 436);
+            this.checkBoxShowTransparentBg.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxShowTransparentBg.Name = "checkBoxShowTransparentBg";
-            this.checkBoxShowTransparentBg.Size = new System.Drawing.Size(188, 21);
+            this.checkBoxShowTransparentBg.Size = new System.Drawing.Size(211, 24);
             this.checkBoxShowTransparentBg.TabIndex = 17;
             this.checkBoxShowTransparentBg.Text = "Transparent Background";
             this.checkBoxShowTransparentBg.UseVisualStyleBackColor = true;
@@ -139,9 +146,10 @@
             // checkBoxShowMidColor
             // 
             this.checkBoxShowMidColor.AutoSize = true;
-            this.checkBoxShowMidColor.Location = new System.Drawing.Point(67, 154);
+            this.checkBoxShowMidColor.Location = new System.Drawing.Point(75, 192);
+            this.checkBoxShowMidColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxShowMidColor.Name = "checkBoxShowMidColor";
-            this.checkBoxShowMidColor.Size = new System.Drawing.Size(89, 21);
+            this.checkBoxShowMidColor.Size = new System.Drawing.Size(101, 24);
             this.checkBoxShowMidColor.TabIndex = 18;
             this.checkBoxShowMidColor.Text = "Mid Color";
             this.checkBoxShowMidColor.UseVisualStyleBackColor = true;
@@ -149,11 +157,12 @@
             // 
             // trackBarMidpoint
             // 
-            this.trackBarMidpoint.Location = new System.Drawing.Point(15, 81);
+            this.trackBarMidpoint.Location = new System.Drawing.Point(17, 101);
+            this.trackBarMidpoint.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.trackBarMidpoint.Maximum = 9;
             this.trackBarMidpoint.Name = "trackBarMidpoint";
             this.trackBarMidpoint.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBarMidpoint.Size = new System.Drawing.Size(56, 202);
+            this.trackBarMidpoint.Size = new System.Drawing.Size(69, 252);
             this.trackBarMidpoint.TabIndex = 19;
             this.trackBarMidpoint.Scroll += new System.EventHandler(this.trackBarMidpoint_Scroll);
             // 
@@ -167,35 +176,37 @@
             "HighQualityBilinear",
             "Bicubic",
             "HighQualityBicubic"});
-            this.comboBoxInterpolation.Location = new System.Drawing.Point(104, 517);
+            this.comboBoxInterpolation.Location = new System.Drawing.Point(117, 646);
+            this.comboBoxInterpolation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxInterpolation.Name = "comboBoxInterpolation";
-            this.comboBoxInterpolation.Size = new System.Drawing.Size(169, 24);
+            this.comboBoxInterpolation.Size = new System.Drawing.Size(190, 28);
             this.comboBoxInterpolation.TabIndex = 21;
             this.comboBoxInterpolation.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterpolation_SelectedIndexChanged);
             // 
             // labelRes
             // 
             this.labelRes.AutoSize = true;
-            this.labelRes.Location = new System.Drawing.Point(12, 455);
+            this.labelRes.Location = new System.Drawing.Point(14, 569);
             this.labelRes.Name = "labelRes";
-            this.labelRes.Size = new System.Drawing.Size(198, 17);
+            this.labelRes.Size = new System.Drawing.Size(221, 20);
             this.labelRes.TabIndex = 22;
             this.labelRes.Text = "Resolution [Maze Units / Pixel]";
             // 
             // labelShowInterpolation
             // 
             this.labelShowInterpolation.AutoSize = true;
-            this.labelShowInterpolation.Location = new System.Drawing.Point(12, 517);
+            this.labelShowInterpolation.Location = new System.Drawing.Point(14, 646);
             this.labelShowInterpolation.Name = "labelShowInterpolation";
-            this.labelShowInterpolation.Size = new System.Drawing.Size(86, 17);
+            this.labelShowInterpolation.Size = new System.Drawing.Size(98, 20);
             this.labelShowInterpolation.TabIndex = 24;
             this.labelShowInterpolation.Text = "Interpolation";
             // 
             // buttonSavePng
             // 
-            this.buttonSavePng.Location = new System.Drawing.Point(107, 718);
+            this.buttonSavePng.Location = new System.Drawing.Point(120, 898);
+            this.buttonSavePng.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonSavePng.Name = "buttonSavePng";
-            this.buttonSavePng.Size = new System.Drawing.Size(93, 23);
+            this.buttonSavePng.Size = new System.Drawing.Size(105, 29);
             this.buttonSavePng.TabIndex = 26;
             this.buttonSavePng.Text = "Save PNG";
             this.buttonSavePng.UseVisualStyleBackColor = true;
@@ -203,10 +214,11 @@
             // 
             // trackBarOpacity
             // 
-            this.trackBarOpacity.Location = new System.Drawing.Point(67, 314);
+            this.trackBarOpacity.Location = new System.Drawing.Point(75, 392);
+            this.trackBarOpacity.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.trackBarOpacity.Maximum = 100;
             this.trackBarOpacity.Name = "trackBarOpacity";
-            this.trackBarOpacity.Size = new System.Drawing.Size(121, 56);
+            this.trackBarOpacity.Size = new System.Drawing.Size(136, 69);
             this.trackBarOpacity.TabIndex = 28;
             this.trackBarOpacity.TickFrequency = 10;
             this.trackBarOpacity.Scroll += new System.EventHandler(this.trackBarOpacity_Scroll);
@@ -214,17 +226,18 @@
             // labelOpacity
             // 
             this.labelOpacity.AutoSize = true;
-            this.labelOpacity.Location = new System.Drawing.Point(5, 314);
+            this.labelOpacity.Location = new System.Drawing.Point(6, 392);
             this.labelOpacity.Name = "labelOpacity";
-            this.labelOpacity.Size = new System.Drawing.Size(56, 17);
+            this.labelOpacity.Size = new System.Drawing.Size(62, 20);
             this.labelOpacity.TabIndex = 29;
             this.labelOpacity.Text = "Opacity";
             // 
             // textBoxOffset
             // 
-            this.textBoxOffset.Location = new System.Drawing.Point(99, 484);
+            this.textBoxOffset.Location = new System.Drawing.Point(111, 605);
+            this.textBoxOffset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxOffset.Name = "textBoxOffset";
-            this.textBoxOffset.Size = new System.Drawing.Size(100, 22);
+            this.textBoxOffset.Size = new System.Drawing.Size(112, 26);
             this.textBoxOffset.TabIndex = 34;
             this.textBoxOffset.TextChanged += new System.EventHandler(this.textBoxOffset_TextChanged);
             this.textBoxOffset.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxOffset_KeyDown);
@@ -233,9 +246,9 @@
             // 
             this.labelOffset.AutoSize = true;
             this.labelOffset.BackColor = System.Drawing.SystemColors.Control;
-            this.labelOffset.Location = new System.Drawing.Point(12, 484);
+            this.labelOffset.Location = new System.Drawing.Point(14, 605);
             this.labelOffset.Name = "labelOffset";
-            this.labelOffset.Size = new System.Drawing.Size(81, 17);
+            this.labelOffset.Size = new System.Drawing.Size(90, 20);
             this.labelOffset.TabIndex = 36;
             this.labelOffset.Text = "Offset (x, z)";
             this.labelOffset.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -248,26 +261,28 @@
             "hot scale",
             "gray scale",
             "custom"});
-            this.comboBoxColorPreset.Location = new System.Drawing.Point(67, 40);
+            this.comboBoxColorPreset.Location = new System.Drawing.Point(75, 50);
+            this.comboBoxColorPreset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxColorPreset.Name = "comboBoxColorPreset";
-            this.comboBoxColorPreset.Size = new System.Drawing.Size(121, 24);
+            this.comboBoxColorPreset.Size = new System.Drawing.Size(136, 28);
             this.comboBoxColorPreset.TabIndex = 38;
             this.comboBoxColorPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxColorPreset_SelectedIndexChanged);
             // 
             // labelColorPreset
             // 
             this.labelColorPreset.AutoSize = true;
-            this.labelColorPreset.Location = new System.Drawing.Point(12, 43);
+            this.labelColorPreset.Location = new System.Drawing.Point(14, 54);
             this.labelColorPreset.Name = "labelColorPreset";
-            this.labelColorPreset.Size = new System.Drawing.Size(49, 17);
+            this.labelColorPreset.Size = new System.Drawing.Size(55, 20);
             this.labelColorPreset.TabIndex = 39;
             this.labelColorPreset.Text = "Preset";
             // 
             // splitter1
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
+            this.splitter1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 767);
+            this.splitter1.Size = new System.Drawing.Size(3, 959);
             this.splitter1.TabIndex = 40;
             this.splitter1.TabStop = false;
             // 
@@ -275,9 +290,9 @@
             // 
             this.labelDrawSettings.AutoSize = true;
             this.labelDrawSettings.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.labelDrawSettings.Location = new System.Drawing.Point(12, 607);
+            this.labelDrawSettings.Location = new System.Drawing.Point(14, 759);
             this.labelDrawSettings.Name = "labelDrawSettings";
-            this.labelDrawSettings.Size = new System.Drawing.Size(95, 17);
+            this.labelDrawSettings.Size = new System.Drawing.Size(109, 20);
             this.labelDrawSettings.TabIndex = 49;
             this.labelDrawSettings.Text = "Draw Settings";
             // 
@@ -285,9 +300,9 @@
             // 
             this.labelQualitySettings.AutoSize = true;
             this.labelQualitySettings.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.labelQualitySettings.Location = new System.Drawing.Point(12, 426);
+            this.labelQualitySettings.Location = new System.Drawing.Point(14, 532);
             this.labelQualitySettings.Name = "labelQualitySettings";
-            this.labelQualitySettings.Size = new System.Drawing.Size(107, 17);
+            this.labelQualitySettings.Size = new System.Drawing.Size(120, 20);
             this.labelQualitySettings.TabIndex = 48;
             this.labelQualitySettings.Text = "Quality Settings";
             // 
@@ -295,18 +310,19 @@
             // 
             this.labelColorSettings.AutoSize = true;
             this.labelColorSettings.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.labelColorSettings.Location = new System.Drawing.Point(12, 9);
+            this.labelColorSettings.Location = new System.Drawing.Point(14, 11);
             this.labelColorSettings.Name = "labelColorSettings";
-            this.labelColorSettings.Size = new System.Drawing.Size(96, 17);
+            this.labelColorSettings.Size = new System.Drawing.Size(109, 20);
             this.labelColorSettings.TabIndex = 47;
             this.labelColorSettings.Text = "Color Settings";
             // 
             // checkBoxShowAnaRegns
             // 
             this.checkBoxShowAnaRegns.AutoSize = true;
-            this.checkBoxShowAnaRegns.Location = new System.Drawing.Point(107, 665);
+            this.checkBoxShowAnaRegns.Location = new System.Drawing.Point(120, 831);
+            this.checkBoxShowAnaRegns.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxShowAnaRegns.Name = "checkBoxShowAnaRegns";
-            this.checkBoxShowAnaRegns.Size = new System.Drawing.Size(141, 21);
+            this.checkBoxShowAnaRegns.Size = new System.Drawing.Size(159, 24);
             this.checkBoxShowAnaRegns.TabIndex = 45;
             this.checkBoxShowAnaRegns.Text = "Analyzer Regions";
             this.checkBoxShowAnaRegns.UseVisualStyleBackColor = true;
@@ -315,9 +331,10 @@
             // checkBoxShowMaze
             // 
             this.checkBoxShowMaze.AutoSize = true;
-            this.checkBoxShowMaze.Location = new System.Drawing.Point(107, 638);
+            this.checkBoxShowMaze.Location = new System.Drawing.Point(120, 798);
+            this.checkBoxShowMaze.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxShowMaze.Name = "checkBoxShowMaze";
-            this.checkBoxShowMaze.Size = new System.Drawing.Size(64, 21);
+            this.checkBoxShowMaze.Size = new System.Drawing.Size(74, 24);
             this.checkBoxShowMaze.TabIndex = 44;
             this.checkBoxShowMaze.Text = "Maze";
             this.checkBoxShowMaze.UseVisualStyleBackColor = true;
@@ -326,9 +343,10 @@
             // radioButtonTime
             // 
             this.radioButtonTime.AutoSize = true;
-            this.radioButtonTime.Location = new System.Drawing.Point(12, 691);
+            this.radioButtonTime.Location = new System.Drawing.Point(14, 864);
+            this.radioButtonTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.radioButtonTime.Name = "radioButtonTime";
-            this.radioButtonTime.Size = new System.Drawing.Size(60, 21);
+            this.radioButtonTime.Size = new System.Drawing.Size(68, 24);
             this.radioButtonTime.TabIndex = 42;
             this.radioButtonTime.Text = "Time";
             this.radioButtonTime.UseVisualStyleBackColor = true;
@@ -337,9 +355,10 @@
             // radioButtonEntr
             // 
             this.radioButtonEntr.AutoSize = true;
-            this.radioButtonEntr.Location = new System.Drawing.Point(12, 664);
+            this.radioButtonEntr.Location = new System.Drawing.Point(14, 830);
+            this.radioButtonEntr.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.radioButtonEntr.Name = "radioButtonEntr";
-            this.radioButtonEntr.Size = new System.Drawing.Size(86, 21);
+            this.radioButtonEntr.Size = new System.Drawing.Size(99, 24);
             this.radioButtonEntr.TabIndex = 41;
             this.radioButtonEntr.Text = "Entrance";
             this.radioButtonEntr.UseVisualStyleBackColor = true;
@@ -349,9 +368,10 @@
             // 
             this.radioButtonPres.AutoSize = true;
             this.radioButtonPres.Checked = true;
-            this.radioButtonPres.Location = new System.Drawing.Point(12, 637);
+            this.radioButtonPres.Location = new System.Drawing.Point(14, 796);
+            this.radioButtonPres.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.radioButtonPres.Name = "radioButtonPres";
-            this.radioButtonPres.Size = new System.Drawing.Size(89, 21);
+            this.radioButtonPres.Size = new System.Drawing.Size(101, 24);
             this.radioButtonPres.TabIndex = 0;
             this.radioButtonPres.TabStop = true;
             this.radioButtonPres.Text = "Presence";
@@ -360,9 +380,10 @@
             // 
             // buttonSaveCsv
             // 
-            this.buttonSaveCsv.Location = new System.Drawing.Point(8, 718);
+            this.buttonSaveCsv.Location = new System.Drawing.Point(9, 898);
+            this.buttonSaveCsv.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonSaveCsv.Name = "buttonSaveCsv";
-            this.buttonSaveCsv.Size = new System.Drawing.Size(93, 23);
+            this.buttonSaveCsv.Size = new System.Drawing.Size(105, 29);
             this.buttonSaveCsv.TabIndex = 40;
             this.buttonSaveCsv.Text = "Save CSV";
             this.buttonSaveCsv.UseVisualStyleBackColor = true;
@@ -406,16 +427,18 @@
             this.panelSettings.Controls.Add(this.labelOffset);
             this.panelSettings.Controls.Add(this.trackBarMidpoint);
             this.panelSettings.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelSettings.Location = new System.Drawing.Point(844, 0);
+            this.panelSettings.Location = new System.Drawing.Point(949, 0);
+            this.panelSettings.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelSettings.Name = "panelSettings";
-            this.panelSettings.Size = new System.Drawing.Size(309, 767);
+            this.panelSettings.Size = new System.Drawing.Size(348, 959);
             this.panelSettings.TabIndex = 42;
             // 
             // buttonCopy
             // 
-            this.buttonCopy.Location = new System.Drawing.Point(206, 706);
+            this.buttonCopy.Location = new System.Drawing.Point(232, 882);
+            this.buttonCopy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonCopy.Name = "buttonCopy";
-            this.buttonCopy.Size = new System.Drawing.Size(91, 46);
+            this.buttonCopy.Size = new System.Drawing.Size(102, 58);
             this.buttonCopy.TabIndex = 55;
             this.buttonCopy.Text = "Copy To Clipboard";
             this.buttonCopy.UseVisualStyleBackColor = true;
@@ -424,35 +447,36 @@
             // labelSharpness
             // 
             this.labelSharpness.AutoSize = true;
-            this.labelSharpness.Location = new System.Drawing.Point(12, 554);
+            this.labelSharpness.Location = new System.Drawing.Point(14, 692);
             this.labelSharpness.Name = "labelSharpness";
-            this.labelSharpness.Size = new System.Drawing.Size(76, 17);
+            this.labelSharpness.Size = new System.Drawing.Size(86, 20);
             this.labelSharpness.TabIndex = 54;
             this.labelSharpness.Text = "Sharpness";
             // 
             // labelSharpnessVal
             // 
             this.labelSharpnessVal.AutoSize = true;
-            this.labelSharpnessVal.Location = new System.Drawing.Point(221, 554);
+            this.labelSharpnessVal.Location = new System.Drawing.Point(249, 692);
             this.labelSharpnessVal.Name = "labelSharpnessVal";
-            this.labelSharpnessVal.Size = new System.Drawing.Size(0, 17);
+            this.labelSharpnessVal.Size = new System.Drawing.Size(0, 20);
             this.labelSharpnessVal.TabIndex = 53;
             // 
             // trackBarSharpness
             // 
-            this.trackBarSharpness.Location = new System.Drawing.Point(94, 547);
+            this.trackBarSharpness.Location = new System.Drawing.Point(106, 684);
+            this.trackBarSharpness.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.trackBarSharpness.Name = "trackBarSharpness";
-            this.trackBarSharpness.Size = new System.Drawing.Size(121, 56);
+            this.trackBarSharpness.Size = new System.Drawing.Size(136, 69);
             this.trackBarSharpness.TabIndex = 52;
             this.trackBarSharpness.Scroll += new System.EventHandler(this.trackBarSharpness_Scroll);
             // 
             // buttonAutoRes
             // 
             this.buttonAutoRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAutoRes.Location = new System.Drawing.Point(276, 455);
+            this.buttonAutoRes.Location = new System.Drawing.Point(310, 569);
             this.buttonAutoRes.Margin = new System.Windows.Forms.Padding(0);
             this.buttonAutoRes.Name = "buttonAutoRes";
-            this.buttonAutoRes.Size = new System.Drawing.Size(28, 24);
+            this.buttonAutoRes.Size = new System.Drawing.Size(32, 30);
             this.buttonAutoRes.TabIndex = 45;
             this.buttonAutoRes.Text = "¤";
             this.buttonAutoRes.UseVisualStyleBackColor = true;
@@ -463,10 +487,10 @@
             this.buttonOffset.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonOffset.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOffset.Image = global::MazeAnalyzer.Properties.Resources.target1;
-            this.buttonOffset.Location = new System.Drawing.Point(206, 482);
+            this.buttonOffset.Location = new System.Drawing.Point(232, 602);
             this.buttonOffset.Margin = new System.Windows.Forms.Padding(0);
             this.buttonOffset.Name = "buttonOffset";
-            this.buttonOffset.Size = new System.Drawing.Size(28, 24);
+            this.buttonOffset.Size = new System.Drawing.Size(32, 30);
             this.buttonOffset.TabIndex = 51;
             this.buttonOffset.UseVisualStyleBackColor = true;
             this.buttonOffset.Click += new System.EventHandler(this.buttonOffset_Click);
@@ -474,9 +498,9 @@
             // labelOpacityPercent
             // 
             this.labelOpacityPercent.AutoSize = true;
-            this.labelOpacityPercent.Location = new System.Drawing.Point(194, 314);
+            this.labelOpacityPercent.Location = new System.Drawing.Point(218, 392);
             this.labelOpacityPercent.Name = "labelOpacityPercent";
-            this.labelOpacityPercent.Size = new System.Drawing.Size(0, 17);
+            this.labelOpacityPercent.Size = new System.Drawing.Size(0, 20);
             this.labelOpacityPercent.TabIndex = 50;
             // 
             // labelScroll
@@ -484,7 +508,7 @@
             this.labelScroll.BackColor = System.Drawing.SystemColors.Control;
             this.labelScroll.Location = new System.Drawing.Point(0, 0);
             this.labelScroll.Name = "labelScroll";
-            this.labelScroll.Size = new System.Drawing.Size(31, 21);
+            this.labelScroll.Size = new System.Drawing.Size(35, 26);
             this.labelScroll.TabIndex = 43;
             // 
             // pictureBoxHeatmap
@@ -492,8 +516,9 @@
             this.pictureBoxHeatmap.BackColor = System.Drawing.Color.White;
             this.pictureBoxHeatmap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxHeatmap.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxHeatmap.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBoxHeatmap.Name = "pictureBoxHeatmap";
-            this.pictureBoxHeatmap.Size = new System.Drawing.Size(841, 767);
+            this.pictureBoxHeatmap.Size = new System.Drawing.Size(946, 959);
             this.pictureBoxHeatmap.TabIndex = 43;
             this.pictureBoxHeatmap.TabStop = false;
             this.pictureBoxHeatmap.Click += new System.EventHandler(this.pictureBoxHeatmap_Click);
@@ -510,22 +535,25 @@
             this.panelHeatmap.Controls.Add(this.labelScroll);
             this.panelHeatmap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelHeatmap.Location = new System.Drawing.Point(3, 0);
+            this.panelHeatmap.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelHeatmap.Name = "panelHeatmap";
-            this.panelHeatmap.Size = new System.Drawing.Size(841, 767);
+            this.panelHeatmap.Size = new System.Drawing.Size(946, 959);
             this.panelHeatmap.TabIndex = 44;
             this.panelHeatmap.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelHeatmap_Scroll);
             this.panelHeatmap.Resize += new System.EventHandler(this.panelHeatmap_Resize);
             // 
             // Heatmap
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1153, 767);
+            this.ClientSize = new System.Drawing.Size(1297, 959);
             this.Controls.Add(this.panelHeatmap);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.splitter1);
-            this.MinimumSize = new System.Drawing.Size(429, 807);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MinimumSize = new System.Drawing.Size(480, 995);
             this.Name = "Heatmap";
             this.Text = "Heatmap";
             this.Load += new System.EventHandler(this.HeatmapConfig_Load);
