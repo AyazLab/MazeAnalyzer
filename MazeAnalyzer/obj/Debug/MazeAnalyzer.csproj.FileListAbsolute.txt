@@ -40,4 +40,3 @@ F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Debug\MazeAnalyzer.csproj.CoreCompileInp
 F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Debug\MazeAnalyzer.csproj.CopyComplete
 F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Debug\MazeAnalyzer.exe
 F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Debug\MazeAnalyzer.pdb
-F:\Github\MazeAnalyzer\MazeAnalyzer\obj\Debug\MazeAnalyzer.Heatmap.resources
