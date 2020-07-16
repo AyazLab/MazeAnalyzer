@@ -69,12 +69,15 @@
             this.labelScroll = new System.Windows.Forms.Label();
             this.pictureBoxHeatmap = new System.Windows.Forms.PictureBox();
             this.panelHeatmap = new System.Windows.Forms.Panel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel_heatmap = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMidpoint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             this.panelSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSharpness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeatmap)).BeginInit();
             this.panelHeatmap.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxRes
@@ -282,7 +285,7 @@
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 959);
+            this.splitter1.Size = new System.Drawing.Size(3, 977);
             this.splitter1.TabIndex = 40;
             this.splitter1.TabStop = false;
             // 
@@ -392,6 +395,7 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.White;
+            this.panelSettings.Controls.Add(this.statusStrip1);
             this.panelSettings.Controls.Add(this.buttonCopy);
             this.panelSettings.Controls.Add(this.labelSharpness);
             this.panelSettings.Controls.Add(this.labelSharpnessVal);
@@ -430,7 +434,7 @@
             this.panelSettings.Location = new System.Drawing.Point(949, 0);
             this.panelSettings.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelSettings.Name = "panelSettings";
-            this.panelSettings.Size = new System.Drawing.Size(348, 959);
+            this.panelSettings.Size = new System.Drawing.Size(348, 977);
             this.panelSettings.TabIndex = 42;
             // 
             // buttonCopy
@@ -518,7 +522,7 @@
             this.pictureBoxHeatmap.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxHeatmap.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pictureBoxHeatmap.Name = "pictureBoxHeatmap";
-            this.pictureBoxHeatmap.Size = new System.Drawing.Size(946, 959);
+            this.pictureBoxHeatmap.Size = new System.Drawing.Size(946, 977);
             this.pictureBoxHeatmap.TabIndex = 43;
             this.pictureBoxHeatmap.TabStop = false;
             this.pictureBoxHeatmap.Click += new System.EventHandler(this.pictureBoxHeatmap_Click);
@@ -537,17 +541,35 @@
             this.panelHeatmap.Location = new System.Drawing.Point(3, 0);
             this.panelHeatmap.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelHeatmap.Name = "panelHeatmap";
-            this.panelHeatmap.Size = new System.Drawing.Size(946, 959);
+            this.panelHeatmap.Size = new System.Drawing.Size(946, 977);
             this.panelHeatmap.TabIndex = 44;
             this.panelHeatmap.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelHeatmap_Scroll);
             this.panelHeatmap.Resize += new System.EventHandler(this.panelHeatmap_Resize);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel_heatmap});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 945);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(348, 32);
+            this.statusStrip1.TabIndex = 56;
+            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
+            // 
+            // toolStripStatusLabel_heatmap
+            // 
+            this.toolStripStatusLabel_heatmap.Name = "toolStripStatusLabel_heatmap";
+            this.toolStripStatusLabel_heatmap.Size = new System.Drawing.Size(246, 25);
+            this.toolStripStatusLabel_heatmap.Text = "toolStripStatusLabel_heatmap";
             // 
             // Heatmap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1297, 959);
+            this.ClientSize = new System.Drawing.Size(1297, 977);
             this.Controls.Add(this.panelHeatmap);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.splitter1);
@@ -564,6 +586,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSharpness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeatmap)).EndInit();
             this.panelHeatmap.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -609,5 +633,7 @@
         private System.Windows.Forms.Label labelSharpnessVal;
         private System.Windows.Forms.TrackBar trackBarSharpness;
         private System.Windows.Forms.Button buttonCopy;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_heatmap;
     }
 }
