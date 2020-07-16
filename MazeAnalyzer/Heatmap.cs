@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 using MazeLib;
@@ -11,32 +10,33 @@ namespace MazeAnalyzer
 {
     public partial class Heatmap : Form
     {
+        // effected by preset
         static Color cusMinColor = Color.FromArgb(128, 255, 128);
         static Color cusMaxColor = Color.FromArgb(128, 0, 255);
 
-        static bool cusMidColorShow = true;
-        static bool midColorShow;
+        static bool showCusMidColor = true;
+        static bool showMidColor;
         static Color cusMidColor = Color.FromArgb(128, 255, 255);
 
-        static bool cusTransparentBg = true;
-        static bool transparentBg;
+        static bool showCusTransparentBg = true;
+        static bool showTransparentBg;
         static Color cusBgColor = Color.White;
 
         public enum Preset
         {
             Cool, Hot, Gray, Custom
         }
-        static Preset selectPreset = Preset.Cool;
+        static Preset preset = Preset.Cool;
         static double midpoint = 0.1;
         static int opacity = 75;
-        static int heatmapAlpha = (int)((double)opacity / 100 * 255);
+        static int heatmapAlpha = (int)(opacity / 100.0 * 255);
         static int sharpness = 0;
 
         public enum ClickMode
         {
             None, Offset, ResolutionBox
         }
-        ClickMode selectClickMode = ClickMode.None;
+        ClickMode clickMode = ClickMode.None;
         public enum InterpolationModes
         {
             None, Bilinear, HighQualityBilinear, Bicubic, HighQualityBicubic
@@ -45,41 +45,41 @@ namespace MazeAnalyzer
         readonly MazeViewer mv;
 
         static string heatmapTypeStr;
-        static HeatmapItem selectHeatmap = new HeatmapItem();
-        static double selectMinHeat;
-        static double selectMaxHeat;
+        static HeatmapItem selectedHeatmap = new HeatmapItem();
+        static double minHeatVal;
+        static double maxHeatVal;
         string heatmapUnits;
         
         static bool showMaze = true;
         static bool showAnaRegns = false;
 
-        static string csvPath; // a string containing the selected paths for the csv files
+        static string csvPaths; // the selected paths for the csv
 
         public Heatmap(MazeViewer mv)
         {
             InitializeComponent();
 
             this.mv = mv;
-            BuildHtmap(this.mv);
+            BuildHeatmap(this.mv);
 
             DoubleBuffered = true;
         }
 
         private void HeatmapConfig_Load(object sender, EventArgs e)
-        // matches the internal and external heatmap settings
+        // syncs internal and external settings
         {
-            comboBoxPreset.SelectedIndex = (int)selectPreset;
-            trackBarMidpoint.Value = Convert.ToInt32(midpoint * 10);
+            comboBoxPreset.SelectedIndex = (int)preset; // calls SetPreset
+            trackBarMidpoint.Value = (int)(midpoint * 10);
             trackBarOpacity.Value = opacity;
-            heatmapAlpha = (int)((double)opacity / 100 * 255);
+            heatmapAlpha = (int)(opacity / 100.0 * 255);
             labelOpacityPercent.Text = string.Format("{0}%", opacity);
 
 
-            textBoxRes.Text = Convert.ToString(selectHeatmap.res);
+            textBoxRes.Text = Convert.ToString(selectedHeatmap.res); // changes textBoxRes.BackColor to white
             textBoxRes.BackColor = SystemColors.Control;
 
-            double offsetX = Math.Round(selectHeatmap.offsetX, 2, MidpointRounding.AwayFromZero);
-            double offsetZ = Math.Round(selectHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero);
+            double offsetX = Math.Round(selectedHeatmap.offsetX, 2, MidpointRounding.AwayFromZero);
+            double offsetZ = Math.Round(selectedHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero);
             textBoxOffset.Text = string.Format("{0}, {1}", offsetX, offsetZ);
             textBoxOffset.BackColor = SystemColors.Control;
             buttonOffset.Image = new Bitmap(buttonOffset.Image, 12, 12);
@@ -90,20 +90,20 @@ namespace MazeAnalyzer
             labelSharpnessVal.Text = string.Format("{0}", sharpness);
 
 
-            if (selectHeatmap.type == HeatmapItem.Type.Presence)
+            if (selectedHeatmap.type == HeatmapItem.Type.Presence)
             {
                 radioButtonPres.Checked = true;
             }
-            else if (selectHeatmap.type == HeatmapItem.Type.Entrance)
+            else if (selectedHeatmap.type == HeatmapItem.Type.Entrance)
             {
                 radioButtonEntr.Checked = true;
             }
-            else if (selectHeatmap.type == HeatmapItem.Type.Time)
+            else if (selectedHeatmap.type == HeatmapItem.Type.Time)
             {
                 radioButtonTime.Checked = true;
             }
-            checkBoxMaze.Checked = showMaze;
-            checkBoxAnaRegns.Checked = showAnaRegns;
+            checkBoxShowMaze.Checked = showMaze;
+            checkBoxShowAnaRegns.Checked = showAnaRegns;
         }
 
 
@@ -112,8 +112,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                selectPreset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)selectPreset;
+                preset = Preset.Custom;
+                comboBoxPreset.SelectedIndex = (int)preset; // calls SetPreset
                 cusMinColor = colorDialog.Color;
 
                 buttonMinColor.BackColor = cusMinColor;
@@ -125,8 +125,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                selectPreset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)selectPreset;
+                preset = Preset.Custom;
+                comboBoxPreset.SelectedIndex = (int)preset;
                 cusMaxColor = colorDialog.Color;
 
                 buttonMaxColor.BackColor = cusMaxColor;
@@ -134,13 +134,13 @@ namespace MazeAnalyzer
             }
         }
 
-        private void checkBoxMidColor_Click(object sender, EventArgs e)
+        private void checkBoxShowMidColor_Click(object sender, EventArgs e)
         {
-            selectPreset = Preset.Custom;
-            comboBoxPreset.SelectedIndex = (int)selectPreset;
-            midColorShow = !midColorShow;
-            checkBoxMidColor.Checked = midColorShow;
-            cusMidColorShow = midColorShow;
+            preset = Preset.Custom;
+            comboBoxPreset.SelectedIndex = (int)preset;
+            showMidColor = !showMidColor;
+            checkBoxShowMidColor.Checked = showMidColor;
+            showCusMidColor = showMidColor;
 
             Refresh();
         }
@@ -149,8 +149,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                selectPreset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)selectPreset;
+                preset = Preset.Custom;
+                comboBoxPreset.SelectedIndex = (int)preset;
                 cusMidColor = colorDialog.Color;
 
                 buttonMidColor.BackColor = cusMidColor;
@@ -158,13 +158,13 @@ namespace MazeAnalyzer
             }
         }
 
-        private void checkBoxBgTransparent_Click(object sender, EventArgs e)
+        private void checkBoxShowBgTransparent_Click(object sender, EventArgs e)
         {
-            selectPreset = Preset.Custom;
-            comboBoxPreset.SelectedIndex = (int)selectPreset;
-            transparentBg = !transparentBg;
-            checkBoxTransparentBg.Checked = transparentBg;
-            cusTransparentBg = transparentBg;
+            preset = Preset.Custom;
+            comboBoxPreset.SelectedIndex = (int)preset;
+            showTransparentBg = !showTransparentBg;
+            checkBoxShowTransparentBg.Checked = showTransparentBg;
+            showCusTransparentBg = showTransparentBg;
 
             Refresh();
         }
@@ -173,8 +173,8 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                selectPreset = Preset.Custom;
-                comboBoxPreset.SelectedIndex = (int)selectPreset;
+                preset = Preset.Custom;
+                comboBoxPreset.SelectedIndex = (int)preset;
                 cusBgColor = colorDialog.Color;
 
                 buttonBgColor.BackColor = cusBgColor;
@@ -198,70 +198,76 @@ namespace MazeAnalyzer
                     buttonMidColor.BackColor = Color.FromArgb(128, 255, 255);
                     buttonMaxColor.BackColor = Color.FromArgb(128, 0, 255);
                     break;
+
                 case Preset.Hot:
                     buttonMinColor.BackColor = Color.White;
                     buttonMidColor.BackColor = Color.FromArgb(255, 255, 128);
                     buttonMaxColor.BackColor = Color.FromArgb(255, 128, 128);
                     break;
+
                 case Preset.Gray:
                     buttonMinColor.BackColor = Color.FromArgb(128, 128, 128);
                     buttonMidColor.BackColor = Color.FromArgb(192, 192, 192);
                     buttonMaxColor.BackColor = Color.White;
                     break;
+
                 case Preset.Custom:
                     buttonMinColor.BackColor = cusMinColor;
                     buttonMaxColor.BackColor = cusMaxColor;
 
-                    checkBoxMidColor.Checked = cusMidColorShow;
+                    checkBoxShowMidColor.Checked = showCusMidColor;
                     buttonMidColor.BackColor = cusMidColor;
 
-                    checkBoxTransparentBg.Checked = cusTransparentBg;
+                    checkBoxShowTransparentBg.Checked = showCusTransparentBg;
                     buttonBgColor.BackColor = cusBgColor;
                     break;
+
                 default:
                     break;
             }
+
             if (newPreset != Preset.Custom)
             {
-                midColorShow = true;
-                checkBoxMidColor.Checked = midColorShow;
-                transparentBg = true;
-                checkBoxTransparentBg.Checked = transparentBg;
+                showMidColor = true;
+                checkBoxShowMidColor.Checked = showMidColor;
+                showTransparentBg = true;
+                checkBoxShowTransparentBg.Checked = showTransparentBg;
                 buttonBgColor.BackColor = Color.White;
             }
-            selectPreset = newPreset;
+            
+            preset = newPreset;
         }
 
         private void trackBarMidpoint_Scroll(object sender, EventArgs e)
         {
-            midpoint = Convert.ToDouble(trackBarMidpoint.Value) / 10;
+            midpoint = (double)trackBarMidpoint.Value / 10;
 
-            if (checkBoxMidColor.Checked)
+            if (checkBoxShowMidColor.Checked)
             {
                 Refresh();
             }
             else
             {
-                checkBoxMidColor_Click(sender, e);
+                checkBoxShowMidColor_Click(sender, e);
             }
         }
 
         private void trackBarOpacity_Scroll(object sender, EventArgs e)
         {
             opacity = trackBarOpacity.Value;
-            heatmapAlpha = (int)((double)opacity / 100 * 255);
+            heatmapAlpha = (int)(opacity / 100.0 * 255);
 
             labelOpacityPercent.Text = string.Format("{0}%", opacity);
             Refresh();
         }
 
 
-        // resolution, offset, interpolation, & sharpness events
+        // quality settings [resolution, offset, interpolation, & sharpness]
         private void textBoxRes_KeyDown(object sender, KeyEventArgs e)
+        // 0.2 - 15 maze coord / pixel recommended
         {
             if (e.KeyCode == Keys.Enter)
             {
-                // 0.2 - 15 maze units / pixel, beyond this range, heatmap calculations and colorbar pixel approximations could slow down
                 mv.SetHeatmapRes(Convert.ToDouble(textBoxRes.Text));
 
                 textBoxRes.BackColor = SystemColors.Control;
@@ -280,6 +286,7 @@ namespace MazeAnalyzer
             {
                 SetOffset();
             }
+
             textBoxOffset.BackColor = SystemColors.Control;
         }
 
@@ -289,11 +296,12 @@ namespace MazeAnalyzer
         }
 
         void SetOffset()
+        // called when textBoxOffset is changed or after an active ClickMode
         {
             string newOffSetX = textBoxOffset.Text.Split(new String[] { ", " }, StringSplitOptions.None)[0];
             string newOffSetZ = textBoxOffset.Text.Split(new String[] { ", " }, StringSplitOptions.None)[1];
-            string offsetX = Convert.ToString(Math.Round(selectHeatmap.offsetX, 2, MidpointRounding.AwayFromZero));
-            string offsetZ = Convert.ToString(Math.Round(selectHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero));
+            string offsetX = Convert.ToString(Math.Round(selectedHeatmap.offsetX, 2, MidpointRounding.AwayFromZero));
+            string offsetZ = Convert.ToString(Math.Round(selectedHeatmap.offsetZ, 2, MidpointRounding.AwayFromZero));
 
             if (newOffSetX != offsetX || newOffSetZ != offsetZ)
             {
@@ -303,9 +311,9 @@ namespace MazeAnalyzer
         }
 
         void RebuildHeatmap()
-        // called when the resolution or offset is changed
+        // call when the resolution or offset is changed
         {
-            BuildHtmap(mv);
+            BuildHeatmap(mv);
 
             Refresh();
         }
@@ -328,110 +336,116 @@ namespace MazeAnalyzer
         Point mouseCoord1;
         Point mouseCoord2;
         private void buttonAutoRes_Click(object sender, EventArgs e)
+        // auto resolution feature
         {
-            if (selectClickMode == ClickMode.ResolutionBox)
+            if (clickMode == ClickMode.ResolutionBox)
             {
-                selectClickMode = ClickMode.None;
+                clickMode = ClickMode.None;
                 Cursor = Cursors.Default;
             }
             else
             {
-                selectClickMode = ClickMode.ResolutionBox;
+                clickMode = ClickMode.ResolutionBox;
                 Cursor = Cursors.Cross;
             }
         }
 
-        private void pictureBoxHtmap_MouseDown(object sender, MouseEventArgs e)
+        private void pictureBoxHeatmap_MouseDown(object sender, MouseEventArgs e)
+        // auto resolution feature
         {
             MouseEventArgs mouseCoord = e;
 
-            if (selectClickMode == ClickMode.ResolutionBox)
+            if (clickMode == ClickMode.ResolutionBox)
             {
-                mouseCoord1 = new Point(mouseCoord.X, mouseCoord.Y - panelHtmap.AutoScrollPosition.Y);
+                mouseCoord1 = new Point(mouseCoord.X, mouseCoord.Y - panelHeatmap.AutoScrollPosition.Y);
             }
         }
 
-        bool selectRect = false;
-        private void pictureBoxHtmap_MouseMove(object sender, MouseEventArgs e)
+        bool showResBox = false;
+        private void pictureBoxHeatmap_MouseMove(object sender, MouseEventArgs e)
+        // auto resolution feature
         {
             MouseEventArgs mouseCoord = e;
 
-            if (selectClickMode == ClickMode.ResolutionBox)
+            if (clickMode == ClickMode.ResolutionBox)
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    mouseCoord2 = new Point(mouseCoord.X, mouseCoord.Y - panelHtmap.AutoScrollPosition.Y);
+                    mouseCoord2 = new Point(mouseCoord.X, mouseCoord.Y - panelHeatmap.AutoScrollPosition.Y);
 
-                    selectRect = true;
+                    showResBox = true;
                     Refresh();
                 }
             }
         }
 
-        private void pictureBoxHtmap_MouseUp(object sender, MouseEventArgs e)
+        private void pictureBoxHeatmap_MouseUp(object sender, MouseEventArgs e)
+        // auto resolution feature
         {
             MouseEventArgs mouseCoord = e;
 
-            if (selectClickMode == ClickMode.ResolutionBox)
+            if (clickMode == ClickMode.ResolutionBox)
             {
                 mouseCoord2 = new Point(mouseCoord.X, mouseCoord.Y);
                 PointF mazeCoord1 = MouseToMazeCoord(mouseCoord1.X, mouseCoord1.Y);
                 PointF mazeCoord2 = MouseToMazeCoord(mouseCoord2.X, mouseCoord2.Y);
 
-                selectHeatmap.res = Math.Round(Math.Max(Math.Abs(mazeCoord1.X - mazeCoord2.X), Math.Abs(mazeCoord1.Y - mazeCoord2.Y)), 2);
-                textBoxRes.Text = Convert.ToString(selectHeatmap.res);
+                selectedHeatmap.res = Math.Round(Math.Max(Math.Abs(mazeCoord1.X - mazeCoord2.X), Math.Abs(mazeCoord1.Y - mazeCoord2.Y)), 2);
+                textBoxRes.Text = Convert.ToString(selectedHeatmap.res);
                 textBoxOffset.Text = string.Format("{0}, {1}", mazeCoord1.X, mazeCoord2.Y);
-                selectRect = false;
-                selectClickMode = ClickMode.None;
+                showResBox = false;
+                clickMode = ClickMode.None;
 
                 textBoxRes.BackColor = SystemColors.Control;
                 textBoxOffset.BackColor = SystemColors.Control;
                 Cursor = Cursors.Default;
-                SetOffset(); // SetOffset calls RebuildHtmap, which calls Refresh
+                SetOffset(); // SetOffset calls RebuildHeatmap, which calls Refresh
             }
         }
 
         private void buttonOffset_Click(object sender, EventArgs e)
+        // offset click mode feature
         {
-            if (selectClickMode == ClickMode.Offset)
+            if (clickMode == ClickMode.Offset)
             {
-                selectClickMode = ClickMode.None;
+                clickMode = ClickMode.None;
                 Cursor = Cursors.Default;
             }
             else
             {
-                selectClickMode = ClickMode.Offset;
+                clickMode = ClickMode.Offset;
                 Cursor = Cursors.Cross;
             }
         }
 
-        private void pictureBoxHtmap_Click(object sender, EventArgs e)
+        private void pictureBoxHeatmap_Click(object sender, EventArgs e)
+        // offset click mode feature
         {
             MouseEventArgs mouseCoord = (MouseEventArgs)e;
             PointF mazeCoord = MouseToMazeCoord(mouseCoord.X, mouseCoord.Y);
 
-            if (selectClickMode == ClickMode.Offset)
+            if (clickMode == ClickMode.Offset)
             {
                 textBoxOffset.Text = string.Format("{0}, {1}", mazeCoord.X, mazeCoord.Y);
                 SetOffset();
-                selectClickMode = ClickMode.None;
+                clickMode = ClickMode.None;
 
                 textBoxOffset.BackColor = SystemColors.Control;
                 Cursor = Cursors.Default;
             }
-            else if (selectClickMode == ClickMode.None)
+            else if (clickMode == ClickMode.None)
             {
                 ToolTip offset = new ToolTip();
 
                 double heatVal = double.NaN;
-                Point heatmapCoord = selectHeatmap.MazeToHeatmapCoord(mazeCoord.X, mazeCoord.Y);
+                Point heatmapCoord = selectedHeatmap.MazeToHeatmapCoord(mazeCoord.X, mazeCoord.Y);
 
-                if (heatmapCoord.X >= 0 && heatmapCoord.X < selectHeatmap.xPixels && heatmapCoord.Y >= 0 && heatmapCoord.Y < selectHeatmap.zPixels)
+                if (heatmapCoord.X >= 0 && heatmapCoord.X < selectedHeatmap.xPixels && heatmapCoord.Y >= 0 && heatmapCoord.Y < selectedHeatmap.zPixels)
                 {
-                    heatVal = Math.Round(selectHeatmap.val[heatmapCoord.X, heatmapCoord.Y], 2, MidpointRounding.AwayFromZero);
+                    heatVal = Math.Round(selectedHeatmap.val[heatmapCoord.X, heatmapCoord.Y], 2, MidpointRounding.AwayFromZero);
                 }
 
-                offset.SetToolTip(pictureBoxHtmap, string.Format("x:{0}, z:{1}\n{2} {3}", mazeCoord.X, mazeCoord.Y, heatVal, heatmapUnits));
+                offset.SetToolTip(pictureBoxHeatmap, string.Format("x:{0}, z:{1}\n{2} {3}", mazeCoord.X, mazeCoord.Y, heatVal, heatmapUnits));
             }
         }
 
@@ -439,45 +453,45 @@ namespace MazeAnalyzer
         {
             PointF mazeCoord = new PointF();
 
-            double mzTopLeftX = selectHeatmap.heatmapXCenter - selectHeatmap.xBotRadius * selectHeatmap.res - buffer;
-            double mzWidth = selectHeatmap.xPixels * selectHeatmap.res + buffer * 2;
+            double mzTopLeftX = selectedHeatmap.hmXCenter - selectedHeatmap.xBotRadius * selectedHeatmap.res - buffer;
+            double mzWidth = selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2;
 
-            mazeCoord.X = (float)Math.Round(mzTopLeftX + x / width * mzWidth, 2, MidpointRounding.AwayFromZero);
+            mazeCoord.X = (float)Math.Round(mzTopLeftX + x / mzHmWidth * mzWidth, 2, MidpointRounding.AwayFromZero);
 
-            double mzTopLeftZ = selectHeatmap.heatmapZCenter - selectHeatmap.zBotRadius * selectHeatmap.res - buffer;
-            double mzHeight = selectHeatmap.zPixels * selectHeatmap.res + buffer * 2;
+            double mzTopLeftZ = selectedHeatmap.hmZCenter - selectedHeatmap.zBotRadius * selectedHeatmap.res - buffer;
+            double mzHeight = selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2;
 
-            mazeCoord.Y = (float)Math.Round(mzTopLeftZ + (z - panelHtmap.AutoScrollPosition.Y) / height * mzHeight, 2, MidpointRounding.AwayFromZero);
+            mazeCoord.Y = (float)Math.Round(mzTopLeftZ + (z - panelHeatmap.AutoScrollPosition.Y) / mzHmHeight * mzHeight, 2, MidpointRounding.AwayFromZero);
 
             return mazeCoord;
         }
 
 
-        // selected heatmap, maze, and analyzer regions events
+        // draw settings [select heatmap type, show maze & analyzer regions]
         public void SetHeatmapType(HeatmapItem.Type newHeatmapType)
         {
             switch (newHeatmapType)
             {
                 case HeatmapItem.Type.Presence:
                     heatmapTypeStr = "Presence";
-                    selectHeatmap = mv.presHeatmap;
+                    selectedHeatmap = mv.presHeatmap;
                     heatmapUnits = "% Trials";
                     break;
                 case HeatmapItem.Type.Entrance:
                     heatmapTypeStr = "Entrance";
-                    selectHeatmap = mv.entrHeatmap;
+                    selectedHeatmap = mv.entrHeatmap;
                     heatmapUnits = "# Times";
                     break;
                 case HeatmapItem.Type.Time:
                     heatmapTypeStr = "Time";
-                    selectHeatmap = mv.timeHeatmap;
+                    selectedHeatmap = mv.timeHeatmap;
                     heatmapUnits = "s";
                     break;
                 default:
                     break;
             }
-            selectMinHeat = selectHeatmap.GetMin();
-            selectMaxHeat = selectHeatmap.GetMax();
+            minHeatVal = selectedHeatmap.GetMin();
+            maxHeatVal = selectedHeatmap.GetMax();
 
             Refresh();
         }
@@ -497,57 +511,57 @@ namespace MazeAnalyzer
             SetHeatmapType(HeatmapItem.Type.Time);
         }
 
-        private void checkBoxMaze_Click(object sender, EventArgs e)
+        private void checkBoxShowMaze_Click(object sender, EventArgs e)
         {
             showMaze = !showMaze;
 
-            checkBoxMaze.Checked = showMaze;
+            checkBoxShowMaze.Checked = showMaze;
             Refresh();
         }
 
-        private void checkBoxAnalyzerRegions_Click(object sender, EventArgs e)
+        private void checkBoxShowAnalyzerRegions_Click(object sender, EventArgs e)
         {
             showAnaRegns = !showAnaRegns;
 
-            checkBoxAnaRegns.Checked = showAnaRegns;
+            checkBoxShowAnaRegns.Checked = showAnaRegns;
             Refresh();
         }
 
 
-        // save file events
+        // save csv & png, & copy to clipboard
         private void buttonSaveCsv_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveCsv = new SaveFileDialog();
-            saveCsv.Filter = "CSV file(*.csv)| *.csv | All Files(*.*) | *.* ";
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "CSV file(*.csv)| *.csv | All Files(*.*) | *.* ";
 
-            if (saveCsv.ShowDialog() == DialogResult.OK)
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
-                StreamWriter csv = new StreamWriter(saveCsv.FileName);
+                StreamWriter csv = new StreamWriter(sfd.FileName);
 
                 csv.Write(string.Format("Maze Analyzer Heatmap Export: {0}\n", heatmapTypeStr));
                 csv.Write(string.Format("Date Exported: {0}\n", DateTime.Now));
                 csv.Write(string.Format("Project File Name: {0}\n", mv.projectInfo.ProjectFilename));
                 csv.Write(string.Format("Project Name: {0}\n", mv.projectInfo.ProjectFilename.Split('\\')[mv.projectInfo.ProjectFilename.Split('\\').Length - 1]));
                 csv.Write(string.Format("Maze Name: {0}.maz\n", mv.mazeFileName));
-                csv.Write(string.Format("Paths Exported: {0}\n", csvPath));
-                csv.Write(string.Format("Heatmap Resolution: {0} Maze Units / Pixel\n", selectHeatmap.res));
+                csv.Write(string.Format("Paths Exported: {0}\n", csvPaths));
+                csv.Write(string.Format("Heatmap Resolution: {0} Maze Units / Pixel\n", selectedHeatmap.res));
                 csv.Write("\n");
 
                 csv.Write("xz, ");
-                string xs = GetHeatmapBorders(selectHeatmap.offsetX, selectHeatmap.xBotRadius, selectHeatmap.xPixels);
-                csv.Write(xs.Substring(0, xs.Length - 2));
+                string hmXBorders = GetHeatmapBorders(selectedHeatmap.offsetX, selectedHeatmap.xBotRadius, selectedHeatmap.xPixels);
+                csv.Write(hmXBorders.Substring(0, hmXBorders.Length - 2));
                 csv.Write("\n");
 
-                string[] zs = GetHeatmapBorders(selectHeatmap.offsetZ, selectHeatmap.zBotRadius, selectHeatmap.zPixels).Split(' ');
+                string[] hmZBorders = GetHeatmapBorders(selectedHeatmap.offsetZ, selectedHeatmap.zBotRadius, selectedHeatmap.zPixels).Split(' ');
 
-                for (int i = 0; i < selectHeatmap.val.GetLength(1); i++)
+                for (int i = 0; i < selectedHeatmap.val.GetLength(1); i++)
                 {
-                    csv.Write(zs[i] + " ");
-                    for (int j = 0; j < selectHeatmap.val.GetLength(0); j++)
+                    csv.Write(hmZBorders[i] + " ");
+                    for (int j = 0; j < selectedHeatmap.val.GetLength(0); j++)
                     {
-                        csv.Write(selectHeatmap.val[j, i]);
+                        csv.Write(selectedHeatmap.val[j, i]);
 
-                        if (j != selectHeatmap.val.GetLength(0) - 1)
+                        if (j != selectedHeatmap.val.GetLength(0) - 1)
                         {
                             csv.Write(", ");
                         }
@@ -559,57 +573,57 @@ namespace MazeAnalyzer
         }
 
         string GetHeatmapBorders(double offset, int lowerRadius, int pixels)
-        // returns the coordinates borders of all the pixels for the csv file
+        // gets the coordinates borders of all the heatmap pixels for the csv
         {
-            string coords = "";
+            string hmBorders = "";
 
             for (int i = 0; i < pixels + 1; i++)
             {
-                double coord = offset + (i - lowerRadius) * selectHeatmap.res;
+                double coord = offset + (i - lowerRadius) * selectedHeatmap.res;
 
                 if (coord != offset)
                 {
-                    coords += string.Format("{0}, ", coord);
+                    hmBorders += string.Format("{0}, ", coord);
                 }
             }
 
-            return coords;
+            return hmBorders;
         }
 
         private void buttonSavePng_Click(object sender, EventArgs e)
         {
-            bool temp = checkBoxTransparentBg.Checked;
-            checkBoxTransparentBg.Checked = true;
+            bool temp = checkBoxShowTransparentBg.Checked;
+            checkBoxShowTransparentBg.Checked = true;
 
-            SaveFileDialog savePng = new SaveFileDialog();
-            savePng.Filter = "Png Image (.png)|*.png";
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Png Image (.png)|*.png";
 
-            if (savePng.ShowDialog() == DialogResult.OK)
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
                 Bitmap bmp = MakePng();
 
-                bmp.Save(savePng.FileName);
+                bmp.Save(sfd.FileName);
             }
 
-            checkBoxTransparentBg.Checked = temp;
+            checkBoxShowTransparentBg.Checked = temp;
         }
 
         Bitmap MakePng()
         {
             int resize = 100;
-            int width = (int)(selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * resize;
-            int height = (int)(selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) * resize;
+            int mzHmWidth = (int)(selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * resize;
+            int mzHmHeight = (int)(selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) * resize;
 
-            int colorbarWidth = width / 10;
-            int colorbarHeight = height / 4;
-            int colorbarTopLeftX = width;
-            int colorbarTopLeftZ = height / 8;
+            int cbWidth = mzHmWidth / 10;
+            int cbHeight = mzHmHeight / 4;
+            int cbTopLeftX = mzHmWidth;
+            int cbTopLeftZ = mzHmHeight / 8;
 
-            Bitmap bmp = new Bitmap(width + colorbarWidth, height);
+            Bitmap bmp = new Bitmap(mzHmWidth + cbWidth, mzHmHeight);
 
-            using (Graphics png = Graphics.FromImage(bmp))
+            using (Graphics g = Graphics.FromImage(bmp))
             {
-                pictureBoxHtmap_Paint(png, false, width, height, colorbarWidth, colorbarHeight, colorbarTopLeftX, colorbarTopLeftZ, 170, Color.White);
+                pictureBoxHeatmap_Paint(g, false, mzHmWidth, mzHmHeight, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 170, Color.White);
             }
 
             return bmp;
@@ -622,22 +636,22 @@ namespace MazeAnalyzer
 
         public void ToClipboard()
         {
-            int colorbarWidth = (int)(trackBarMidpoint.Width * 1.4);
-            int colorbarHeight = trackBarMidpoint.Height;
-            int colorbarTopLeftX = panelSettings.Location.X - colorbarWidth;
-            int colorbarTopLeftZ = trackBarMidpoint.Location.Y - panelHtmap.AutoScrollPosition.Y * 2;
+            int cbWidth = (int)(trackBarMidpoint.Width * 1.4);
+            int cbHeight = trackBarMidpoint.Height;
+            int cbTopLeftX = panelSettings.Location.X - cbWidth;
+            int cbTopLeftZ = trackBarMidpoint.Location.Y;
 
-            width = panelHtmap.Width - colorbarWidth;
-            height = (int)((selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * width);
-            scale = 5 + (double)(panelHtmap.Width - panelSettings.Width) / (1302 - panelSettings.Width) * 12;
+            mzHmWidth = panelHeatmap.Width - cbWidth;
+            mzHmHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * mzHmWidth);
+            scale = 5 + ((double)panelHeatmap.Width - panelSettings.Width) / (1302.0 - panelSettings.Width) * 12;
 
-            Bitmap copy = new Bitmap((int)(width + colorbarWidth * 0.85), height);
+            Bitmap copy = new Bitmap((int)(mzHmWidth + cbWidth * 0.85), mzHmHeight);
             Graphics g = Graphics.FromImage(copy);
 
-            pictureBoxHtmap_Paint(g, true, width, height, colorbarWidth, colorbarHeight, colorbarTopLeftX, colorbarTopLeftZ, 8, Color.Black);
+            pictureBoxHeatmap_Paint(g, false, mzHmWidth, mzHmHeight, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
 
             Clipboard.Clear();
-            Clipboard.SetImage(copy.Clone(new Rectangle(0, 0, (int)(width + colorbarWidth * 0.85), height), copy.PixelFormat));
+            Clipboard.SetImage(copy.Clone(new Rectangle(0, 0, (int)(mzHmWidth + cbWidth * 0.85), mzHmHeight), copy.PixelFormat));
             copy.Dispose();
         }
 
@@ -653,15 +667,15 @@ namespace MazeAnalyzer
             return new Rectangle(left, top, right - left, bot - top);
         }
 
-        private void PaintSelectRect(Graphics g)
+        private void PaintResBox(Graphics g)
+        // paints resolution box
         {
             g.DrawRectangle(new Pen(Brushes.Black, 1F), MouseToRect(mouseCoord1, mouseCoord2));
         }
 
-        void BuildHtmap(MazeViewer mv)
-        // makes the heatmaps and adds them together [the numbers]
+        void BuildHeatmap(MazeViewer mv)
+        // each path has a heatmap, which will be added together such that each maze has a heatmap
         {
-            // TODO: Make flag to skip build if no changes are made
             mv.presHeatmap = new HeatmapItem(HeatmapItem.Type.Presence);
             mv.entrHeatmap = new HeatmapItem(HeatmapItem.Type.Entrance);
             mv.timeHeatmap = new HeatmapItem(HeatmapItem.Type.Time);
@@ -676,86 +690,88 @@ namespace MazeAnalyzer
                     mv.entrHeatmap += mpi.entrHeatmap;
                     mv.timeHeatmap += mpi.timeHeatmap;
 
-                    // gets paths for the csv file
-                    csvPath += string.Format("\"TRI {0} ", mpi.ExpTrial);
+                    // gets the selected paths for the csv
+                    csvPaths += string.Format("\"TRI {0} ", mpi.ExpTrial);
                     if (mpi.ExpGroup != "")
                     {
-                        csvPath += string.Format("GRO {0} ", mpi.ExpGroup);
+                        csvPaths += string.Format("GRO {0} ", mpi.ExpGroup);
                     }
                     if (mpi.ExpCondition != "")
                     {
-                        csvPath += string.Format("CON {0} ", mpi.ExpCondition);
+                        csvPaths += string.Format("CON {0} ", mpi.ExpCondition);
                     }
-                    csvPath += string.Format("SUB {0} ", mpi.ExpSubjectID);
-                    csvPath += string.Format("SES {0}\"; ", mpi.ExpSession);
+                    csvPaths += string.Format("SUB {0} ", mpi.ExpSubjectID);
+                    csvPaths += string.Format("SES {0}\"; ", mpi.ExpSession);
                 }
             }
 
             mv.presHeatmap /= mv.curMazePaths.cPaths.Count;
             mv.entrHeatmap /= mv.curMazePaths.cPaths.Count;
-            mv.timeHeatmap /= mv.curMazePaths.cPaths.Count / 1000; // convert to seconds
+            mv.timeHeatmap = mv.timeHeatmap / mv.curMazePaths.cPaths.Count / 1000.0; // milliseconds to seconds
 
-            SetHeatmapType(selectHeatmap.type);
+            SetHeatmapType(selectedHeatmap.type);
         }
 
-        Color ToColor(double heatVal) // takes a heat number and returns a color
+        Color HeatValToColor(double heatVal)
+        // called by HeatmapToBitmap
         {
-            double minR = Convert.ToDouble(buttonMinColor.BackColor.R);
-            double minG = Convert.ToDouble(buttonMinColor.BackColor.G);
-            double minB = Convert.ToDouble(buttonMinColor.BackColor.B);
+            byte minR = buttonMinColor.BackColor.R;
+            byte minG = buttonMinColor.BackColor.G;
+            byte minB = buttonMinColor.BackColor.B;
 
-            double midR = Convert.ToDouble(buttonMidColor.BackColor.R);
-            double midG = Convert.ToDouble(buttonMidColor.BackColor.G);
-            double midB = Convert.ToDouble(buttonMidColor.BackColor.B);
+            byte midR = buttonMidColor.BackColor.R;
+            byte midG = buttonMidColor.BackColor.G;
+            byte midB = buttonMidColor.BackColor.B;
 
-            double maxR = Convert.ToDouble(buttonMaxColor.BackColor.R);
-            double maxG = Convert.ToDouble(buttonMaxColor.BackColor.G);
-            double maxB = Convert.ToDouble(buttonMaxColor.BackColor.B);
+            byte maxR = buttonMaxColor.BackColor.R;
+            byte maxG = buttonMaxColor.BackColor.G;
+            byte maxB = buttonMaxColor.BackColor.B;
 
-            int r;
-            int g;
-            int b;
+            byte r;
+            byte g;
+            byte b;
 
-            if (checkBoxMidColor.Checked)
+            if (checkBoxShowMidColor.Checked)
             {
-                if (heatVal / (selectMaxHeat - selectMinHeat) >= midpoint) // checks heat percentile
+                if (heatVal / (maxHeatVal - minHeatVal) >= midpoint) // checks heat percentile
                 {
-                    r = Convert.ToInt32(midR + (maxR - midR) * (heatVal / (selectMaxHeat - selectMinHeat) - midpoint) / (1 - midpoint));
-                    g = Convert.ToInt32(midG + (maxG - midG) * (heatVal / (selectMaxHeat - selectMinHeat) - midpoint) / (1 - midpoint));
-                    b = Convert.ToInt32(midB + (maxB - midB) * (heatVal / (selectMaxHeat - selectMinHeat) - midpoint) / (1 - midpoint));
+                    r = (byte)(midR + (maxR - midR) * (heatVal / (maxHeatVal - minHeatVal) - midpoint) / (1 - midpoint));
+                    g = (byte)(midG + (maxG - midG) * (heatVal / (maxHeatVal - minHeatVal) - midpoint) / (1 - midpoint));
+                    b = (byte)(midB + (maxB - midB) * (heatVal / (maxHeatVal - minHeatVal) - midpoint) / (1 - midpoint));
                 }
                 else
                 {
-                    r = Convert.ToInt32(minR + (midR - minR) * heatVal / (selectMaxHeat - selectMinHeat) / midpoint);
-                    g = Convert.ToInt32(minG + (midG - minG) * heatVal / (selectMaxHeat - selectMinHeat) / midpoint);
-                    b = Convert.ToInt32(minB + (midB - minB) * heatVal / (selectMaxHeat - selectMinHeat) / midpoint);
+                    r = (byte)(minR + (midR - minR) * heatVal / (maxHeatVal - minHeatVal) / midpoint);
+                    g = (byte)(minG + (midG - minG) * heatVal / (maxHeatVal - minHeatVal) / midpoint);
+                    b = (byte)(minB + (midB - minB) * heatVal / (maxHeatVal - minHeatVal) / midpoint);
                 }
             }
             else
             {
-                r = Convert.ToInt32(minR + (maxR - minR) * heatVal / (selectMaxHeat - selectMinHeat));
-                g = Convert.ToInt32(minG + (maxG - minG) * heatVal / (selectMaxHeat - selectMinHeat));
-                b = Convert.ToInt32(minB + (maxB - minB) * heatVal / (selectMaxHeat - selectMinHeat));
+                r = (byte)(minR + (maxR - minR) * heatVal / (maxHeatVal - minHeatVal));
+                g = (byte)(minG + (maxG - minG) * heatVal / (maxHeatVal - minHeatVal));
+                b = (byte)(minB + (maxB - minB) * heatVal / (maxHeatVal - minHeatVal));
             }
 
             return Color.FromArgb(heatmapAlpha, r, g, b);
         }
 
-        Bitmap ToBitmap(double[,] htmap) // makes a bitmap for the colorbar and heatmap
+        Bitmap HeatmapToBitmap(double[,] heatmap)
+        // heatmap & colorbar to bitmap
         {
-            Bitmap bmp = new Bitmap(htmap.GetLength(0), htmap.GetLength(1));
+            Bitmap bmp = new Bitmap(heatmap.GetLength(0), heatmap.GetLength(1));
 
-            for (int i = 0; i < htmap.GetLength(0); i++)
+            for (int i = 0; i < heatmap.GetLength(0); i++)
             {
-                for (int j = 0; j < htmap.GetLength(1); j++)
+                for (int j = 0; j < heatmap.GetLength(1); j++)
                 {
-                    bmp.SetPixel(i, j, ToColor(htmap[i, j]));
+                    bmp.SetPixel(i, j, HeatValToColor(heatmap[i, j]));
 
-                    if (htmap[i, j] == 0 && checkBoxTransparentBg.Checked) // sets background to transparent or background color
+                    if (heatmap[i, j] == 0 && checkBoxShowTransparentBg.Checked) // sets background to transparent or background color
                     {
                         bmp.SetPixel(i, j, Color.Transparent);
                     }
-                    else if (htmap[i, j] == 0)
+                    else if (heatmap[i, j] == 0)
                     {
                         bmp.SetPixel(i, j, Color.FromArgb(heatmapAlpha, buttonBgColor.BackColor));
                     }
@@ -767,18 +783,19 @@ namespace MazeAnalyzer
 
         Bitmap MakeColorbar()
         {
-            // MakeColorbar parameter 0 less than parameter 1, parameter 1 is an approximation of the number of pixels
-            double[,] colorbar = new double[Math.Min(selectHeatmap.xPixels, selectHeatmap.zPixels), (selectHeatmap.xPixels + selectHeatmap.zPixels) / 2];
+            // new double[] parameter 0 less than parameter 1
+            // new double[] parameter 1: average of heatmap xPixels & zPixels
+            double[,] colorbar = new double[Math.Min(selectedHeatmap.xPixels, selectedHeatmap.zPixels), (selectedHeatmap.xPixels + selectedHeatmap.zPixels) / 2];
 
             for (int i = 0; i < colorbar.GetLength(0); i++)
             {
                 for (int j = 0; j < colorbar.GetLength(1); j++)
                 {
-                    colorbar[i, j] = selectMaxHeat - (selectMaxHeat - selectMinHeat) / (colorbar.GetLength(1) - 1) * j;
+                    colorbar[i, j] = maxHeatVal - (maxHeatVal - minHeatVal) / (colorbar.GetLength(1) - 1) * j;
                 }
             }
 
-            return ToBitmap(colorbar);
+            return HeatmapToBitmap(colorbar);
         }
 
         void SetInterpolation(Graphics g)
@@ -791,18 +808,23 @@ namespace MazeAnalyzer
                     trackBarSharpness.Enabled = false;
                     g.InterpolationMode = InterpolationMode.NearestNeighbor;
                     break;
+
                 case InterpolationModes.Bilinear:
                     g.InterpolationMode = InterpolationMode.Bilinear;
                     break;
+
                 case InterpolationModes.HighQualityBilinear:
                     g.InterpolationMode = InterpolationMode.HighQualityBilinear;
                     break;
+
                 case InterpolationModes.Bicubic:
                     g.InterpolationMode = InterpolationMode.Bicubic;
                     break;
+
                 case InterpolationModes.HighQualityBicubic:
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     break;
+
                 default:
                     break;
             }
@@ -812,49 +834,50 @@ namespace MazeAnalyzer
             g.CompositingQuality = CompositingQuality.AssumeLinear;
         }
 
-        static int width;
-        static int height;
-        static double scale; // in pixel per maze units
-        static double buffer = 2; // in maze units
-        private void pictureBoxHtmap_Paint(object sender, PaintEventArgs e)
+        static int mzHmWidth;
+        static int mzHmHeight;
+        static double scale; // in pixel / maze coord
+        static double buffer = 2; // in maze coord
+        private void pictureBoxHeatmap_Paint(object sender, PaintEventArgs e)
         {
-            int colorbarWidth = (int)(trackBarMidpoint.Width * 1.4);
-            int colorbarHeight = trackBarMidpoint.Height;
-            int colorbarTopLeftX = panelSettings.Location.X - colorbarWidth;
-            int colorbarTopLeftZ = trackBarMidpoint.Location.Y - panelHtmap.AutoScrollPosition.Y * 2;
+            int cbWidth = (int)(trackBarMidpoint.Width * 1.4);
+            int cbHeight = trackBarMidpoint.Height;
+            int cbTopLeftX = panelSettings.Location.X - cbWidth;
+            int cbTopLeftZ = trackBarMidpoint.Location.Y - panelHeatmap.AutoScrollPosition.Y * 2;
 
-            width = panelHtmap.Width - colorbarWidth;
-            height = (int)((selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * width);
-            scale = 5 + (double)(panelHtmap.Width - panelSettings.Width) / (1302 - panelSettings.Width) * 12;
+            mzHmWidth = panelHeatmap.Width - cbWidth;
+            mzHmHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * mzHmWidth);
+            scale = 5 + ((double)panelHeatmap.Width - panelSettings.Width) / (1302.0 - panelSettings.Width) * 12;
 
-            pictureBoxHtmap_Paint(e.Graphics, true, width, height, colorbarWidth, colorbarHeight, colorbarTopLeftX, colorbarTopLeftZ, 8, Color.Black);
+            pictureBoxHeatmap_Paint(e.Graphics, true, mzHmWidth, mzHmHeight, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
 
-            if (selectRect)
+            if (showResBox) // paints resolution box
             {
-                PaintSelectRect(e.Graphics);
+                PaintResBox(e.Graphics);
             }
         }
 
         static bool scroll = false;
-        private void pictureBoxHtmap_Paint(Graphics g, bool autosize, int width, int height, int colorbarWidth, int colorbarHeight, int colorbarTopLeftX, int colorbarTopLeftZ, int colorbarLabelSize, Color colorbarLabelColor)
+        private void pictureBoxHeatmap_Paint(Graphics g, bool autosize, int mzHmWidth, int mzHmHeight, int cbWidth, int cbHeight, int cbTopLeftX, int cbTopLeftZ, int cbLabelSize, Color cbLabelColor)
+        // overload for MakePng
         {
-            // in maze units * scale
-            int mazeTopLeftX = (int)(-(selectHeatmap.heatmapXCenter - selectHeatmap.xBotRadius * selectHeatmap.res - buffer) * scale);
-            int mazeTopLeftZ = (int)(-(selectHeatmap.heatmapZCenter - selectHeatmap.zBotRadius * selectHeatmap.res - buffer) * scale);
-            int mazeWidth = (int)((selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * scale);
-            int mazeHeight = (int)((selectHeatmap.zPixels * selectHeatmap.res + buffer * 2) * scale);
+            // in maze coord * scale
+            int mzTopLeftX = (int)(-(selectedHeatmap.hmXCenter - selectedHeatmap.xBotRadius * selectedHeatmap.res - buffer) * scale);
+            int mzTopLeftZ = (int)(-(selectedHeatmap.hmZCenter - selectedHeatmap.zBotRadius * selectedHeatmap.res - buffer) * scale);
+            int mzWidth = (int)((selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * scale);
+            int mzHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) * scale);
 
-            // in coord system of the paint function
-            int htmapTopLeftX = (int)(width * buffer / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2));
-            int htmapTopLeftZ = (int)(htmapTopLeftX / (selectHeatmap.xPixels * selectHeatmap.res + buffer * 2) * (selectHeatmap.zPixels * selectHeatmap.res + buffer * 2));
-            int htmapWidth = width - htmapTopLeftX * 2;
-            int htmapHeight = height - htmapTopLeftZ * 2;
+            // in mouse coord
+            int hmTopLeftX = (int)(mzHmWidth * buffer / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2));
+            int hmTopLeftZ = (int)(hmTopLeftX / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * (selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2));
+            int hmWidth = mzHmWidth - hmTopLeftX * 2;
+            int hmHeight = mzHmHeight - hmTopLeftZ * 2;
 
 
-            // makes maze, heatmap, and colorbar
-            Image mazeBmp = mv.PaintMazeToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
-            Image anaRegnsBmp = mv.PaintAnalyzerItemsToBuffer(mazeTopLeftX, mazeTopLeftZ, mazeWidth, mazeHeight, scale);
-            Bitmap heatBmp = ToBitmap(selectHeatmap.val);
+            // makes maze, heatmap, & colorbar
+            Image mazeBmp = mv.PaintMazeToBuffer(mzTopLeftX, mzTopLeftZ, mzWidth, mzHeight, scale);
+            Image anaRegnsBmp = mv.PaintAnalyzerItemsToBuffer(mzTopLeftX, mzTopLeftZ, mzWidth, mzHeight, scale);
+            Bitmap heatmapBmp = HeatmapToBitmap(selectedHeatmap.val);
             Bitmap colorbarBmp = MakeColorbar();
 
 
@@ -863,17 +886,17 @@ namespace MazeAnalyzer
             {
                 if (!scroll)
                 {
-                    labelScroll.Location = new Point(labelScroll.Location.X, height);
+                    labelScroll.Location = new Point(labelScroll.Location.X, mzHmHeight);
                     scroll = true;
                 }
-                g.TranslateTransform(panelHtmap.AutoScrollPosition.X, panelHtmap.AutoScrollPosition.Y);
+                g.TranslateTransform(panelHeatmap.AutoScrollPosition.X, panelHeatmap.AutoScrollPosition.Y);
             }
 
 
-            // draws maze, heatmap, colorbar, and colorbar labels
+            // paints maze, heatmap, & colorbar
             SetInterpolation(g);
 
-            Rectangle mazeDest = new Rectangle(0, 0, width, height);
+            Rectangle mazeDest = new Rectangle(0, 0, mzHmWidth, mzHmHeight);
             if (showMaze)
             {
                 g.DrawImage(mazeBmp, mazeDest, 0, 0, mazeBmp.Width, mazeBmp.Height, GraphicsUnit.Pixel);
@@ -883,24 +906,25 @@ namespace MazeAnalyzer
                 g.DrawImage(anaRegnsBmp, mazeDest, 0, 0, anaRegnsBmp.Width, anaRegnsBmp.Height, GraphicsUnit.Pixel);
             }
 
-            Rectangle htmapDest = new Rectangle(htmapTopLeftX, htmapTopLeftZ, htmapWidth, htmapHeight);
-            Bitmap resizeheatBitmap = ResizeBitmap(heatBmp, sharpness, htmapWidth);
-            g.DrawImage(resizeheatBitmap, htmapDest, 0, 0, resizeheatBitmap.Width, resizeheatBitmap.Height, GraphicsUnit.Pixel);
+            Rectangle heatmapDest = new Rectangle(hmTopLeftX, hmTopLeftZ, hmWidth, hmHeight);
+            Bitmap resizeheatBitmap = ResizeBitmap(heatmapBmp, sharpness, hmWidth);
+            g.DrawImage(resizeheatBitmap, heatmapDest, 0, 0, resizeheatBitmap.Width, resizeheatBitmap.Height, GraphicsUnit.Pixel);
 
-            Rectangle colorbarDest = new Rectangle(colorbarTopLeftX, colorbarTopLeftZ, colorbarWidth, colorbarHeight);
+            Rectangle colorbarDest = new Rectangle(cbTopLeftX, cbTopLeftZ, cbWidth, cbHeight);
             g.DrawImage(colorbarBmp, colorbarDest, 0, 0, colorbarBmp.Width, colorbarBmp.Height, GraphicsUnit.Pixel);
 
-            Font font = new Font(new FontFamily("times"), colorbarLabelSize);
-            SolidBrush brush = new SolidBrush(colorbarLabelColor);
-            g.DrawString(string.Format("{0}\n({1})", heatmapTypeStr, heatmapUnits), font, brush, colorbarTopLeftX - font.Size, (float)(colorbarTopLeftZ + colorbarHeight * -0.22));
-            g.DrawString(string.Format("{0:0.00}", selectMaxHeat), font, brush, colorbarTopLeftX, colorbarTopLeftZ);
-            g.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .75), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.22));
-            g.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .5), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.44));
-            g.DrawString(string.Format("{0:0.00}", selectMinHeat + (selectMaxHeat - selectMinHeat) * .25), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.66));
-            g.DrawString(string.Format("{0:0.00}", selectMinHeat), font, brush, colorbarTopLeftX, (float)(colorbarTopLeftZ + colorbarHeight * 0.88));
+            Font font = new Font(new FontFamily("times"), cbLabelSize);
+            SolidBrush brush = new SolidBrush(cbLabelColor);
+            g.DrawString(string.Format("{0}\n({1})", heatmapTypeStr, heatmapUnits), font, brush, cbTopLeftX - font.Size, (float)(cbTopLeftZ + cbHeight * -0.22));
+            g.DrawString(string.Format("{0:0.00}", maxHeatVal), font, brush, cbTopLeftX, cbTopLeftZ);
+            g.DrawString(string.Format("{0:0.00}", minHeatVal + (maxHeatVal - minHeatVal) * .75), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.22));
+            g.DrawString(string.Format("{0:0.00}", minHeatVal + (maxHeatVal - minHeatVal) * .5), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.44));
+            g.DrawString(string.Format("{0:0.00}", minHeatVal + (maxHeatVal - minHeatVal) * .25), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.66));
+            g.DrawString(string.Format("{0:0.00}", minHeatVal), font, brush, cbTopLeftX, (float)(cbTopLeftZ + cbHeight * 0.88));
         }
 
         public Bitmap ResizeBitmap(Bitmap bmp, int factor, int destWidth)
+        // sharpness feature
         {
             if (factor < 1)
             {
@@ -929,16 +953,16 @@ namespace MazeAnalyzer
             return resizeBmp;
         }
 
-        private void panelHtmap_Resize(object sender, EventArgs e)
+        private void panelHeatmap_Resize(object sender, EventArgs e)
         {
             scroll = false;
-            panelHtmap.AutoScroll = false;
-            panelHtmap.AutoScroll = true;
+            panelHeatmap.AutoScroll = false;
+            panelHeatmap.AutoScroll = true;
 
             Refresh();
         }
 
-        private void panelHtmap_Scroll(object sender, ScrollEventArgs e)
+        private void panelHeatmap_Scroll(object sender, ScrollEventArgs e)
         {
             Refresh();
         }

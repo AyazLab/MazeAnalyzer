@@ -34,8 +34,8 @@
             this.buttonMinColor = new System.Windows.Forms.Button();
             this.buttonBgColor = new System.Windows.Forms.Button();
             this.buttonMidColor = new System.Windows.Forms.Button();
-            this.checkBoxTransparentBg = new System.Windows.Forms.CheckBox();
-            this.checkBoxMidColor = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowTransparentBg = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowMidColor = new System.Windows.Forms.CheckBox();
             this.trackBarMidpoint = new System.Windows.Forms.TrackBar();
             this.comboBoxInterpolation = new System.Windows.Forms.ComboBox();
             this.labelRes = new System.Windows.Forms.Label();
@@ -51,8 +51,8 @@
             this.labelDrawSettings = new System.Windows.Forms.Label();
             this.labelQualitySettings = new System.Windows.Forms.Label();
             this.labelColorSettings = new System.Windows.Forms.Label();
-            this.checkBoxAnaRegns = new System.Windows.Forms.CheckBox();
-            this.checkBoxMaze = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowAnaRegns = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowMaze = new System.Windows.Forms.CheckBox();
             this.radioButtonTime = new System.Windows.Forms.RadioButton();
             this.radioButtonEntr = new System.Windows.Forms.RadioButton();
             this.radioButtonPres = new System.Windows.Forms.RadioButton();
@@ -66,14 +66,14 @@
             this.buttonOffset = new System.Windows.Forms.Button();
             this.labelOpacityPercent = new System.Windows.Forms.Label();
             this.labelScroll = new System.Windows.Forms.Label();
-            this.pictureBoxHtmap = new System.Windows.Forms.PictureBox();
-            this.panelHtmap = new System.Windows.Forms.Panel();
+            this.pictureBoxHeatmap = new System.Windows.Forms.PictureBox();
+            this.panelHeatmap = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMidpoint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             this.panelSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSharpness)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHtmap)).BeginInit();
-            this.panelHtmap.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeatmap)).BeginInit();
+            this.panelHeatmap.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxRes
@@ -125,27 +125,27 @@
             this.buttonMidColor.UseVisualStyleBackColor = true;
             this.buttonMidColor.Click += new System.EventHandler(this.buttonMidColor_Click);
             // 
-            // checkBoxTransparentBg
+            // checkBoxShowTransparentBg
             // 
-            this.checkBoxTransparentBg.AutoSize = true;
-            this.checkBoxTransparentBg.Location = new System.Drawing.Point(15, 349);
-            this.checkBoxTransparentBg.Name = "checkBoxTransparentBg";
-            this.checkBoxTransparentBg.Size = new System.Drawing.Size(188, 21);
-            this.checkBoxTransparentBg.TabIndex = 17;
-            this.checkBoxTransparentBg.Text = "Transparent Background";
-            this.checkBoxTransparentBg.UseVisualStyleBackColor = true;
-            this.checkBoxTransparentBg.Click += new System.EventHandler(this.checkBoxBgTransparent_Click);
+            this.checkBoxShowTransparentBg.AutoSize = true;
+            this.checkBoxShowTransparentBg.Location = new System.Drawing.Point(15, 349);
+            this.checkBoxShowTransparentBg.Name = "checkBoxShowTransparentBg";
+            this.checkBoxShowTransparentBg.Size = new System.Drawing.Size(188, 21);
+            this.checkBoxShowTransparentBg.TabIndex = 17;
+            this.checkBoxShowTransparentBg.Text = "Transparent Background";
+            this.checkBoxShowTransparentBg.UseVisualStyleBackColor = true;
+            this.checkBoxShowTransparentBg.Click += new System.EventHandler(this.checkBoxShowBgTransparent_Click);
             // 
-            // checkBoxMidColor
+            // checkBoxShowMidColor
             // 
-            this.checkBoxMidColor.AutoSize = true;
-            this.checkBoxMidColor.Location = new System.Drawing.Point(67, 154);
-            this.checkBoxMidColor.Name = "checkBoxMidColor";
-            this.checkBoxMidColor.Size = new System.Drawing.Size(89, 21);
-            this.checkBoxMidColor.TabIndex = 18;
-            this.checkBoxMidColor.Text = "Mid Color";
-            this.checkBoxMidColor.UseVisualStyleBackColor = true;
-            this.checkBoxMidColor.Click += new System.EventHandler(this.checkBoxMidColor_Click);
+            this.checkBoxShowMidColor.AutoSize = true;
+            this.checkBoxShowMidColor.Location = new System.Drawing.Point(67, 154);
+            this.checkBoxShowMidColor.Name = "checkBoxShowMidColor";
+            this.checkBoxShowMidColor.Size = new System.Drawing.Size(89, 21);
+            this.checkBoxShowMidColor.TabIndex = 18;
+            this.checkBoxShowMidColor.Text = "Mid Color";
+            this.checkBoxShowMidColor.UseVisualStyleBackColor = true;
+            this.checkBoxShowMidColor.Click += new System.EventHandler(this.checkBoxShowMidColor_Click);
             // 
             // trackBarMidpoint
             // 
@@ -301,27 +301,27 @@
             this.labelColorSettings.TabIndex = 47;
             this.labelColorSettings.Text = "Color Settings";
             // 
-            // checkBoxAnaRegns
+            // checkBoxShowAnaRegns
             // 
-            this.checkBoxAnaRegns.AutoSize = true;
-            this.checkBoxAnaRegns.Location = new System.Drawing.Point(107, 665);
-            this.checkBoxAnaRegns.Name = "checkBoxAnaRegns";
-            this.checkBoxAnaRegns.Size = new System.Drawing.Size(141, 21);
-            this.checkBoxAnaRegns.TabIndex = 45;
-            this.checkBoxAnaRegns.Text = "Analyzer Regions";
-            this.checkBoxAnaRegns.UseVisualStyleBackColor = true;
-            this.checkBoxAnaRegns.Click += new System.EventHandler(this.checkBoxAnalyzerRegions_Click);
+            this.checkBoxShowAnaRegns.AutoSize = true;
+            this.checkBoxShowAnaRegns.Location = new System.Drawing.Point(107, 665);
+            this.checkBoxShowAnaRegns.Name = "checkBoxShowAnaRegns";
+            this.checkBoxShowAnaRegns.Size = new System.Drawing.Size(141, 21);
+            this.checkBoxShowAnaRegns.TabIndex = 45;
+            this.checkBoxShowAnaRegns.Text = "Analyzer Regions";
+            this.checkBoxShowAnaRegns.UseVisualStyleBackColor = true;
+            this.checkBoxShowAnaRegns.Click += new System.EventHandler(this.checkBoxShowAnalyzerRegions_Click);
             // 
-            // checkBoxMaze
+            // checkBoxShowMaze
             // 
-            this.checkBoxMaze.AutoSize = true;
-            this.checkBoxMaze.Location = new System.Drawing.Point(107, 638);
-            this.checkBoxMaze.Name = "checkBoxMaze";
-            this.checkBoxMaze.Size = new System.Drawing.Size(64, 21);
-            this.checkBoxMaze.TabIndex = 44;
-            this.checkBoxMaze.Text = "Maze";
-            this.checkBoxMaze.UseVisualStyleBackColor = true;
-            this.checkBoxMaze.Click += new System.EventHandler(this.checkBoxMaze_Click);
+            this.checkBoxShowMaze.AutoSize = true;
+            this.checkBoxShowMaze.Location = new System.Drawing.Point(107, 638);
+            this.checkBoxShowMaze.Name = "checkBoxShowMaze";
+            this.checkBoxShowMaze.Size = new System.Drawing.Size(64, 21);
+            this.checkBoxShowMaze.TabIndex = 44;
+            this.checkBoxShowMaze.Text = "Maze";
+            this.checkBoxShowMaze.UseVisualStyleBackColor = true;
+            this.checkBoxShowMaze.Click += new System.EventHandler(this.checkBoxShowMaze_Click);
             // 
             // radioButtonTime
             // 
@@ -370,6 +370,7 @@
             // 
             // panelSettings
             // 
+            this.panelSettings.BackColor = System.Drawing.Color.White;
             this.panelSettings.Controls.Add(this.buttonCopy);
             this.panelSettings.Controls.Add(this.labelSharpness);
             this.panelSettings.Controls.Add(this.labelSharpnessVal);
@@ -377,15 +378,15 @@
             this.panelSettings.Controls.Add(this.buttonAutoRes);
             this.panelSettings.Controls.Add(this.buttonOffset);
             this.panelSettings.Controls.Add(this.labelOpacityPercent);
-            this.panelSettings.Controls.Add(this.checkBoxTransparentBg);
+            this.panelSettings.Controls.Add(this.checkBoxShowTransparentBg);
             this.panelSettings.Controls.Add(this.labelDrawSettings);
             this.panelSettings.Controls.Add(this.labelColorSettings);
             this.panelSettings.Controls.Add(this.labelQualitySettings);
             this.panelSettings.Controls.Add(this.labelShowInterpolation);
             this.panelSettings.Controls.Add(this.buttonSavePng);
-            this.panelSettings.Controls.Add(this.checkBoxAnaRegns);
+            this.panelSettings.Controls.Add(this.checkBoxShowAnaRegns);
             this.panelSettings.Controls.Add(this.labelRes);
-            this.panelSettings.Controls.Add(this.checkBoxMaze);
+            this.panelSettings.Controls.Add(this.checkBoxShowMaze);
             this.panelSettings.Controls.Add(this.comboBoxInterpolation);
             this.panelSettings.Controls.Add(this.radioButtonTime);
             this.panelSettings.Controls.Add(this.trackBarOpacity);
@@ -394,7 +395,7 @@
             this.panelSettings.Controls.Add(this.buttonSaveCsv);
             this.panelSettings.Controls.Add(this.labelOpacity);
             this.panelSettings.Controls.Add(this.buttonBgColor);
-            this.panelSettings.Controls.Add(this.checkBoxMidColor);
+            this.panelSettings.Controls.Add(this.checkBoxShowMidColor);
             this.panelSettings.Controls.Add(this.labelPreset);
             this.panelSettings.Controls.Add(this.buttonMidColor);
             this.panelSettings.Controls.Add(this.textBoxRes);
@@ -486,40 +487,42 @@
             this.labelScroll.Size = new System.Drawing.Size(31, 21);
             this.labelScroll.TabIndex = 43;
             // 
-            // pictureBoxHtmap
+            // pictureBoxHeatmap
             // 
-            this.pictureBoxHtmap.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBoxHtmap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBoxHtmap.Location = new System.Drawing.Point(0, 0);
-            this.pictureBoxHtmap.Name = "pictureBoxHtmap";
-            this.pictureBoxHtmap.Size = new System.Drawing.Size(841, 767);
-            this.pictureBoxHtmap.TabIndex = 43;
-            this.pictureBoxHtmap.TabStop = false;
-            this.pictureBoxHtmap.Click += new System.EventHandler(this.pictureBoxHtmap_Click);
-            this.pictureBoxHtmap.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxHtmap_Paint);
-            this.pictureBoxHtmap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHtmap_MouseDown);
-            this.pictureBoxHtmap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHtmap_MouseMove);
-            this.pictureBoxHtmap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHtmap_MouseUp);
+            this.pictureBoxHeatmap.BackColor = System.Drawing.Color.White;
+            this.pictureBoxHeatmap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBoxHeatmap.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxHeatmap.Name = "pictureBoxHeatmap";
+            this.pictureBoxHeatmap.Size = new System.Drawing.Size(841, 767);
+            this.pictureBoxHeatmap.TabIndex = 43;
+            this.pictureBoxHeatmap.TabStop = false;
+            this.pictureBoxHeatmap.Click += new System.EventHandler(this.pictureBoxHeatmap_Click);
+            this.pictureBoxHeatmap.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxHeatmap_Paint);
+            this.pictureBoxHeatmap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHeatmap_MouseDown);
+            this.pictureBoxHeatmap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHeatmap_MouseMove);
+            this.pictureBoxHeatmap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHeatmap_MouseUp);
             // 
-            // panelHtmap
+            // panelHeatmap
             // 
-            this.panelHtmap.AutoScroll = true;
-            this.panelHtmap.Controls.Add(this.pictureBoxHtmap);
-            this.panelHtmap.Controls.Add(this.labelScroll);
-            this.panelHtmap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelHtmap.Location = new System.Drawing.Point(3, 0);
-            this.panelHtmap.Name = "panelHtmap";
-            this.panelHtmap.Size = new System.Drawing.Size(841, 767);
-            this.panelHtmap.TabIndex = 44;
-            this.panelHtmap.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelHtmap_Scroll);
-            this.panelHtmap.Resize += new System.EventHandler(this.panelHtmap_Resize);
+            this.panelHeatmap.AutoScroll = true;
+            this.panelHeatmap.BackColor = System.Drawing.Color.White;
+            this.panelHeatmap.Controls.Add(this.pictureBoxHeatmap);
+            this.panelHeatmap.Controls.Add(this.labelScroll);
+            this.panelHeatmap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelHeatmap.Location = new System.Drawing.Point(3, 0);
+            this.panelHeatmap.Name = "panelHeatmap";
+            this.panelHeatmap.Size = new System.Drawing.Size(841, 767);
+            this.panelHeatmap.TabIndex = 44;
+            this.panelHeatmap.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelHeatmap_Scroll);
+            this.panelHeatmap.Resize += new System.EventHandler(this.panelHeatmap_Resize);
             // 
             // Heatmap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1153, 767);
-            this.Controls.Add(this.panelHtmap);
+            this.Controls.Add(this.panelHeatmap);
             this.Controls.Add(this.panelSettings);
             this.Controls.Add(this.splitter1);
             this.MinimumSize = new System.Drawing.Size(429, 807);
@@ -531,8 +534,8 @@
             this.panelSettings.ResumeLayout(false);
             this.panelSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarSharpness)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHtmap)).EndInit();
-            this.panelHtmap.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHeatmap)).EndInit();
+            this.panelHeatmap.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -544,8 +547,8 @@
         private System.Windows.Forms.Button buttonMinColor;
         private System.Windows.Forms.Button buttonBgColor;
         private System.Windows.Forms.Button buttonMidColor;
-        private System.Windows.Forms.CheckBox checkBoxTransparentBg;
-        private System.Windows.Forms.CheckBox checkBoxMidColor;
+        private System.Windows.Forms.CheckBox checkBoxShowTransparentBg;
+        private System.Windows.Forms.CheckBox checkBoxShowMidColor;
         private System.Windows.Forms.TrackBar trackBarMidpoint;
         private System.Windows.Forms.ComboBox comboBoxInterpolation;
         private System.Windows.Forms.Label labelRes;
@@ -562,15 +565,15 @@
         private System.Windows.Forms.RadioButton radioButtonPres;
         private System.Windows.Forms.RadioButton radioButtonTime;
         private System.Windows.Forms.RadioButton radioButtonEntr;
-        private System.Windows.Forms.CheckBox checkBoxAnaRegns;
-        private System.Windows.Forms.CheckBox checkBoxMaze;
+        private System.Windows.Forms.CheckBox checkBoxShowAnaRegns;
+        private System.Windows.Forms.CheckBox checkBoxShowMaze;
         private System.Windows.Forms.Label labelDrawSettings;
         private System.Windows.Forms.Label labelQualitySettings;
         private System.Windows.Forms.Label labelColorSettings;
         private System.Windows.Forms.Panel panelSettings;
         private System.Windows.Forms.Label labelScroll;
-        private System.Windows.Forms.PictureBox pictureBoxHtmap;
-        private System.Windows.Forms.Panel panelHtmap;
+        private System.Windows.Forms.PictureBox pictureBoxHeatmap;
+        private System.Windows.Forms.Panel panelHeatmap;
         private System.Windows.Forms.Label labelOpacityPercent;
         private System.Windows.Forms.Button buttonOffset;
         private System.Windows.Forms.Button buttonAutoRes;
