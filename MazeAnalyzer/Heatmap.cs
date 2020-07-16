@@ -268,7 +268,7 @@ namespace MazeAnalyzer
         {
             if (e.KeyCode == Keys.Enter)
             {
-                mv.SetHeatmapRes(Convert.ToDouble(textBoxRes.Text));
+                mv.SetPathHeatmapRes(Convert.ToDouble(textBoxRes.Text));
 
                 textBoxRes.BackColor = SystemColors.Control;
                 RebuildHeatmap();
@@ -305,7 +305,7 @@ namespace MazeAnalyzer
 
             if (newOffSetX != offsetX || newOffSetZ != offsetZ)
             {
-                mv.SetHeatmapOffset(Convert.ToDouble(newOffSetX), Convert.ToDouble(newOffSetZ));
+                mv.SetPathHeatmapOffsets(Convert.ToDouble(newOffSetX), Convert.ToDouble(newOffSetZ));
                 RebuildHeatmap();
             }
         }
@@ -684,7 +684,7 @@ namespace MazeAnalyzer
             {
                 if (mpi.selected)
                 {
-                    mpi.MakePathHeatmap();
+                    mpi.MakePathHeatmaps();
 
                     mv.presHeatmap += mpi.presHeatmap;
                     mv.entrHeatmap += mpi.entrHeatmap;

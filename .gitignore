@@ -5,3 +5,7 @@
 *.exe
 *.exe
 *.exe
+*.exe
+MazeAnalyzer/bin/Debug/MazeAnalyzer.exe
+MazeAnalyzer/obj/Debug/MazeAnalyzer.exe
+MazeAnalyzer/bin/Debug/MazeLib.dll
