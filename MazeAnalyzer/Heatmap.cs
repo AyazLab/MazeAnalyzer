@@ -937,9 +937,9 @@ namespace MazeAnalyzer
 
             int newWidth = bmp.Width * factor;
             int newHeight = bmp.Height * factor;
-            Bitmap resizeBmp = new Bitmap(newWidth, newHeight);
+            Bitmap resizedBmp = new Bitmap(newWidth, newHeight);
 
-            using (Graphics g = Graphics.FromImage(resizeBmp))
+            using (Graphics g = Graphics.FromImage(resizedBmp))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
@@ -950,7 +950,7 @@ namespace MazeAnalyzer
                 g.DrawImage(bmp, 0, 0, newWidth, newHeight);
             }
 
-            return resizeBmp;
+            return resizedBmp;
         }
 
         private void panelHeatmap_Resize(object sender, EventArgs e)
