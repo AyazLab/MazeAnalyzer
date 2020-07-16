@@ -49,7 +49,9 @@ namespace MazeAnalyzer
         static double minHeatVal;
         static double maxHeatVal;
         string heatmapUnits;
-        
+
+        static bool useAllPaths = false;
+
         static bool showMaze = true;
         static bool showAnaRegns = false;
 
@@ -751,10 +753,15 @@ namespace MazeAnalyzer
             mv.entrHeatmap = new HeatmapItem(HeatmapItem.Type.Entrance);
             mv.timeHeatmap = new HeatmapItem(HeatmapItem.Type.Time);
 
+            int numPaths = 0;
+
             foreach (MazePathItem mpi in mv.curMazePaths.cPaths)
             {
-                if (mpi.selected)
+                if (mpi.selected || useAllPaths)
                 {
+
+                    numPaths++;
+
                     mpi.MakePathHeatmaps();
 
                     mv.presHeatmap += mpi.presHeatmap;
@@ -776,9 +783,9 @@ namespace MazeAnalyzer
                 }
             }
 
-            mv.presHeatmap /= (double)mv.curMazePaths.cPaths.Count/100.0; 
-            mv.entrHeatmap /= mv.curMazePaths.cPaths.Count;
-            mv.timeHeatmap = mv.timeHeatmap / mv.curMazePaths.cPaths.Count / 1000.0; // milliseconds to seconds
+            mv.presHeatmap /= (double)numPaths / 100.0; 
+            mv.entrHeatmap /= numPaths;
+            mv.timeHeatmap = mv.timeHeatmap / (double)numPaths / 1000.0; // milliseconds to seconds
 
             SetHeatmapType(selectedHeatmap.type);
         }
