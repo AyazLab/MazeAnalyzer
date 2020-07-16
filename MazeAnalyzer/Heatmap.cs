@@ -493,7 +493,7 @@ namespace MazeAnalyzer
             {
                 heatVal = Math.Round(selectedHeatmap.val[heatmapCoord.X, heatmapCoord.Y], 2, MidpointRounding.AwayFromZero);
 
-                toolStripStatusLabel_heatmap.Text += string.Format("x:{0:0.00}, z:{1:0.00}: {2:0.00} {3}", mazeCoord.X, mazeCoord.Y, heatVal, heatmapUnits);
+                toolStripStatusLabel_heatmap.Text += string.Format("x:{0:0.00}, z:{1:0.00}: {2:0.##} {3}", mazeCoord.X, mazeCoord.Y, heatVal, heatmapUnits);
             }
             else
                 toolStripStatusLabel_heatmap.Text+= string.Format("x:{0:0.00}, z:{1:0.00}", mazeCoord.X, mazeCoord.Y);
