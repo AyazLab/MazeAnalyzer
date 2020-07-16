@@ -2982,6 +2982,12 @@ namespace MazeAnalyzer
         {
             CenterOnStart();
         }
+
+        private void toolStripButtonHeatmap_Click(object sender, EventArgs e)
+        {
+            Heatmap exp = new Heatmap(curMazeViewer);
+            exp.ShowDialog();
+        }
     }
 
     public class TabPageNoScroll : TabPage

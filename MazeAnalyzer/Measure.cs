@@ -372,12 +372,12 @@ namespace MazeAnalyzer
                     if (i > 0)
                     {
                         t = (mzPath.PathTimes[i] - mzPath.PathTimes[i - 1]);
-                        t = t / 1000;
+                        t = t / 1000.0;
                         p = mzPath.PathPoints[i].GetDistance(mzPath.PathPoints[i - 1]);                        
                         total.time += t;
-                        total.pathLength += p;                        
+                        total.pathLength += p;
                     }
-                    
+
                     //Process each region with the current point
                     for (j = 0; j < curMaze.curRegions.Regions.Count; j++)
                     {
