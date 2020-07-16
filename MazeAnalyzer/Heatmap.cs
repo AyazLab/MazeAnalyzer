@@ -468,9 +468,9 @@ namespace MazeAnalyzer
 
 
         // draw settings [select heatmap type, show maze & analyzer regions]
-        public void SetHeatmapType(HeatmapItem.Type newHeatmapType)
+        public void SetHeatmapType(HeatmapItem.Type newType)
         {
-            switch (newHeatmapType)
+            switch (newType)
             {
                 case HeatmapItem.Type.Presence:
                     heatmapTypeStr = "Presence";
@@ -907,8 +907,8 @@ namespace MazeAnalyzer
             }
 
             Rectangle heatmapDest = new Rectangle(hmTopLeftX, hmTopLeftZ, hmWidth, hmHeight);
-            Bitmap resizeheatBitmap = ResizeBitmap(heatmapBmp, sharpness, hmWidth);
-            g.DrawImage(resizeheatBitmap, heatmapDest, 0, 0, resizeheatBitmap.Width, resizeheatBitmap.Height, GraphicsUnit.Pixel);
+            Bitmap resizedHeatmapBmp = ResizeBitmap(heatmapBmp, sharpness, hmWidth);
+            g.DrawImage(resizedHeatmapBmp, heatmapDest, 0, 0, resizedHeatmapBmp.Width, resizedHeatmapBmp.Height, GraphicsUnit.Pixel);
 
             Rectangle colorbarDest = new Rectangle(cbTopLeftX, cbTopLeftZ, cbWidth, cbHeight);
             g.DrawImage(colorbarBmp, colorbarDest, 0, 0, colorbarBmp.Width, colorbarBmp.Height, GraphicsUnit.Pixel);
@@ -935,9 +935,9 @@ namespace MazeAnalyzer
                 factor = (int)Math.Floor((double)destWidth / bmp.Width);
             }
 
-            int newBmpWidth = bmp.Width * factor;
-            int newBmpHeight = bmp.Height * factor;
-            Bitmap resizeBmp = new Bitmap(newBmpWidth, newBmpHeight);
+            int newWidth = bmp.Width * factor;
+            int newHeight = bmp.Height * factor;
+            Bitmap resizeBmp = new Bitmap(newWidth, newHeight);
 
             using (Graphics g = Graphics.FromImage(resizeBmp))
             {
@@ -947,7 +947,7 @@ namespace MazeAnalyzer
                 g.SmoothingMode = SmoothingMode.None;
                 g.CompositingQuality = CompositingQuality.AssumeLinear;
 
-                g.DrawImage(bmp, 0, 0, newBmpWidth, newBmpHeight);
+                g.DrawImage(bmp, 0, 0, newWidth, newHeight);
             }
 
             return resizeBmp;
