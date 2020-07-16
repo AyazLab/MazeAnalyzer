@@ -24,7 +24,7 @@ namespace MazeAnalyzer
 
         public enum ColorPreset
         {
-            Cool, Hot, Gray, Custom
+            Custom, Hot, Cool,  Gray, Summer, Autumn, Winter, Spring, Jet,RedWhiteBlue,RedYellowGreen,OrangeWhitePurple,WhiteBlackRed 
         }
         static ColorPreset colorPreset = ColorPreset.Cool;
         static double midpoint = 0.1;
@@ -122,11 +122,10 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                colorPreset = ColorPreset.Custom;
-                comboBoxColorPreset.SelectedIndex = (int)colorPreset; // calls SetColorPreset
                 cusMinColor = colorDialog.Color;
 
                 buttonMinColor.BackColor = cusMinColor;
+                saveCurrentToCustom();
                 Refresh();
             }
         }
@@ -135,22 +134,34 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                colorPreset = ColorPreset.Custom;
-                comboBoxColorPreset.SelectedIndex = (int)colorPreset;
-                cusMaxColor = colorDialog.Color;
+                 cusMaxColor = colorDialog.Color;
 
                 buttonMaxColor.BackColor = cusMaxColor;
+                saveCurrentToCustom();
                 Refresh();
             }
         }
 
-        private void checkBoxShowMidColor_Click(object sender, EventArgs e)
+        private void saveCurrentToCustom()
         {
             colorPreset = ColorPreset.Custom;
+
+            cusMaxColor = buttonMaxColor.BackColor;
+            cusMidColor = buttonMidColor.BackColor;
+            cusMinColor = buttonMinColor.BackColor;
+            showCusMidColor = showMidColor;
+
             comboBoxColorPreset.SelectedIndex = (int)colorPreset;
+        }
+
+        private void checkBoxShowMidColor_Click(object sender, EventArgs e)
+        {
+            
             showMidColor = !showMidColor;
             checkBoxShowMidColor.Checked = showMidColor;
-            showCusMidColor = showMidColor;
+            
+
+            saveCurrentToCustom();
 
             Refresh();
         }
@@ -159,19 +170,19 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                colorPreset = ColorPreset.Custom;
-                comboBoxColorPreset.SelectedIndex = (int)colorPreset;
                 cusMidColor = colorDialog.Color;
 
                 buttonMidColor.BackColor = cusMidColor;
+
+                saveCurrentToCustom();
                 Refresh();
             }
         }
 
         private void checkBoxShowBgTransparent_Click(object sender, EventArgs e)
         {
-            colorPreset = ColorPreset.Custom;
-            comboBoxColorPreset.SelectedIndex = (int)colorPreset;
+            //colorPreset = ColorPreset.Custom;
+            //comboBoxColorPreset.SelectedIndex = (int)colorPreset;
             showTransparentBg = !showTransparentBg;
             checkBoxShowTransparentBg.Checked = showTransparentBg;
             showCusTransparentBg = showTransparentBg;
@@ -183,11 +194,11 @@ namespace MazeAnalyzer
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
             {
-                colorPreset = ColorPreset.Custom;
-                comboBoxColorPreset.SelectedIndex = (int)colorPreset;
+
                 cusBgColor = colorDialog.Color;
 
                 buttonBgColor.BackColor = cusBgColor;
+                saveCurrentToCustom();
                 Refresh();
             }
         }
@@ -204,21 +215,66 @@ namespace MazeAnalyzer
             switch (newColorPreset)
             {
                 case ColorPreset.Cool:
-                    buttonMinColor.BackColor = Color.FromArgb(128, 255, 128);
-                    buttonMidColor.BackColor = Color.FromArgb(128, 255, 255);
-                    buttonMaxColor.BackColor = Color.FromArgb(128, 0, 255);
+                    buttonMinColor.BackColor = Color.FromArgb(0, 255, 255);
+                    buttonMidColor.BackColor = Color.FromArgb(128, 128, 255);
+                    buttonMaxColor.BackColor = Color.FromArgb(255, 0, 255);
                     break;
 
                 case ColorPreset.Hot:
-                    buttonMinColor.BackColor = Color.White;
-                    buttonMidColor.BackColor = Color.FromArgb(255, 255, 128);
-                    buttonMaxColor.BackColor = Color.FromArgb(255, 128, 128);
+                    buttonMinColor.BackColor = Color.FromArgb(255, 0, 0);
+                    buttonMidColor.BackColor = Color.FromArgb(255, 255, 0);
+                    buttonMaxColor.BackColor = Color.FromArgb(255, 255, 255);
                     break;
 
                 case ColorPreset.Gray:
-                    buttonMinColor.BackColor = Color.FromArgb(128, 128, 128);
-                    buttonMidColor.BackColor = Color.FromArgb(192, 192, 192);
-                    buttonMaxColor.BackColor = Color.White;
+                    buttonMinColor.BackColor = Color.FromArgb(255, 255, 255);
+                    buttonMidColor.BackColor = Color.FromArgb(128, 128, 128);
+                    buttonMaxColor.BackColor = Color.FromArgb(0, 0, 0);
+                    break;
+                case ColorPreset.Summer:
+                    buttonMinColor.BackColor = Color.FromArgb(0, 0, 103);
+                    buttonMidColor.BackColor = Color.FromArgb(128, 192, 103);
+                    buttonMaxColor.BackColor = Color.FromArgb(255, 255, 103);
+                    break;
+                case ColorPreset.Autumn:
+                    buttonMinColor.BackColor = Color.FromArgb(255, 0, 0);
+                    buttonMidColor.BackColor = Color.FromArgb(255, 128, 0);
+                    buttonMaxColor.BackColor = Color.FromArgb(255, 255, 0);
+                    break;
+                case ColorPreset.Winter:
+                    buttonMinColor.BackColor = Color.FromArgb(0, 0, 255);
+                    buttonMidColor.BackColor = Color.FromArgb(0, 128, 192);
+                    buttonMaxColor.BackColor = Color.FromArgb(0, 255, 128);
+                    break;
+                case ColorPreset.Spring:
+                    buttonMinColor.BackColor = Color.FromArgb(255, 0, 255);
+                    buttonMidColor.BackColor = Color.FromArgb(255, 128, 128);
+                    buttonMaxColor.BackColor = Color.FromArgb(255, 255, 0);
+                    break;
+                case ColorPreset.Jet:
+                    buttonMinColor.BackColor = Color.FromArgb(0, 0, 255);
+                    buttonMidColor.BackColor = Color.FromArgb(0, 255, 255);
+                    buttonMaxColor.BackColor = Color.FromArgb(255, 255, 0);
+                    break;
+                case ColorPreset.RedWhiteBlue:
+                    buttonMinColor.BackColor = Color.Red;
+                    buttonMidColor.BackColor = Color.White;
+                    buttonMaxColor.BackColor = Color.Blue;
+                    break;
+                case ColorPreset.RedYellowGreen:
+                    buttonMinColor.BackColor = Color.Red;
+                    buttonMidColor.BackColor = Color.Yellow;
+                    buttonMaxColor.BackColor = Color.Green;
+                    break;
+                case ColorPreset.OrangeWhitePurple:
+                    buttonMinColor.BackColor = Color.Orange;
+                    buttonMidColor.BackColor = Color.White;
+                    buttonMaxColor.BackColor = Color.Purple;
+                    break;
+                case ColorPreset.WhiteBlackRed:
+                    buttonMinColor.BackColor = Color.White;
+                    buttonMidColor.BackColor = Color.Black;
+                    buttonMaxColor.BackColor = Color.Red;
                     break;
 
                 case ColorPreset.Custom:
@@ -240,9 +296,9 @@ namespace MazeAnalyzer
             {
                 showMidColor = true;
                 checkBoxShowMidColor.Checked = showMidColor;
-                showTransparentBg = true;
-                checkBoxShowTransparentBg.Checked = showTransparentBg;
-                buttonBgColor.BackColor = Color.White;
+                //showTransparentBg = true;
+                //checkBoxShowTransparentBg.Checked = showTransparentBg;
+                //buttonBgColor.BackColor = Color.White;
             }
             
             colorPreset = newColorPreset;
@@ -1084,6 +1140,11 @@ namespace MazeAnalyzer
         }
 
         private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxShowTransparentBg_CheckedChanged(object sender, EventArgs e)
         {
 
         }

@@ -144,6 +144,7 @@
             this.checkBoxShowTransparentBg.TabIndex = 17;
             this.checkBoxShowTransparentBg.Text = "Transparent Background";
             this.checkBoxShowTransparentBg.UseVisualStyleBackColor = true;
+            this.checkBoxShowTransparentBg.CheckedChanged += new System.EventHandler(this.checkBoxShowTransparentBg_CheckedChanged);
             this.checkBoxShowTransparentBg.Click += new System.EventHandler(this.checkBoxShowBgTransparent_Click);
             // 
             // checkBoxShowMidColor
@@ -260,10 +261,19 @@
             // 
             this.comboBoxColorPreset.FormattingEnabled = true;
             this.comboBoxColorPreset.Items.AddRange(new object[] {
-            "cool scale",
-            "hot scale",
-            "gray scale",
-            "custom"});
+            "Custom",
+            "Hot",
+            "Cool",
+            "Gray",
+            "Summer",
+            "Autumn",
+            "Winter",
+            "Spring",
+            "Jet",
+            "Red-White-Blue",
+            "Red-Yellow-Green",
+            "Orange-White-Purple",
+            "White-Black-Red"});
             this.comboBoxColorPreset.Location = new System.Drawing.Point(75, 50);
             this.comboBoxColorPreset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxColorPreset.Name = "comboBoxColorPreset";
@@ -442,9 +452,9 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel_heatmap});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 949);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 955);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(348, 28);
+            this.statusStrip1.Size = new System.Drawing.Size(348, 22);
             this.statusStrip1.TabIndex = 56;
             this.statusStrip1.Text = "statusStrip1";
             this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
@@ -452,7 +462,7 @@
             // toolStripStatusLabel_heatmap
             // 
             this.toolStripStatusLabel_heatmap.Name = "toolStripStatusLabel_heatmap";
-            this.toolStripStatusLabel_heatmap.Size = new System.Drawing.Size(0, 21);
+            this.toolStripStatusLabel_heatmap.Size = new System.Drawing.Size(0, 15);
             // 
             // buttonCopy
             // 
