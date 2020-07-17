@@ -35,7 +35,7 @@
             this.buttonMinColor = new System.Windows.Forms.Button();
             this.buttonBgColor = new System.Windows.Forms.Button();
             this.buttonMidColor = new System.Windows.Forms.Button();
-            this.checkBoxShowTransparentBg = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowBg = new System.Windows.Forms.CheckBox();
             this.checkBoxShowMidColor = new System.Windows.Forms.CheckBox();
             this.trackBarMidpoint = new System.Windows.Forms.TrackBar();
             this.comboBoxInterpolation = new System.Windows.Forms.ComboBox();
@@ -71,6 +71,11 @@
             this.labelScroll = new System.Windows.Forms.Label();
             this.pictureBoxHeatmap = new System.Windows.Forms.PictureBox();
             this.panelHeatmap = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMidpoint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             this.panelSettings.SuspendLayout();
@@ -82,80 +87,75 @@
             // 
             // textBoxRes
             // 
-            this.textBoxRes.Location = new System.Drawing.Point(243, 569);
+            this.textBoxRes.Location = new System.Drawing.Point(240, 464);
             this.textBoxRes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxRes.Name = "textBoxRes";
-            this.textBoxRes.Size = new System.Drawing.Size(64, 26);
+            this.textBoxRes.Size = new System.Drawing.Size(52, 26);
             this.textBoxRes.TabIndex = 1;
             this.textBoxRes.TextChanged += new System.EventHandler(this.textBoxRes_TextChanged);
             this.textBoxRes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxRes_KeyDown);
             // 
             // buttonMaxColor
             // 
-            this.buttonMaxColor.Location = new System.Drawing.Point(75, 101);
+            this.buttonMaxColor.Location = new System.Drawing.Point(134, 101);
             this.buttonMaxColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonMaxColor.Name = "buttonMaxColor";
-            this.buttonMaxColor.Size = new System.Drawing.Size(94, 29);
+            this.buttonMaxColor.Size = new System.Drawing.Size(33, 29);
             this.buttonMaxColor.TabIndex = 2;
-            this.buttonMaxColor.Text = "Max Color";
             this.buttonMaxColor.UseVisualStyleBackColor = true;
             this.buttonMaxColor.Click += new System.EventHandler(this.buttonMaxColor_Click);
             // 
             // buttonMinColor
             // 
-            this.buttonMinColor.Location = new System.Drawing.Point(75, 325);
+            this.buttonMinColor.Location = new System.Drawing.Point(134, 324);
             this.buttonMinColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonMinColor.Name = "buttonMinColor";
-            this.buttonMinColor.Size = new System.Drawing.Size(94, 29);
+            this.buttonMinColor.Size = new System.Drawing.Size(33, 29);
             this.buttonMinColor.TabIndex = 3;
-            this.buttonMinColor.Text = "Min Color";
             this.buttonMinColor.UseVisualStyleBackColor = true;
             this.buttonMinColor.Click += new System.EventHandler(this.buttonMinColor_Click);
             // 
             // buttonBgColor
             // 
-            this.buttonBgColor.Location = new System.Drawing.Point(17, 470);
+            this.buttonBgColor.Location = new System.Drawing.Point(19, 368);
             this.buttonBgColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonBgColor.Name = "buttonBgColor";
-            this.buttonBgColor.Size = new System.Drawing.Size(161, 29);
+            this.buttonBgColor.Size = new System.Drawing.Size(35, 29);
             this.buttonBgColor.TabIndex = 4;
-            this.buttonBgColor.Text = "Background Color";
             this.buttonBgColor.UseVisualStyleBackColor = true;
             this.buttonBgColor.Click += new System.EventHandler(this.buttonBgColor_Click);
             // 
             // buttonMidColor
             // 
-            this.buttonMidColor.Location = new System.Drawing.Point(75, 226);
+            this.buttonMidColor.Location = new System.Drawing.Point(134, 212);
             this.buttonMidColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonMidColor.Name = "buttonMidColor";
-            this.buttonMidColor.Size = new System.Drawing.Size(94, 29);
+            this.buttonMidColor.Size = new System.Drawing.Size(33, 29);
             this.buttonMidColor.TabIndex = 10;
-            this.buttonMidColor.Text = "Mid Color";
             this.buttonMidColor.UseVisualStyleBackColor = true;
             this.buttonMidColor.Click += new System.EventHandler(this.buttonMidColor_Click);
             // 
-            // checkBoxShowTransparentBg
+            // checkBoxShowBg
             // 
-            this.checkBoxShowTransparentBg.AutoSize = true;
-            this.checkBoxShowTransparentBg.Location = new System.Drawing.Point(17, 436);
-            this.checkBoxShowTransparentBg.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.checkBoxShowTransparentBg.Name = "checkBoxShowTransparentBg";
-            this.checkBoxShowTransparentBg.Size = new System.Drawing.Size(211, 24);
-            this.checkBoxShowTransparentBg.TabIndex = 17;
-            this.checkBoxShowTransparentBg.Text = "Transparent Background";
-            this.checkBoxShowTransparentBg.UseVisualStyleBackColor = true;
-            this.checkBoxShowTransparentBg.CheckedChanged += new System.EventHandler(this.checkBoxShowTransparentBg_CheckedChanged);
-            this.checkBoxShowTransparentBg.Click += new System.EventHandler(this.checkBoxShowBgTransparent_Click);
+            this.checkBoxShowBg.AutoSize = true;
+            this.checkBoxShowBg.Location = new System.Drawing.Point(75, 372);
+            this.checkBoxShowBg.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.checkBoxShowBg.Name = "checkBoxShowBg";
+            this.checkBoxShowBg.Size = new System.Drawing.Size(22, 21);
+            this.checkBoxShowBg.TabIndex = 17;
+            this.checkBoxShowBg.UseVisualStyleBackColor = true;
+            this.checkBoxShowBg.CheckedChanged += new System.EventHandler(this.checkBoxShowTransparentBg_CheckedChanged);
+            this.checkBoxShowBg.Click += new System.EventHandler(this.checkBoxShowBgTransparent_Click);
             // 
             // checkBoxShowMidColor
             // 
             this.checkBoxShowMidColor.AutoSize = true;
-            this.checkBoxShowMidColor.Location = new System.Drawing.Point(75, 192);
+            this.checkBoxShowMidColor.Location = new System.Drawing.Point(71, 215);
             this.checkBoxShowMidColor.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxShowMidColor.Name = "checkBoxShowMidColor";
-            this.checkBoxShowMidColor.Size = new System.Drawing.Size(101, 24);
+            this.checkBoxShowMidColor.Size = new System.Drawing.Size(60, 24);
             this.checkBoxShowMidColor.TabIndex = 18;
-            this.checkBoxShowMidColor.Text = "Mid Color";
+            this.checkBoxShowMidColor.Text = "Mid";
             this.checkBoxShowMidColor.UseVisualStyleBackColor = true;
             this.checkBoxShowMidColor.Click += new System.EventHandler(this.checkBoxShowMidColor_Click);
             // 
@@ -163,11 +163,11 @@
             // 
             this.trackBarMidpoint.Location = new System.Drawing.Point(17, 101);
             this.trackBarMidpoint.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.trackBarMidpoint.Maximum = 9;
             this.trackBarMidpoint.Name = "trackBarMidpoint";
             this.trackBarMidpoint.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.trackBarMidpoint.Size = new System.Drawing.Size(69, 252);
             this.trackBarMidpoint.TabIndex = 19;
+            this.trackBarMidpoint.Value = 5;
             this.trackBarMidpoint.Scroll += new System.EventHandler(this.trackBarMidpoint_Scroll);
             // 
             // comboBoxInterpolation
@@ -180,7 +180,7 @@
             "HighQualityBilinear",
             "Bicubic",
             "HighQualityBicubic"});
-            this.comboBoxInterpolation.Location = new System.Drawing.Point(117, 646);
+            this.comboBoxInterpolation.Location = new System.Drawing.Point(115, 538);
             this.comboBoxInterpolation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxInterpolation.Name = "comboBoxInterpolation";
             this.comboBoxInterpolation.Size = new System.Drawing.Size(190, 28);
@@ -190,7 +190,7 @@
             // labelRes
             // 
             this.labelRes.AutoSize = true;
-            this.labelRes.Location = new System.Drawing.Point(14, 569);
+            this.labelRes.Location = new System.Drawing.Point(11, 464);
             this.labelRes.Name = "labelRes";
             this.labelRes.Size = new System.Drawing.Size(221, 20);
             this.labelRes.TabIndex = 22;
@@ -199,7 +199,7 @@
             // labelShowInterpolation
             // 
             this.labelShowInterpolation.AutoSize = true;
-            this.labelShowInterpolation.Location = new System.Drawing.Point(14, 646);
+            this.labelShowInterpolation.Location = new System.Drawing.Point(11, 541);
             this.labelShowInterpolation.Name = "labelShowInterpolation";
             this.labelShowInterpolation.Size = new System.Drawing.Size(98, 20);
             this.labelShowInterpolation.TabIndex = 24;
@@ -218,7 +218,7 @@
             // 
             // trackBarOpacity
             // 
-            this.trackBarOpacity.Location = new System.Drawing.Point(75, 392);
+            this.trackBarOpacity.Location = new System.Drawing.Point(103, 636);
             this.trackBarOpacity.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.trackBarOpacity.Maximum = 100;
             this.trackBarOpacity.Name = "trackBarOpacity";
@@ -230,7 +230,7 @@
             // labelOpacity
             // 
             this.labelOpacity.AutoSize = true;
-            this.labelOpacity.Location = new System.Drawing.Point(6, 392);
+            this.labelOpacity.Location = new System.Drawing.Point(10, 636);
             this.labelOpacity.Name = "labelOpacity";
             this.labelOpacity.Size = new System.Drawing.Size(62, 20);
             this.labelOpacity.TabIndex = 29;
@@ -238,7 +238,7 @@
             // 
             // textBoxOffset
             // 
-            this.textBoxOffset.Location = new System.Drawing.Point(111, 605);
+            this.textBoxOffset.Location = new System.Drawing.Point(108, 500);
             this.textBoxOffset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxOffset.Name = "textBoxOffset";
             this.textBoxOffset.Size = new System.Drawing.Size(112, 26);
@@ -250,7 +250,7 @@
             // 
             this.labelOffset.AutoSize = true;
             this.labelOffset.BackColor = System.Drawing.SystemColors.Control;
-            this.labelOffset.Location = new System.Drawing.Point(14, 605);
+            this.labelOffset.Location = new System.Drawing.Point(11, 500);
             this.labelOffset.Name = "labelOffset";
             this.labelOffset.Size = new System.Drawing.Size(90, 20);
             this.labelOffset.TabIndex = 36;
@@ -274,17 +274,17 @@
             "Red-Yellow-Green",
             "Orange-White-Purple",
             "White-Black-Red"});
-            this.comboBoxColorPreset.Location = new System.Drawing.Point(75, 50);
+            this.comboBoxColorPreset.Location = new System.Drawing.Point(108, 50);
             this.comboBoxColorPreset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxColorPreset.Name = "comboBoxColorPreset";
-            this.comboBoxColorPreset.Size = new System.Drawing.Size(136, 28);
+            this.comboBoxColorPreset.Size = new System.Drawing.Size(196, 28);
             this.comboBoxColorPreset.TabIndex = 38;
             this.comboBoxColorPreset.SelectedIndexChanged += new System.EventHandler(this.comboBoxColorPreset_SelectedIndexChanged);
             // 
             // labelColorPreset
             // 
             this.labelColorPreset.AutoSize = true;
-            this.labelColorPreset.Location = new System.Drawing.Point(14, 54);
+            this.labelColorPreset.Location = new System.Drawing.Point(22, 53);
             this.labelColorPreset.Name = "labelColorPreset";
             this.labelColorPreset.Size = new System.Drawing.Size(55, 20);
             this.labelColorPreset.TabIndex = 39;
@@ -303,7 +303,7 @@
             // 
             this.labelDrawSettings.AutoSize = true;
             this.labelDrawSettings.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.labelDrawSettings.Location = new System.Drawing.Point(14, 759);
+            this.labelDrawSettings.Location = new System.Drawing.Point(15, 697);
             this.labelDrawSettings.Name = "labelDrawSettings";
             this.labelDrawSettings.Size = new System.Drawing.Size(109, 20);
             this.labelDrawSettings.TabIndex = 49;
@@ -313,7 +313,7 @@
             // 
             this.labelQualitySettings.AutoSize = true;
             this.labelQualitySettings.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.labelQualitySettings.Location = new System.Drawing.Point(14, 532);
+            this.labelQualitySettings.Location = new System.Drawing.Point(11, 427);
             this.labelQualitySettings.Name = "labelQualitySettings";
             this.labelQualitySettings.Size = new System.Drawing.Size(120, 20);
             this.labelQualitySettings.TabIndex = 48;
@@ -332,7 +332,7 @@
             // checkBoxShowAnaRegns
             // 
             this.checkBoxShowAnaRegns.AutoSize = true;
-            this.checkBoxShowAnaRegns.Location = new System.Drawing.Point(120, 831);
+            this.checkBoxShowAnaRegns.Location = new System.Drawing.Point(186, 791);
             this.checkBoxShowAnaRegns.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxShowAnaRegns.Name = "checkBoxShowAnaRegns";
             this.checkBoxShowAnaRegns.Size = new System.Drawing.Size(159, 24);
@@ -344,7 +344,7 @@
             // checkBoxShowMaze
             // 
             this.checkBoxShowMaze.AutoSize = true;
-            this.checkBoxShowMaze.Location = new System.Drawing.Point(120, 798);
+            this.checkBoxShowMaze.Location = new System.Drawing.Point(186, 758);
             this.checkBoxShowMaze.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxShowMaze.Name = "checkBoxShowMaze";
             this.checkBoxShowMaze.Size = new System.Drawing.Size(74, 24);
@@ -356,7 +356,7 @@
             // radioButtonTime
             // 
             this.radioButtonTime.AutoSize = true;
-            this.radioButtonTime.Location = new System.Drawing.Point(14, 864);
+            this.radioButtonTime.Location = new System.Drawing.Point(23, 826);
             this.radioButtonTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.radioButtonTime.Name = "radioButtonTime";
             this.radioButtonTime.Size = new System.Drawing.Size(68, 24);
@@ -368,7 +368,7 @@
             // radioButtonEntr
             // 
             this.radioButtonEntr.AutoSize = true;
-            this.radioButtonEntr.Location = new System.Drawing.Point(14, 830);
+            this.radioButtonEntr.Location = new System.Drawing.Point(23, 792);
             this.radioButtonEntr.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.radioButtonEntr.Name = "radioButtonEntr";
             this.radioButtonEntr.Size = new System.Drawing.Size(99, 24);
@@ -381,7 +381,7 @@
             // 
             this.radioButtonPres.AutoSize = true;
             this.radioButtonPres.Checked = true;
-            this.radioButtonPres.Location = new System.Drawing.Point(14, 796);
+            this.radioButtonPres.Location = new System.Drawing.Point(23, 758);
             this.radioButtonPres.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.radioButtonPres.Name = "radioButtonPres";
             this.radioButtonPres.Size = new System.Drawing.Size(101, 24);
@@ -405,15 +405,19 @@
             // panelSettings
             // 
             this.panelSettings.BackColor = System.Drawing.Color.White;
+            this.panelSettings.Controls.Add(this.label5);
+            this.panelSettings.Controls.Add(this.label4);
+            this.panelSettings.Controls.Add(this.label3);
+            this.panelSettings.Controls.Add(this.label2);
+            this.panelSettings.Controls.Add(this.label1);
             this.panelSettings.Controls.Add(this.statusStrip1);
             this.panelSettings.Controls.Add(this.buttonCopy);
             this.panelSettings.Controls.Add(this.labelSharpness);
             this.panelSettings.Controls.Add(this.labelSharpnessVal);
-            this.panelSettings.Controls.Add(this.trackBarSharpness);
             this.panelSettings.Controls.Add(this.buttonAutoRes);
             this.panelSettings.Controls.Add(this.buttonOffset);
             this.panelSettings.Controls.Add(this.labelOpacityPercent);
-            this.panelSettings.Controls.Add(this.checkBoxShowTransparentBg);
+            this.panelSettings.Controls.Add(this.checkBoxShowBg);
             this.panelSettings.Controls.Add(this.labelDrawSettings);
             this.panelSettings.Controls.Add(this.labelColorSettings);
             this.panelSettings.Controls.Add(this.labelQualitySettings);
@@ -440,6 +444,7 @@
             this.panelSettings.Controls.Add(this.buttonMaxColor);
             this.panelSettings.Controls.Add(this.labelOffset);
             this.panelSettings.Controls.Add(this.trackBarMidpoint);
+            this.panelSettings.Controls.Add(this.trackBarSharpness);
             this.panelSettings.Dock = System.Windows.Forms.DockStyle.Right;
             this.panelSettings.Location = new System.Drawing.Point(949, 0);
             this.panelSettings.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -478,7 +483,7 @@
             // labelSharpness
             // 
             this.labelSharpness.AutoSize = true;
-            this.labelSharpness.Location = new System.Drawing.Point(14, 692);
+            this.labelSharpness.Location = new System.Drawing.Point(11, 587);
             this.labelSharpness.Name = "labelSharpness";
             this.labelSharpness.Size = new System.Drawing.Size(86, 20);
             this.labelSharpness.TabIndex = 54;
@@ -487,14 +492,14 @@
             // labelSharpnessVal
             // 
             this.labelSharpnessVal.AutoSize = true;
-            this.labelSharpnessVal.Location = new System.Drawing.Point(249, 692);
+            this.labelSharpnessVal.Location = new System.Drawing.Point(246, 587);
             this.labelSharpnessVal.Name = "labelSharpnessVal";
             this.labelSharpnessVal.Size = new System.Drawing.Size(0, 20);
             this.labelSharpnessVal.TabIndex = 53;
             // 
             // trackBarSharpness
             // 
-            this.trackBarSharpness.Location = new System.Drawing.Point(106, 684);
+            this.trackBarSharpness.Location = new System.Drawing.Point(103, 579);
             this.trackBarSharpness.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.trackBarSharpness.Name = "trackBarSharpness";
             this.trackBarSharpness.Size = new System.Drawing.Size(136, 69);
@@ -504,7 +509,7 @@
             // buttonAutoRes
             // 
             this.buttonAutoRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonAutoRes.Location = new System.Drawing.Point(310, 569);
+            this.buttonAutoRes.Location = new System.Drawing.Point(302, 462);
             this.buttonAutoRes.Margin = new System.Windows.Forms.Padding(0);
             this.buttonAutoRes.Name = "buttonAutoRes";
             this.buttonAutoRes.Size = new System.Drawing.Size(32, 30);
@@ -518,7 +523,7 @@
             this.buttonOffset.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.buttonOffset.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOffset.Image = global::MazeAnalyzer.Properties.Resources.target1;
-            this.buttonOffset.Location = new System.Drawing.Point(232, 602);
+            this.buttonOffset.Location = new System.Drawing.Point(229, 497);
             this.buttonOffset.Margin = new System.Windows.Forms.Padding(0);
             this.buttonOffset.Name = "buttonOffset";
             this.buttonOffset.Size = new System.Drawing.Size(32, 30);
@@ -573,6 +578,51 @@
             this.panelHeatmap.Scroll += new System.Windows.Forms.ScrollEventHandler(this.panelHeatmap_Scroll);
             this.panelHeatmap.Resize += new System.EventHandler(this.panelHeatmap_Resize);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(81, 105);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 20);
+            this.label1.TabIndex = 57;
+            this.label1.Text = "Max";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(81, 328);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 20);
+            this.label2.TabIndex = 58;
+            this.label2.Text = "Min";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(110, 372);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(136, 20);
+            this.label3.TabIndex = 59;
+            this.label3.Text = "Background Color";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(10, 731);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(113, 20);
+            this.label4.TabIndex = 60;
+            this.label4.Text = "Heatmap Type";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(182, 731);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(46, 20);
+            this.label5.TabIndex = 61;
+            this.label5.Text = "Draw";
+            // 
             // Heatmap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -608,7 +658,7 @@
         private System.Windows.Forms.Button buttonMinColor;
         private System.Windows.Forms.Button buttonBgColor;
         private System.Windows.Forms.Button buttonMidColor;
-        private System.Windows.Forms.CheckBox checkBoxShowTransparentBg;
+        private System.Windows.Forms.CheckBox checkBoxShowBg;
         private System.Windows.Forms.CheckBox checkBoxShowMidColor;
         private System.Windows.Forms.TrackBar trackBarMidpoint;
         private System.Windows.Forms.ComboBox comboBoxInterpolation;
@@ -644,5 +694,10 @@
         private System.Windows.Forms.Button buttonCopy;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_heatmap;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
     }
 }

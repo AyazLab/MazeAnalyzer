@@ -27,7 +27,7 @@ namespace MazeAnalyzer
             Custom, Hot, Cool,  Gray, Summer, Autumn, Winter, Spring, Jet,RedWhiteBlue,RedYellowGreen,OrangeWhitePurple,WhiteBlackRed 
         }
         static ColorPreset colorPreset = ColorPreset.Cool;
-        static double midpoint = 0.1;
+        static double midpoint = 0.5;
         static int opacity = 75;
         static int heatmapAlpha = (int)(opacity / 100.0 * 255);
         static int sharpness = 0;
@@ -93,6 +93,8 @@ namespace MazeAnalyzer
             textBoxOffset.Text = string.Format("{0}, {1}", offsetX, offsetZ);
             textBoxOffset.BackColor = SystemColors.Control;
             buttonOffset.Image = new Bitmap(buttonOffset.Image, 12, 12);
+
+            buttonBgColor.BackColor = Color.White;
 
             comboBoxInterpolation.SelectedIndex = (int)interpolation;
 
@@ -184,7 +186,7 @@ namespace MazeAnalyzer
             //colorPreset = ColorPreset.Custom;
             //comboBoxColorPreset.SelectedIndex = (int)colorPreset;
             showTransparentBg = !showTransparentBg;
-            checkBoxShowTransparentBg.Checked = showTransparentBg;
+            checkBoxShowBg.Checked = showTransparentBg;
             showCusTransparentBg = showTransparentBg;
 
             Refresh();
@@ -284,7 +286,7 @@ namespace MazeAnalyzer
                     checkBoxShowMidColor.Checked = showCusMidColor;
                     buttonMidColor.BackColor = cusMidColor;
 
-                    checkBoxShowTransparentBg.Checked = showCusTransparentBg;
+                    checkBoxShowBg.Checked = showCusTransparentBg;
                     buttonBgColor.BackColor = cusBgColor;
                     break;
 
@@ -719,8 +721,8 @@ namespace MazeAnalyzer
 
         private void buttonSavePng_Click(object sender, EventArgs e)
         {
-            bool temp = checkBoxShowTransparentBg.Checked;
-            checkBoxShowTransparentBg.Checked = true;
+            bool temp = checkBoxShowBg.Checked;
+            checkBoxShowBg.Checked = true;
 
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Png Image (.png)|*.png";
@@ -732,7 +734,7 @@ namespace MazeAnalyzer
                 bmp.Save(sfd.FileName);
             }
 
-            checkBoxShowTransparentBg.Checked = temp;
+            checkBoxShowBg.Checked = temp;
         }
 
         Bitmap MakePng()
@@ -751,7 +753,7 @@ namespace MazeAnalyzer
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 PaintHeatmap(g, false, mzHmWidth, mzHmHeight);
-                PaintColorBar(g, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
+                PaintColorBar(g, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 1, Color.Black);
             }
 
             return bmp;
@@ -867,7 +869,7 @@ namespace MazeAnalyzer
 
             if (checkBoxShowMidColor.Checked)
             {
-                if (heatVal / (maxHeatVal - minHeatVal) >= midpoint) // checks heat percentile
+                if (heatVal / (maxHeatVal - minHeatVal) > midpoint) // checks heat percentile
                 {
                     r = (byte)(midR + (maxR - midR) * (heatVal / (maxHeatVal - minHeatVal) - midpoint) / (1 - midpoint));
                     g = (byte)(midG + (maxG - midG) * (heatVal / (maxHeatVal - minHeatVal) - midpoint) / (1 - midpoint));
@@ -899,9 +901,9 @@ namespace MazeAnalyzer
             {
                 for (int j = 0; j < heatmap.GetLength(1); j++)
                 {
-                    bmp.SetPixel(i, j, HeatValToColor(heatmap[i, j]));
+                    
 
-                    if (heatmap[i, j] == 0 && checkBoxShowTransparentBg.Checked) // sets background to transparent or background color
+                    if (heatmap[i, j] == 0 && !checkBoxShowBg.Checked) // sets background to transparent or background color
                     {
                         bmp.SetPixel(i, j, Color.Transparent);
                     }
@@ -909,6 +911,8 @@ namespace MazeAnalyzer
                     {
                         bmp.SetPixel(i, j, Color.FromArgb(heatmapAlpha, buttonBgColor.BackColor));
                     }
+                    else
+                        bmp.SetPixel(i, j, HeatValToColor(heatmap[i, j]));
                 }
             }
 
