@@ -18,13 +18,13 @@ namespace MazeAnalyzer
         static bool showMidColor;
         static Color cusMidColor = Color.FromArgb(128, 255, 255);
 
-        static bool showCusTransparentBg = true;
+        static bool showCusTransparentBg = true; // Not effected by color preset
         static bool showTransparentBg;
         static Color cusBgColor = Color.White;
 
         public enum ColorPreset
         {
-            Custom, Hot, Cool,  Gray, Summer, Autumn, Winter, Spring, Jet,RedWhiteBlue,RedYellowGreen,OrangeWhitePurple,WhiteBlackRed 
+            Custom, Hot, Cool,  Gray, Summer, Autumn, Winter, Spring, Jet, RedWhiteBlue, RedYellowGreen, OrangeWhitePurple, WhiteBlackRed
         }
         static ColorPreset colorPreset = ColorPreset.Cool;
         static double midpoint = 0.5;
@@ -50,7 +50,7 @@ namespace MazeAnalyzer
         static double maxHeatVal;
         string heatmapUnits;
 
-        static bool useAllPaths = false;
+        static bool showAllPaths = false;
 
         static bool showMaze = true;
         static bool showAnaRegns = false;
@@ -116,6 +116,14 @@ namespace MazeAnalyzer
             }
             checkBoxShowMaze.Checked = showMaze;
             checkBoxShowAnaRegns.Checked = showAnaRegns;
+            if (showAllPaths)
+            {
+                comboBoxShowPaths.SelectedIndex = 1;
+            }
+            else
+            {
+                comboBoxShowPaths.SelectedIndex = 0;
+            }
         }
 
 
@@ -233,46 +241,55 @@ namespace MazeAnalyzer
                     buttonMidColor.BackColor = Color.FromArgb(128, 128, 128);
                     buttonMaxColor.BackColor = Color.FromArgb(0, 0, 0);
                     break;
+
                 case ColorPreset.Summer:
                     buttonMinColor.BackColor = Color.FromArgb(0, 0, 103);
                     buttonMidColor.BackColor = Color.FromArgb(128, 192, 103);
                     buttonMaxColor.BackColor = Color.FromArgb(255, 255, 103);
                     break;
+
                 case ColorPreset.Autumn:
                     buttonMinColor.BackColor = Color.FromArgb(255, 0, 0);
                     buttonMidColor.BackColor = Color.FromArgb(255, 128, 0);
                     buttonMaxColor.BackColor = Color.FromArgb(255, 255, 0);
                     break;
+
                 case ColorPreset.Winter:
                     buttonMinColor.BackColor = Color.FromArgb(0, 0, 255);
                     buttonMidColor.BackColor = Color.FromArgb(0, 128, 192);
                     buttonMaxColor.BackColor = Color.FromArgb(0, 255, 128);
                     break;
+
                 case ColorPreset.Spring:
                     buttonMinColor.BackColor = Color.FromArgb(255, 0, 255);
                     buttonMidColor.BackColor = Color.FromArgb(255, 128, 128);
                     buttonMaxColor.BackColor = Color.FromArgb(255, 255, 0);
                     break;
+
                 case ColorPreset.Jet:
                     buttonMinColor.BackColor = Color.FromArgb(0, 0, 255);
                     buttonMidColor.BackColor = Color.FromArgb(0, 255, 255);
                     buttonMaxColor.BackColor = Color.FromArgb(255, 255, 0);
                     break;
+
                 case ColorPreset.RedWhiteBlue:
                     buttonMinColor.BackColor = Color.Red;
                     buttonMidColor.BackColor = Color.White;
                     buttonMaxColor.BackColor = Color.Blue;
                     break;
+
                 case ColorPreset.RedYellowGreen:
                     buttonMinColor.BackColor = Color.Red;
                     buttonMidColor.BackColor = Color.Yellow;
                     buttonMaxColor.BackColor = Color.Green;
                     break;
+
                 case ColorPreset.OrangeWhitePurple:
                     buttonMinColor.BackColor = Color.Orange;
                     buttonMidColor.BackColor = Color.White;
                     buttonMaxColor.BackColor = Color.Purple;
                     break;
+
                 case ColorPreset.WhiteBlackRed:
                     buttonMinColor.BackColor = Color.White;
                     buttonMidColor.BackColor = Color.Black;
@@ -379,7 +396,7 @@ namespace MazeAnalyzer
         }
 
         void RebuildHeatmap()
-        // call when the resolution or offset is changed
+        // call when changes are made to the resolution, offset, or path selection
         {
             BuildHeatmap(mv);
 
@@ -606,16 +623,19 @@ namespace MazeAnalyzer
                     selectedHeatmap = mv.presHeatmap;
                     heatmapUnits = "% Trials";
                     break;
+
                 case HeatmapItem.Type.Entrance:
                     heatmapTypeStr = "Entrance";
                     selectedHeatmap = mv.entrHeatmap;
                     heatmapUnits = "# Times";
                     break;
+
                 case HeatmapItem.Type.Time:
                     heatmapTypeStr = "Time";
                     selectedHeatmap = mv.timeHeatmap;
                     heatmapUnits = "s";
                     break;
+
                 default:
                     break;
             }
@@ -654,6 +674,25 @@ namespace MazeAnalyzer
 
             checkBoxShowAnaRegns.Checked = showAnaRegns;
             Refresh();
+        }
+
+        private void comboBoxShowPaths_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboBoxShowPaths.SelectedIndex)
+            {
+                case 0:
+                    showAllPaths = false;
+                    break;
+
+                case 1:
+                    showAllPaths = true;
+                    break;
+
+                default:
+                    break;
+            }
+
+            RebuildHeatmap();
         }
 
 
@@ -815,7 +854,7 @@ namespace MazeAnalyzer
 
             foreach (MazePathItem mpi in mv.curMazePaths.cPaths)
             {
-                if (mpi.selected || useAllPaths)
+                if (mpi.selected || showAllPaths)
                 {
 
                     numPaths++;
@@ -841,9 +880,9 @@ namespace MazeAnalyzer
                 }
             }
 
-            mv.presHeatmap /= (double)numPaths / 100.0; 
+            mv.presHeatmap /= numPaths / 100.0; 
             mv.entrHeatmap /= numPaths;
-            mv.timeHeatmap = mv.timeHeatmap / (double)numPaths / 1000.0; // milliseconds to seconds
+            mv.timeHeatmap = mv.timeHeatmap / numPaths / 1000.0; // milliseconds to seconds
 
             SetHeatmapType(selectedHeatmap.type);
         }
@@ -1141,16 +1180,6 @@ namespace MazeAnalyzer
         {
             PointF mazeCoord = new PointF(curMouseCoord.X, curMouseCoord.Y);
             showCoordTooltip(mazeCoord);
-        }
-
-        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void checkBoxShowTransparentBg_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
