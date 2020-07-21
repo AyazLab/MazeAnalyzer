@@ -579,18 +579,27 @@ namespace MazeAnalyzer
 
         }
 
+        double mzTopLeftX = 0;
+        double mzWidth = 1;
+        double mzTopLeftZ = 0;
+        double mzHeight = 1;
+
+        private void UpdateMzSize()
+        {
+             mzTopLeftX = selectedHeatmap.hmXCenter - selectedHeatmap.xOffsetRemainder_Bot * selectedHeatmap.res - buffer * selectedHeatmap.res;
+             mzWidth = selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2 * selectedHeatmap.res;
+
+             mzTopLeftZ = selectedHeatmap.hmZCenter - selectedHeatmap.zOffsetRemainder_Bot * selectedHeatmap.res - buffer * selectedHeatmap.res;
+             mzHeight = selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2 * selectedHeatmap.res;
+        }
+
         private PointF MouseToMazeCoord(double x, double z)
         {
             PointF mazeCoord = new PointF();
 
-            double mzTopLeftX = selectedHeatmap.hmXCenter - selectedHeatmap.xOffsetRemainder_Bot * selectedHeatmap.res - buffer;
-            double mzWidth = selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2;
+            UpdateMzSize();
 
             mazeCoord.X = (float)Math.Round(mzTopLeftX + x / mzHmWidth * mzWidth, 2, MidpointRounding.AwayFromZero);
-
-            double mzTopLeftZ = selectedHeatmap.hmZCenter - selectedHeatmap.zOffsetRemainder_Bot * selectedHeatmap.res - buffer;
-            double mzHeight = selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2;
-
             mazeCoord.Y = (float)Math.Round(mzTopLeftZ + (z - panelHeatmap.AutoScrollPosition.Y) / mzHmHeight * mzHeight, 2, MidpointRounding.AwayFromZero);
 
             return mazeCoord;
@@ -598,15 +607,11 @@ namespace MazeAnalyzer
         private PointF MazeToMouseCoord(double x, double z)
         {
             PointF mouseCoord = new PointF();
-
-            double mzTopLeftX = selectedHeatmap.hmXCenter - selectedHeatmap.xOffsetRemainder_Bot * selectedHeatmap.res - buffer;
-            double mzWidth = selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2;
+            
+            UpdateMzSize();
 
             mouseCoord.X =(float) ((x - mzTopLeftX) / mzWidth * (double)mzHmWidth);
             //mazeCoord.X = (float)Math.Round(mzTopLeftX + x / mzHmWidth * mzWidth, 2, MidpointRounding.AwayFromZero);
-
-            double mzTopLeftZ = selectedHeatmap.hmZCenter - selectedHeatmap.zOffsetRemainder_Bot * selectedHeatmap.res - buffer;
-            double mzHeight = selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2;
 
             mouseCoord.Y = (float)((z - mzTopLeftZ) / mzHeight * (double)mzHmHeight + (double)panelHeatmap.AutoScrollPosition.Y);
             //mazeCoord.Y = (float)Math.Round(mzTopLeftZ + (z - panelHeatmap.AutoScrollPosition.Y) / mzHmHeight * mzHeight, 2, MidpointRounding.AwayFromZero);
@@ -742,14 +747,14 @@ namespace MazeAnalyzer
             }
         }
 
-        string GetHeatmapBorders(double offset, int lowerRadius, int pixels)
+        string GetHeatmapBorders(double offset, int offset_remainder_bot, int pixels)
         // gets the coordinates borders of all the heatmap pixels for the csv
         {
             string hmBorders = "";
 
             for (int i = 0; i < pixels + 1; i++)
             {
-                double coord = offset + (i - lowerRadius) * selectedHeatmap.res;
+                double coord = offset + (i - offset_remainder_bot) * selectedHeatmap.res;
 
                 if (coord != offset)
                 {
@@ -780,11 +785,12 @@ namespace MazeAnalyzer
 
         Bitmap MakePng()
         {
-            int resize = 100;
-            int mzHmWidth = (int)(selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * resize;
-            int mzHmHeight = (int)(selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) * resize;
+            float resize = 100;
 
-            int cbWidth = mzHmWidth / 10;
+            int mzHmWidth = (int)((selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2 * selectedHeatmap.res) * resize);
+            int mzHmHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2 * selectedHeatmap.res) * resize);
+
+            int cbWidth = mzHmWidth / 20;
             int cbHeight = mzHmHeight / 4;
             int cbTopLeftX = mzHmWidth;
             int cbTopLeftZ = mzHmHeight / 8;
@@ -793,8 +799,8 @@ namespace MazeAnalyzer
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                PaintHeatmap(g, false, mzHmWidth, mzHmHeight);
-                PaintColorBar(g, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 1, Color.Black);
+                PaintHeatmap(g, true, mzHmWidth, mzHmHeight);
+                PaintColorBar(g, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, (int)(resize/4.0), Color.Black);
             }
 
             return bmp;
@@ -819,7 +825,7 @@ namespace MazeAnalyzer
             Bitmap copy = new Bitmap((int)(mzHmWidth + cbWidth * 0.85), mzHmHeight);
             Graphics g = Graphics.FromImage(copy);
 
-            PaintHeatmap(g, false, mzHmWidth, mzHmHeight);
+            PaintHeatmap(g, true, mzHmWidth, mzHmHeight);
             PaintColorBar(g, cbWidth, cbHeight, cbTopLeftX, cbTopLeftZ, 8, Color.Black);
 
             Clipboard.Clear();
@@ -1021,7 +1027,7 @@ namespace MazeAnalyzer
         static int mzHmWidth;
         static int mzHmHeight;
         static double mazeDrawScale; // in pixel / maze coord
-        static double buffer = 2; // in maze coord
+        static double buffer = 1; // in heatmap coords
         private void pictureBoxHeatmap_Paint(object sender, PaintEventArgs e)
         {
             int cbWidth = (int)(trackBarMidpoint.Width * 1.4);
@@ -1030,7 +1036,7 @@ namespace MazeAnalyzer
             int cbTopLeftZ = trackBarMidpoint.Location.Y - panelHeatmap.AutoScrollPosition.Y;
 
             mzHmWidth = panelHeatmap.Width - cbWidth;
-            mzHmHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * mzHmWidth);
+            mzHmHeight = (int)((selectedHeatmap.zPixels + buffer * 2) / (selectedHeatmap.xPixels + buffer * 2) * mzHmWidth);
             //mazeDrawScale = 5 + ((double)panelHeatmap.Width - panelSettings.Width) / (1302.0 - panelSettings.Width) * 12;
 
             PaintHeatmap(e.Graphics, true, mzHmWidth, mzHmHeight);
@@ -1047,39 +1053,41 @@ namespace MazeAnalyzer
         private void PaintHeatmap(Graphics g, bool autosize, int mzHmWidth, int mzHmHeight)
         // overload for MakePng
         {
+            UpdateMzSize();
             // in maze coord * scale
-            int mzTopLeftX = (int)((selectedHeatmap.xOffsetRemainder_Bot * selectedHeatmap.res + buffer- selectedHeatmap.hmXCenter) * mazeDrawScale); //coordinate for default  max top pixel location to start drawing maze
-            int mzTopLeftZ = (int)((selectedHeatmap.zOffsetRemainder_Bot * selectedHeatmap.res + buffer- selectedHeatmap.hmZCenter) * mazeDrawScale);//coordinate for default max left pixel location to start drawing maze
-            int mzWidth = (int)((selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * mazeDrawScale);  //width of maze in pixels
-            int mzHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) * mazeDrawScale); //height of maze in pixels
-            bool overdraw = true;
-            if(overdraw)
+            
+            int mzWidth_px = (int)(mzWidth * mazeDrawScale);  //width of maze in pixels
+            int mzHeight_px = (int)(mzHeight * mazeDrawScale); //height of maze in pixels
+
+            PointF upperLeft = selectedHeatmap.HeatmapToMazeCoord(-buffer, -buffer);
+            PointF lowerRight = selectedHeatmap.HeatmapToMazeCoord(selectedHeatmap.xPixels + buffer, selectedHeatmap.zPixels + buffer);
+
+            if (autosize)
             {
-                PointF upperLeft = MouseToMazeCoord(0, 0);
-                PointF lowerRight = MouseToMazeCoord(mzHmWidth, mzHmHeight);
-
                 
+                mzWidth_px = mzHmWidth;  //width of maze in pixels
+                mzHeight_px =mzHmHeight; //height of maze in pixels
+                mazeDrawScale = (float)mzWidth_px / (float)(lowerRight.X - upperLeft.X);
 
-                
-                mzWidth = mzHmWidth;  //width of maze in pixels
-                mzHeight =panelHeatmap.Height+ mzHmHeight; //height of maze in pixels
-                mazeDrawScale = (float)mzWidth / (float)(lowerRight.X- upperLeft.X);
-
-                mzTopLeftX = (int)((selectedHeatmap.xOffsetRemainder_Bot * selectedHeatmap.res + buffer - selectedHeatmap.hmXCenter) * mazeDrawScale); //coordinate for default  max top pixel location to start drawing maze
-                mzTopLeftZ = (int)((selectedHeatmap.zOffsetRemainder_Bot * selectedHeatmap.res + buffer - selectedHeatmap.hmZCenter) * mazeDrawScale);//coordinate for default max left pixel location to start drawing maze
+            }
+            else
+            {
 
             }
 
+            double mzTopLeftX_px = (-1 * mzTopLeftX * mazeDrawScale); //coordinate for default  max top pixel location to start drawing maze
+            double mzTopLeftZ_px = (-1 * mzTopLeftZ * mazeDrawScale);//coordinate for default max left pixel location to start drawing maze
+
             // in mouse coord
-            int hmTopLeftX = (int)(mzHmWidth * buffer / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2));
-            int hmTopLeftZ = (int)(mzHmHeight * buffer / (selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2));
+            int hmTopLeftX = (int)(mzHmWidth * buffer / (selectedHeatmap.xPixels + buffer * 2));
+            int hmTopLeftZ = (int)(mzHmHeight * buffer / (selectedHeatmap.zPixels + buffer * 2 ));
             int hmWidth = mzHmWidth - hmTopLeftX * 2;
             int hmHeight = mzHmHeight - hmTopLeftZ * 2;
 
 
             // makes maze, heatmap, & colorbar
-            Image mazeBmp = mv.PaintMazeToBuffer(mzTopLeftX, mzTopLeftZ, mzWidth, mzHeight, mazeDrawScale);
-            Image anaRegnsBmp = mv.PaintAnalyzerItemsToBuffer(mzTopLeftX, mzTopLeftZ, mzWidth, mzHeight, mazeDrawScale);
+            Image mazeBmp = mv.PaintMazeToBuffer((float)mzTopLeftX_px, (float)mzTopLeftZ_px, mzWidth_px, mzHeight_px, mazeDrawScale);
+            Image anaRegnsBmp = mv.PaintAnalyzerItemsToBuffer((float)mzTopLeftX_px, (float)mzTopLeftZ_px, mzWidth_px, mzHeight_px, mazeDrawScale);
             Bitmap heatmapBmp = HeatmapToBitmap(selectedHeatmap.val);
             
            
@@ -1092,7 +1100,7 @@ namespace MazeAnalyzer
                     labelScroll.Location = new Point(labelScroll.Location.X, mzHmHeight);
                     scroll = true;
                 }
-                //g.TranslateTransform(panelHeatmap.AutoScrollPosition.X, panelHeatmap.AutoScrollPosition.Y);
+                
             }
 
 
@@ -1102,8 +1110,8 @@ namespace MazeAnalyzer
 
             Rectangle mazeDest = new Rectangle(0, 0, mzHmWidth, mzHmHeight);
 
-            if(overdraw)
-                mazeDest = new Rectangle(0, 0, mzHmWidth, mzHeight);
+            if(autosize)
+                mazeDest = new Rectangle(0, 0, mzHmWidth, mzHeight_px);
 
 
             if (showMaze)

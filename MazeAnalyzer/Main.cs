@@ -1598,13 +1598,8 @@ namespace MazeAnalyzer
         Point curMouseLocation = new Point(0, 0);
         private PointF Mouse2Maze(float X, float Y)
         {
-            PointF mzCoord = new PointF();
-            //X = X - iViewOffsetX;
-            //Y = Y - iViewOffsetY;
-            mzCoord.X = X / (float)curMazeViewer.curMaze.Scale; //this works
-            mzCoord.Y = Y / (float)curMazeViewer.curMaze.Scale;
-
-            return mzCoord;
+            
+            return curMazeViewer.Mouse2Maze(X,Y);
         }
         private void UpdateToolStripReport()
         {
@@ -1615,7 +1610,7 @@ namespace MazeAnalyzer
                 toolStripStatusLabel1.Text = ""; // Offset: " + viewOffset.X.ToString("F3") + ", " + viewOffset.Y.ToString("F3"); Offset not really used in Maze Analyzer
                 if (curMouseLocation.X > 0 && curMouseLocation.Y > 0 /*&& curMouseLocation.X < tabPage1.Width && curMouseLocation.Y < tabPage1.Height*/)
                 { 
-                    toolStripStatusLabel1.Text += "Position: " + (mouseLoc.X + viewOffset.X).ToString("F3") + "," + (mouseLoc.Y + viewOffset.Y).ToString("F3"); //Maze Position
+                    toolStripStatusLabel1.Text += "Position: " + (mouseLoc.X).ToString("F3") + "," + (mouseLoc.Y + viewOffset.Y).ToString("F3"); //Maze Position
 
                 }
                 if (bMeasuringMode)
