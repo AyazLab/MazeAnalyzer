@@ -391,6 +391,7 @@ namespace MazeAnalyzer
             if (newOffSetX != offsetX || newOffSetZ != offsetZ)
             {
                 mv.SetPathHeatmapOffsets(Convert.ToDouble(newOffSetX), Convert.ToDouble(newOffSetZ));
+                mv.SetPathHeatmapRes(Convert.ToDouble(textBoxRes.Text));
                 RebuildHeatmap();
             }
         }
@@ -454,7 +455,7 @@ namespace MazeAnalyzer
             MouseEventArgs mouseCoord = e;
             curMouseCoord= new Point(mouseCoord.X, mouseCoord.Y);
 
-            UpdateToolStripReport(curMouseCoord);
+            
 
             if (clickMode == ClickMode.ResolutionBox)
             {
@@ -466,6 +467,8 @@ namespace MazeAnalyzer
                     Refresh();
                 }
             }
+
+            UpdateToolStripReport(curMouseCoord);
         }
 
 
@@ -564,7 +567,6 @@ namespace MazeAnalyzer
             Point heatmapCoord = selectedHeatmap.MazeToHeatmapCoord(mazeCoord.X, mazeCoord.Y);
 
             toolStripStatusLabel_heatmap.Text = ""; // Offset: " + viewOffset.X.ToString("F3") + ", " + viewOffset.Y.ToString("F3"); Offset not really used in Maze Analyzer
-
 
             if (heatmapCoord.X >= 0 && heatmapCoord.X < selectedHeatmap.xPixels && heatmapCoord.Y >= 0 && heatmapCoord.Y < selectedHeatmap.zPixels)
             {
