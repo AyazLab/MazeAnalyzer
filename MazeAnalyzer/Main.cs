@@ -20,6 +20,8 @@ namespace MazeAnalyzer
         MazeLib.MazeItemThemeLibrary mazeThemeLibrary = new MazeItemThemeLibrary();
         //MazeLib.MazePath curMazePaths = new MazeLib.MazePath();
 
+        Heatmap hmViewer;
+
         public enum mzFileType
         {
             Project, Maze, LogFile, RegionFile
@@ -80,6 +82,8 @@ namespace MazeAnalyzer
                 t.Click += themeButton_Click;
                 toolStripDropdown_Theme.DropDownItems.Add(t);
             }
+
+            hmViewer=new Heatmap(curMazeViewer);
         }
 
         public Main(string inp)
@@ -1115,6 +1119,8 @@ namespace MazeAnalyzer
             if (curMazeViewer.bNewRegionFlag)
                 UpdateProjectList();
             Invalidate();
+
+            
         }
 
 
@@ -2978,10 +2984,15 @@ namespace MazeAnalyzer
             CenterOnStart();
         }
 
+
+
         private void toolStripButtonHeatmap_Click(object sender, EventArgs e)
         {
-            Heatmap exp = new Heatmap(curMazeViewer);
-            exp.ShowDialog();
+            if (!hmViewer.Visible)
+            { 
+                hmViewer = new Heatmap(curMazeViewer);
+                hmViewer.ShowDialog();
+            }
         }
     }
 

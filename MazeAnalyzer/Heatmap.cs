@@ -849,10 +849,15 @@ namespace MazeAnalyzer
         // paints resolution box
         {
             Point mouseCoordDiff = new Point(mouseCoord1.X - mouseCoord2.X, mouseCoord1.Y - mouseCoord2.Y);
-            int maxDiff = Math.Max(mouseCoordDiff.X, mouseCoordDiff.Y);
+            int maxDiff = Math.Max(Math.Abs(mouseCoordDiff.X), Math.Abs(mouseCoordDiff.Y));
 
-           
             Point squarePoint = new Point(mouseCoord1.X - maxDiff, mouseCoord1.Y - maxDiff);
+
+            if (mouseCoordDiff.X < 0)
+                squarePoint.X = mouseCoord1.X + maxDiff;
+            if (mouseCoordDiff.Y<0)
+                squarePoint.Y = mouseCoord1.Y + maxDiff;
+
             g.DrawRectangle(new Pen(Brushes.Black, 1F), MouseToRect(mouseCoord1, squarePoint));
         }
 
