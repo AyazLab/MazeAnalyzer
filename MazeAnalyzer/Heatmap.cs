@@ -842,7 +842,12 @@ namespace MazeAnalyzer
         private void PaintResBox(Graphics g)
         // paints resolution box
         {
-            g.DrawRectangle(new Pen(Brushes.Black, 1F), MouseToRect(mouseCoord1, mouseCoord2));
+            Point mouseCoordDiff = new Point(mouseCoord1.X - mouseCoord2.X, mouseCoord1.Y - mouseCoord2.Y);
+            int maxDiff = Math.Max(mouseCoordDiff.X, mouseCoordDiff.Y);
+
+           
+            Point squarePoint = new Point(mouseCoord1.X - maxDiff, mouseCoord1.Y - maxDiff);
+            g.DrawRectangle(new Pen(Brushes.Black, 1F), MouseToRect(mouseCoord1, squarePoint));
         }
 
         void BuildHeatmap(MazeViewer mv)
@@ -1026,7 +1031,7 @@ namespace MazeAnalyzer
 
             mzHmWidth = panelHeatmap.Width - cbWidth;
             mzHmHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * mzHmWidth);
-            mazeDrawScale = 5 + ((double)panelHeatmap.Width - panelSettings.Width) / (1302.0 - panelSettings.Width) * 12;
+            //mazeDrawScale = 5 + ((double)panelHeatmap.Width - panelSettings.Width) / (1302.0 - panelSettings.Width) * 12;
 
             PaintHeatmap(e.Graphics, true, mzHmWidth, mzHmHeight);
 
