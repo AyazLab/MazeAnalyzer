@@ -707,8 +707,9 @@ namespace MazeAnalyzer
         private void buttonSaveCsv_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "CSV file(*.csv)| *.csv | All Files(*.*) | *.* ";
+            sfd.Filter = "CSV file(*.csv)| *.csv| All Files(*.*)| *.*";
             sfd.DefaultExt = "csv";
+            sfd.FileName = string.Format("{0}_{1}.csv", mv.mazeFileName, heatmapTypeStr);
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
