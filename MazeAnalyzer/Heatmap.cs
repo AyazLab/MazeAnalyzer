@@ -708,6 +708,7 @@ namespace MazeAnalyzer
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "CSV file(*.csv)| *.csv | All Files(*.*) | *.* ";
+            sfd.DefaultExt = "csv";
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
