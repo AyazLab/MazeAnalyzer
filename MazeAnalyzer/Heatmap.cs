@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
@@ -787,13 +788,36 @@ namespace MazeAnalyzer
             checkBoxShowBg.Checked = true;
 
             SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Png Image (.png)|*.png";
+            sfd.Filter = "Png Image (.png)|*.png|JPEG Image (.jpg)|*.jpg|Bitmap Image (.bmp)|*.bmp";
+            sfd.DefaultExt = "png";
+            sfd.FileName = string.Format("{0}_{1}", mv.mazeFileName, heatmapTypeStr);
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 Bitmap bmp = MakePng();
 
-                bmp.Save(sfd.FileName);
+                string fileExt = Path.GetExtension(sfd.FileName);
+               
+                switch(fileExt.ToLower())
+                {
+                    case ".png":
+                        bmp.Save(sfd.FileName,ImageFormat.Png);
+                        break;
+                    case ".bmp":
+                        bmp.Save(sfd.FileName, ImageFormat.Bmp);
+                        break;
+                    case ".jpg":
+                        bmp.Save(sfd.FileName, ImageFormat.Jpeg);
+                        break;
+                    case ".jpeg":
+                        bmp.Save(sfd.FileName, ImageFormat.Jpeg);
+                        break;
+                    default:
+                        bmp.Save(sfd.FileName, ImageFormat.Png);
+                        break;
+                }
+
+                
             }
 
             checkBoxShowBg.Checked = temp;
@@ -811,7 +835,9 @@ namespace MazeAnalyzer
             int cbTopLeftX = mzHmWidth;
             int cbTopLeftZ = mzHmHeight / 8;
 
-            Bitmap bmp = new Bitmap(mzHmWidth + cbWidth, mzHmHeight);
+            Bitmap bmp = new Bitmap(mzHmWidth + cbWidth, mzHmHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+        
 
             using (Graphics g = Graphics.FromImage(bmp))
             {
@@ -838,7 +864,7 @@ namespace MazeAnalyzer
             mzHmHeight = (int)((selectedHeatmap.zPixels * selectedHeatmap.res + buffer * 2) / (selectedHeatmap.xPixels * selectedHeatmap.res + buffer * 2) * mzHmWidth);
             mazeDrawScale = 5 + ((double)panelHeatmap.Width - panelSettings.Width) / (1302.0 - panelSettings.Width) * 12;
 
-            Bitmap copy = new Bitmap((int)(mzHmWidth + cbWidth * 0.85), mzHmHeight);
+            Bitmap copy = new Bitmap((int)(mzHmWidth + cbWidth * 0.85), mzHmHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             Graphics g = Graphics.FromImage(copy);
 
             PaintHeatmap(g, true, mzHmWidth, mzHmHeight);
