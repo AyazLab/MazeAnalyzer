@@ -720,18 +720,25 @@ namespace MazeAnalyzer
                 csv.Write(string.Format("Maze Name: {0}.maz\n", mv.mazeFileName));
                 csv.Write(string.Format("Paths Exported: {0}\n", csvPaths));
                 csv.Write(string.Format("Heatmap Resolution: {0} Maze Units / Pixel\n", selectedHeatmap.res));
+                
                 csv.Write("\n");
 
+                string hmZBorders;
+                string hmXBorders;
+                GetHeatmapBorders(selectedHeatmap, out hmXBorders, out hmZBorders);
+
                 csv.Write("xz, ");
-                string hmXBorders = GetHeatmapBorders(selectedHeatmap.offsetMazeX, selectedHeatmap.xOffsetRemainder_Bot, selectedHeatmap.xPixels);
+                
                 csv.Write(hmXBorders.Substring(0, hmXBorders.Length - 2));
                 csv.Write("\n");
 
-                string[] hmZBorders = GetHeatmapBorders(selectedHeatmap.offsetMazeZ, selectedHeatmap.zOffsetRemainder_Bot, selectedHeatmap.zPixels).Split(' ');
+                
+
+                string[] hmZBorders_split= hmZBorders.Split(' ');
 
                 for (int i = 0; i < selectedHeatmap.val.GetLength(1); i++)
                 {
-                    csv.Write(hmZBorders[i] + " ");
+                    csv.Write(hmZBorders_split[i] + " ");
                     for (int j = 0; j < selectedHeatmap.val.GetLength(0); j++)
                     {
                         csv.Write(selectedHeatmap.val[j, i]);
@@ -747,22 +754,29 @@ namespace MazeAnalyzer
             }
         }
 
-        string GetHeatmapBorders(double offset, int offset_remainder_bot, int pixels)
+        private void GetHeatmapBorders(HeatmapItem selectedHeatmap, out string hmBordersX, out string hmBordersZ)
         // gets the coordinates borders of all the heatmap pixels for the csv
         {
-            string hmBorders = "";
+            hmBordersX = "";
+            hmBordersZ = "";
 
-            for (int i = 0; i < pixels + 1; i++)
+            for (int i = 0; i < selectedHeatmap.xPixels; i++)
             {
-                double coord = offset + (i - offset_remainder_bot) * selectedHeatmap.res;
+                PointF mzCoordX = selectedHeatmap.HeatmapToMazeCoord((double)i,0);
+                double coord = (double)mzCoordX.X;
 
-                if (coord != offset)
-                {
-                    hmBorders += string.Format("{0}, ", coord);
-                }
+                hmBordersX += string.Format("{0}, ", coord);
             }
 
-            return hmBorders;
+            for (int i = 0; i < selectedHeatmap.xPixels; i++)
+            {
+                PointF mzCoordZ = selectedHeatmap.HeatmapToMazeCoord(0, (double)i);
+                double coord = (double)mzCoordZ.Y;
+
+                hmBordersZ += string.Format("{0}, ", coord);
+            }
+
+            
         }
 
         private void buttonSavePng_Click(object sender, EventArgs e)
@@ -898,7 +912,7 @@ namespace MazeAnalyzer
                 }
             }
 
-            mv.presHeatmap /= numPaths / 100.0; 
+            mv.presHeatmap /= numPaths / 100.0; //conversion to 100% of paths 
             mv.entrHeatmap /= numPaths;
             mv.timeHeatmap = mv.timeHeatmap / numPaths / 1000.0; // milliseconds to seconds
 
