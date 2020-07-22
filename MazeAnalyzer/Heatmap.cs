@@ -784,8 +784,8 @@ namespace MazeAnalyzer
 
         private void buttonSavePng_Click(object sender, EventArgs e)
         {
-            bool temp = checkBoxShowBg.Checked;
-            checkBoxShowBg.Checked = true;
+            //bool temp = checkBoxShowBg.Checked;
+            //checkBoxShowBg.Checked = true;
 
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Png Image (.png)|*.png|JPEG Image (.jpg)|*.jpg|Bitmap Image (.bmp)|*.bmp";
@@ -820,7 +820,7 @@ namespace MazeAnalyzer
                 
             }
 
-            checkBoxShowBg.Checked = temp;
+            //checkBoxShowBg.Checked = temp;
         }
 
         Bitmap MakePng()
