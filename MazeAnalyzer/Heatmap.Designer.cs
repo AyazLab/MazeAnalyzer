@@ -247,6 +247,7 @@
             // 
             // comboBoxColorPreset
             // 
+            this.comboBoxColorPreset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxColorPreset.FormattingEnabled = true;
             this.comboBoxColorPreset.Items.AddRange(new object[] {
             "Custom",
@@ -342,9 +343,12 @@
             this.radioButtonTime.AutoSize = true;
             this.radioButtonTime.Location = new System.Drawing.Point(20, 661);
             this.radioButtonTime.Name = "radioButtonTime";
+
             this.radioButtonTime.Size = new System.Drawing.Size(60, 21);
+
+        
             this.radioButtonTime.TabIndex = 42;
-            this.radioButtonTime.Text = "Time";
+            this.radioButtonTime.Text = "Time Elapsed";
             this.radioButtonTime.UseVisualStyleBackColor = true;
             this.radioButtonTime.CheckedChanged += new System.EventHandler(this.radioButtonTime_CheckedChanged);
             // 
@@ -434,6 +438,7 @@
             // 
             // comboBoxShowPaths
             // 
+            this.comboBoxShowPaths.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxShowPaths.FormattingEnabled = true;
             this.comboBoxShowPaths.Items.AddRange(new object[] {
             "Selected Paths",
