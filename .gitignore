@@ -1,7 +1,11 @@
 
 *.pdb
 *.cache
-
+.vs
+.vs/*.*
+*.exe
+MazeAnalyzer/bin/*.*
+MazeAnalyzer/obj/*.*
 *.vsidx
 *.lock
 *.suo
