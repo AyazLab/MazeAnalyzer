@@ -60,3 +60,5 @@ MazeAnalyzer/obj/Release/MazeAnalyzer.Properties.Resources.resources
 MazeAnalyzer/obj/Release/MazeAnalyzer.SelectPaths.resources
 MazeAnalyzer/obj/Release/MazeAnalyzer.Splash.resources
 MazeAnalyzer/obj/Release/TempPE/Properties.Resources.Designer.cs.dll
+*.vsidx
+*.lock
