@@ -2,7 +2,7 @@
 *.pdb
 *.cache
 .vs
-.vs/*.*
+.vs/
 *.exe
 MazeAnalyzer/bin/
 MazeAnalyzer/obj/
