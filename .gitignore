@@ -4,8 +4,8 @@
 .vs
 .vs/*.*
 *.exe
-MazeAnalyzer/bin/*.*
-MazeAnalyzer/obj/*.*
+MazeAnalyzer/bin/
+MazeAnalyzer/obj/
 *.vsidx
 *.lock
 *.suo
