@@ -2884,6 +2884,7 @@ namespace MazeAnalyzer
             markAllThemesFalse();
 
             curMazeViewer.curMazeTheme = mazeThemeLibrary.GetThemeByIndex(index);
+            curMazeViewer.BackColor = curMazeViewer.curMazeTheme.bgColor;
             RefreshMazeView(true);
             CurrentSettings.themeIndex = curMazeViewer.curMazeTheme.themeIndex;
             CurrentSettings.SaveSettings();
