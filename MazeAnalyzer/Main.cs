@@ -1148,6 +1148,8 @@ namespace MazeAnalyzer
             ext=ext.ToLower();
             if (ext.CompareTo("maz") == 0)
                 return 1;
+            if (ext.CompareTo("mazx") == 0)
+                return 1;
             if (ext.CompareTo("txt") == 0)
                 return 2;
             if (ext.CompareTo("dat") == 0)

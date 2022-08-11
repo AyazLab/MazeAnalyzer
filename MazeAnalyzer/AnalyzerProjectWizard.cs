@@ -117,6 +117,8 @@ namespace MazeAnalyzer
                     ext = ext.ToLower();
                     if (ext.CompareTo("maz") == 0)
                         listBox_mazefiles.Items.Add(a[i]);
+                    if (ext.CompareTo("mazx") == 0)
+                        listBox_mazefiles.Items.Add(a[i]);
 
                 }
             }

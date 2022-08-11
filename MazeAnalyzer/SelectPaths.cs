@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using MazeLib;
 
 namespace MazeAnalyzer
@@ -191,8 +192,9 @@ namespace MazeAnalyzer
                 }
                 if (mpiList.Count > 0)
                 {
-                    if (mpiList[0].Mel.Length >= 0)
-                        logFileName_TextBox.Text = "Log from " + mpiList[0].Mel.Substring(mpiList[0].Mel.LastIndexOf('\\') + 1);
+                    
+                    if (mpiList[0].Mel.Length > 0)
+                        logFileName_TextBox.Text = "Log from " + Path.GetFileName(mpiList[0].Mel);
                     else
                         logFileName_TextBox.Visible = false;
                 }
